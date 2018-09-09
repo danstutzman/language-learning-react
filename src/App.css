@@ -1,3 +1,14 @@
 .App {
   background-color: white;
 }
+
+.Quiz {
+  position: fixed;
+  border: 1px black solid;
+  padding: 30px;
+  top: 30px;
+  width: 80%;
+  margin: 30px auto;
+  left: 30px;
+  background-color: white;
+}
