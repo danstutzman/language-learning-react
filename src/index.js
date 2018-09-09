@@ -1,12 +1,12 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import registerServiceWorker from './registerServiceWorker';
+import App from './App' // eslint-disable-line no-unused-vars
+import './index.css'
+import React from 'react' // eslint-disable-line no-unused-vars
+import ReactDOM from 'react-dom'
+import registerServiceWorker from './registerServiceWorker'
 
-const rootElement = document.getElementById('root');
+const rootElement = document.getElementById('root')
 if (rootElement === null) {
-  throw Error("Can't find element with id=root");
+  throw Error("Can't find element with id=root")
 }
-ReactDOM.render(<App />, rootElement);
-registerServiceWorker();
+ReactDOM.render(<App />, rootElement)
+registerServiceWorker()
