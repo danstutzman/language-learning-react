@@ -1,6 +1,9 @@
 ## How to run app in development mode
 - `npm start`
 
+## How to run flowtype check
+- `npm run flow`
+
 ## How to run lint
 - `npm run eslint`
 

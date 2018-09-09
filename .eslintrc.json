@@ -3,7 +3,10 @@
     "browser": true,
     "es6": true
   },
-  "extends": "eslint:recommended",
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended"
+  ],
   "globals": {
     "it": true,
     "process": true
@@ -24,6 +27,7 @@
     "linebreak-style": ["error", "unix"],
     "no-trailing-spaces": ["error"],
     "quotes": ["error", "single", {"avoidEscape": true}],
+    "react/display-name": ["off"],
     "semi": ["error", "never"]
   }
 }
