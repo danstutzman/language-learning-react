@@ -1,0 +1,14 @@
+[ignore]
+.*/node_modules/.*
+
+[include]
+
+[libs]
+interfaces/jest/globals.js
+
+[lints]
+
+[options]
+all=true
+
+[strict]

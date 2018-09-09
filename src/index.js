@@ -4,5 +4,9 @@ import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+const rootElement = document.getElementById('root');
+if (rootElement === null) {
+  throw Error("Can't find element with id=root");
+}
+ReactDOM.render(<App />, rootElement);
 registerServiceWorker();
