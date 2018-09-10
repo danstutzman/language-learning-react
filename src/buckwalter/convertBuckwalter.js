@@ -151,8 +151,8 @@ export function convertBuckwalterToMiddles(buckwalter: string): string {
     .replace(/\ufee0\ufe8e/, '\ufee0\ufeff\ufe8e') // split up l+a ligature
 }
 
-export function convertBuckwalterToDisplay(buckwalter: string): string {
-  return buckwalter
+export function romanizeJoinedSyllables(joinedSyllables: string): string {
+  return joinedSyllables
     .replace('*', 'dh')
     .replace('E', '\u1d9c')
     // .replace('E', '\u02bf')
@@ -164,7 +164,7 @@ export function convertBuckwalterToDisplay(buckwalter: string): string {
     .replace('o', '')
 }
 
-export function convertUserInputToBuckwalter(userInput: string): string {
+export function mergeDigraphs(userInput: string): string {
   return userInput
     .replace('c', 'E')
     .replace('th', 'v')

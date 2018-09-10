@@ -1,13 +1,13 @@
 // @flow
 import './App.css'
+import type {Card} from './buckwalter/Card.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
-import {convertUserInputToBuckwalter} from './buckwalter/convertBuckwalter'
+import {mergeDigraphs} from './buckwalter/convertBuckwalter'
 import diffStrings from './diffStrings.js'
-import splitIntoSyllables from './buckwalter/splitIntoSyllables'
 import React from 'react'
 
 type Props = {|
-  card: { buckwalter: string },
+  card: Card,
   close: () => void,
   speakText: (script: string) => void,
 |}
@@ -35,14 +35,8 @@ export default class Quiz extends React.Component<Props, State> {
     if ((e: any).key === 'Enter') {
       e.preventDefault()
       const answer = (e.target: any).value
-      let syllables = []
-      for (const word of this.props.card.buckwalter.split(' ')) {
-        syllables = syllables.concat(splitIntoSyllables(word))
-      }
       const edits = diffStrings(
-        syllables.map((syllable) =>
-          `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`).join(''),
-        convertUserInputToBuckwalter(answer))
+        mergeDigraphs(this.props.card.roman), mergeDigraphs(answer))
       this.setState({ edits })
     }
   }

@@ -1,18 +1,17 @@
 // @flow
-import cards from './cards.js'
+import type {Card} from './buckwalter/Card.js'
+import CARDS from './buckwalter/CARDS.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
-import {convertBuckwalterToDisplay} from './buckwalter/convertBuckwalter.js'
 import Quiz from './Quiz.js'
 import React from 'react'
-import splitIntoSyllables from './buckwalter/splitIntoSyllables.js'
-import WORDS from './buckwalter/WORDS.js'
+import {romanizeJoinedSyllables} from './buckwalter/convertBuckwalter.js'
 
 type Props = {|
   speakText: (script: string) => void,
 |}
 
 type State = {|
-  card: { buckwalter: string },
+  card: Card,
   showQuiz: boolean,
 |}
 
@@ -20,7 +19,7 @@ export default class Home extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      card: cards[Math.floor(Math.random() * cards.length)],
+      card: CARDS[Math.floor(Math.random() * CARDS.length)],
       showQuiz: false,
     }
   }
@@ -32,26 +31,32 @@ export default class Home extends React.Component<Props, State> {
     this.setState({ showQuiz: false })
 
   onClickWord = (e: Event) => {
-    const wordBuckwalter = (e.target: any).getAttribute('data-word')
+    const buckwalter = (e.target: any).getAttribute('data-buckwalter')
       .replace('ll', 'l')
-    this.props.speakText(convertBuckwalterToArabic(wordBuckwalter))
+    this.props.speakText(convertBuckwalterToArabic(buckwalter))
   }
 
   render() {
     return <div>
       <h2>Home</h2>
 
-      {WORDS.map((wordBuckwalter: string, i: number) =>
+      {CARDS.map((card: Card, i: number) =>
         <li key={i}>
-          {splitIntoSyllables(wordBuckwalter).map(
-            (syllable: [string | null, string, string | null]) => {
+          <button
+            key={card.buckwalter}
+            onClick={this.onClickWord}
+            data-buckwalter={card.buckwalter}>
+            {card.roman}
+          </button>
+          {card.syllables.map(
+            (syllable: [string | null, string, string | null], j: number) => {
               const syllableBuckwalter =
                 `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`
               return <button
-                key={syllableBuckwalter}
+                key={j}
                 onClick={this.onClickWord}
-                data-word={syllableBuckwalter + 'o'}>
-                {convertBuckwalterToDisplay(syllableBuckwalter)}
+                data-buckwalter={syllableBuckwalter + 'o'}>
+                {romanizeJoinedSyllables(syllableBuckwalter)}
               </button>
             })}
         </li>
