@@ -1,9 +1,7 @@
+import cards from './cards.js'
+import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
 import Quiz from './Quiz.js'
 import React from 'react'
-
-const cards = [
-  { buckwalter: '\u0645\u0631\u062D\u0628\u0627' },
-]
 
 type Props = {|
   gradeAnswer: (answer: string) => void,
@@ -11,6 +9,7 @@ type Props = {|
 |}
 
 type State = {|
+  cardNum: number,
   showQuiz: boolean,
 |}
 
@@ -18,12 +17,15 @@ export default class Home extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
+      cardNum: Math.floor(Math.random() * cards.length),
       showQuiz: false,
     }
   }
 
   speakForQuiz = () => {
-    this.props.speak(cards[0].buckwalter)
+    const { cardNum } = this.state
+    const script = convertBuckwalterToArabic(cards[cardNum].buckwalter)
+    this.props.speak(script)
   }
 
   onClickShowQuiz = () => {
