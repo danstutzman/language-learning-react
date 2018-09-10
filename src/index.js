@@ -1,3 +1,4 @@
+// @flow
 import App from './App' // eslint-disable-line no-unused-vars
 import './index.css'
 import React from 'react' // eslint-disable-line no-unused-vars

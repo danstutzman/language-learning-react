@@ -1,3 +1,4 @@
+// @flow
 const STOP = 0
 const LEFT = 1
 const UP = 2

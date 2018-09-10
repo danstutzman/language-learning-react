@@ -1,3 +1,4 @@
+// @flow
 import { parse } from './buckwalterWord.js'
 
 const SQUIGGLE_REGEXP = new RegExp(

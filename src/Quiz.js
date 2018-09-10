@@ -1,3 +1,4 @@
+// @flow
 import './App.css'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
 import {convertBuckwalterToQalam} from './buckwalter/convertBuckwalter'

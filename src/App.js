@@ -1,3 +1,4 @@
+// @flow
 import './App.css'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'

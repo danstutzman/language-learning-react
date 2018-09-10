@@ -1,3 +1,4 @@
+// @flow
 export default [
   { buckwalter: 'Aisomiy daAniyaAl' },
   { buckwalter: 'maroHabFA' },

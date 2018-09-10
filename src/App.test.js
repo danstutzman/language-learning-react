@@ -1,3 +1,4 @@
+// @flow
 import App from './App.js' // eslint-disable-line no-unused-vars
 import diffStrings from './diffStrings.js'
 import splitIntoSyllables from './buckwalter/splitIntoSyllables.js'

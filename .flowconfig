@@ -11,6 +11,5 @@ interfaces/web-speech-api/SpeechSynthesisUtterance.js
 [lints]
 
 [options]
-all=true
 
 [strict]

@@ -1,3 +1,4 @@
+// @flow
 const BUCKWALTER_TO_ARABIC = {
   A: '\u0627',
   D: '\u0636',

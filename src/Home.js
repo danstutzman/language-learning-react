@@ -1,3 +1,4 @@
+// @flow
 import cards from './cards.js'
 import Quiz from './Quiz.js'
 import React from 'react'
