@@ -7,8 +7,6 @@ import React from 'react'
 import { Route } from 'react-router-dom'
 import Topics from './Topics.js'
 
-const MARHABBAN_IN_ARABIC = '\u0645\u0631\u062D\u0628\u0627'
-
 type Props = {|
   arabicVoices: Array<{| lang: string, name: string |}>,
   speakText: (script: string, selectedVoiceName: string | null) => void,
@@ -28,12 +26,18 @@ export default class App extends React.Component<Props, State> {
     }
   }
 
-  speakForHome = () => {
-    this.props.speakText(MARHABBAN_IN_ARABIC, this.state.selectedVoiceName)
+  gradeAnswerForHome = (answer: string) => {
+    console.log('Answered', answer)
+  }
+
+  speakForHome = (script: string) => {
+    this.props.speakText(script, this.state.selectedVoiceName)
   }
 
   renderHome = () =>
-    <Home speak={this.speakForHome} />
+    <Home
+      gradeAnswer={this.gradeAnswerForHome}
+      speak={this.speakForHome} />
 
   renderPreferences = () =>
     <Preferences

@@ -1,8 +1,13 @@
 import Quiz from './Quiz.js'
 import React from 'react'
 
+const cards = [
+  { buckwalter: '\u0645\u0631\u062D\u0628\u0627' },
+]
+
 type Props = {|
-  speak: () => void,
+  gradeAnswer: (answer: string) => void,
+  speak: (script: string) => void,
 |}
 
 type State = {|
@@ -17,8 +22,12 @@ export default class Home extends React.Component<Props, State> {
     }
   }
 
+  speakForQuiz = () => {
+    this.props.speak(cards[0].buckwalter)
+  }
+
   onClickShowQuiz = () => {
-    this.props.speak()
+    this.speakForQuiz()
     this.setState({ showQuiz: true })
   }
 
@@ -33,7 +42,8 @@ export default class Home extends React.Component<Props, State> {
       {this.state.showQuiz &&
         <Quiz
           close={this.onCloseQuiz}
-          speak={this.props.speak} />}
+          gradeAnswer={this.props.gradeAnswer}
+          speak={this.speakForQuiz} />}
     </div>
   }
 }
