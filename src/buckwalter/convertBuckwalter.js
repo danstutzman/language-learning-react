@@ -121,55 +121,6 @@ const BUCKWALTER_TO_MIDDLES = {
   ' ': ' ',
 }
 
-const BUCKWALTER_TO_QALAM = {
-  A: 'a', //?
-  D: 'D',
-  E: '`',
-  F: 'aN', //?
-  H: 'H',
-  K: 'iN', //?
-  N: 'uN', //?
-  S: 'S',
-  T: 'T',
-  Y: 'ae',
-  Z: 'Z',
-  a: 'a',
-  b: 'b',
-  d: 'd',
-  f: 'f',
-  g: 'gh',
-  h: 'h',
-  k: 'k',
-  i: 'i',
-  j: 'j',
-  l: 'l',
-  m: 'm',
-  n: 'n',
-  o: '',
-  p: '', // ta marbuta is not usually pronounced
-  q: 'q',
-  r: 'r',
-  s: 's',
-  t: 't',
-  u: 'u',
-  v: 'th',
-  w: 'w',
-  x: 'kh',
-  y: 'y',
-  z: 'z',
-  '*': 'dh',
-  '$': 'sh',
-  "'": "'",
-  '>': "'a", //?
-  '<': "'i", //?
-  '&': "w'", //?
-  '}': "y'", //?
-  '|': '~aa', //?
-  '{': 'a', // alif al-wasla indicates word is connected to previous word
-  '`': 'a', //?
-  ' ': ' ',
-}
-
 const ARABIC_TO_BUCKWALTER = {}
 for (const key in BUCKWALTER_TO_ARABIC) {
   ARABIC_TO_BUCKWALTER[BUCKWALTER_TO_ARABIC[key]] = key
@@ -200,10 +151,25 @@ export function convertBuckwalterToMiddles(buckwalter: string): string {
     .replace(/\ufee0\ufe8e/, '\ufee0\ufeff\ufe8e') // split up l+a ligature
 }
 
-export function convertBuckwalterToQalam(buckwalter: string): string {
+export function convertBuckwalterToDisplay(buckwalter: string): string {
   return buckwalter
-    .trim()
-    .split('')
-    .map(function (c) { return BUCKWALTER_TO_QALAM[c] })
-    .join('')
+    .replace('*', 'dh')
+    .replace('E', '\u1d9c')
+    // .replace('E', '\u02bf')
+    .replace('x', 'kh')
+    .replace('$', 'sh')
+    .replace('g', 'gh')
+    // .replace("'", '\u02bea')
+    .replace("'", '\u2019')
+    .replace('o', '')
+}
+
+export function convertUserInputToBuckwalter(userInput: string): string {
+  return userInput
+    .replace('c', 'E')
+    .replace('th', 'v')
+    .replace('kh', 'x')
+    .replace('dh', '*')
+    .replace('sh', '$')
+    .replace('gh', 'g')
 }

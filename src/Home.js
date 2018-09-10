@@ -1,6 +1,7 @@
 // @flow
 import cards from './cards.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
+import {convertBuckwalterToDisplay} from './buckwalter/convertBuckwalter.js'
 import Quiz from './Quiz.js'
 import React from 'react'
 import splitIntoSyllables from './buckwalter/splitIntoSyllables.js'
@@ -32,6 +33,7 @@ export default class Home extends React.Component<Props, State> {
 
   onClickWord = (e: Event) => {
     const wordBuckwalter = (e.target: any).getAttribute('data-word')
+      .replace('ll', 'l')
     this.props.speakText(convertBuckwalterToArabic(wordBuckwalter))
   }
 
@@ -45,21 +47,11 @@ export default class Home extends React.Component<Props, State> {
             (syllable: [string | null, string, string | null]) => {
               const syllableBuckwalter =
                 `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`
-                  .replace('ll', 'l')
-              const displayed = syllableBuckwalter
-                .replace('*', 'dh')
-                .replace('E', '\u1d9c')
-                // .replace('E', '\u02bf')
-                .replace('x', 'kh')
-                .replace('$', 'sh')
-                .replace('g', 'gh')
-                // .replace("'", '\u02bea')
-                .replace("'", '\u2019')
               return <button
                 key={syllableBuckwalter}
                 onClick={this.onClickWord}
                 data-word={syllableBuckwalter + 'o'}>
-                {displayed}
+                {convertBuckwalterToDisplay(syllableBuckwalter)}
               </button>
             })}
         </li>

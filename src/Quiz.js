@@ -1,8 +1,9 @@
 // @flow
 import './App.css'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
-import {convertBuckwalterToQalam} from './buckwalter/convertBuckwalter'
+import {convertUserInputToBuckwalter} from './buckwalter/convertBuckwalter'
 import diffStrings from './diffStrings.js'
+import splitIntoSyllables from './buckwalter/splitIntoSyllables'
 import React from 'react'
 
 type Props = {|
@@ -34,8 +35,14 @@ export default class Quiz extends React.Component<Props, State> {
     if ((e: any).key === 'Enter') {
       e.preventDefault()
       const answer = (e.target: any).value
+      let syllables = []
+      for (const word of this.props.card.buckwalter.split(' ')) {
+        syllables = syllables.concat(splitIntoSyllables(word))
+      }
       const edits = diffStrings(
-        convertBuckwalterToQalam(this.props.card.buckwalter), answer)
+        syllables.map((syllable) =>
+          `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`).join(''),
+        convertUserInputToBuckwalter(answer))
       this.setState({ edits })
     }
   }
