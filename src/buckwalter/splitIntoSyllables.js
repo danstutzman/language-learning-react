@@ -7,7 +7,14 @@ const SQUIGGLE_REGEXP = new RegExp(
 export default function splitIntoSyllables(buckwalterWord: string):
   Array<[string | null, string, string | null]> {
   const doubled = buckwalterWord.replace(SQUIGGLE_REGEXP, '$1$1$2')
-  return parse(doubled)
+  try {
+    return parse(doubled)
+  } catch (e) {
+    if (e.name === 'SyntaxError') {
+      console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
+    }
+    throw e
+  }
 }
 
 /*
