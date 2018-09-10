@@ -1,15 +1,13 @@
 import cards from './cards.js'
-import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
 import Quiz from './Quiz.js'
 import React from 'react'
 
 type Props = {|
-  gradeAnswer: (answer: string) => void,
-  speak: (script: string) => void,
+  speakText: (script: string) => void,
 |}
 
 type State = {|
-  cardNum: number,
+  card: { buckwalter: string },
   showQuiz: boolean,
 |}
 
@@ -17,21 +15,13 @@ export default class Home extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      cardNum: Math.floor(Math.random() * cards.length),
+      card: cards[Math.floor(Math.random() * cards.length)],
       showQuiz: false,
     }
   }
 
-  speakForQuiz = () => {
-    const { cardNum } = this.state
-    const script = convertBuckwalterToArabic(cards[cardNum].buckwalter)
-    this.props.speak(script)
-  }
-
-  onClickShowQuiz = () => {
-    this.speakForQuiz()
+  onClickShowQuiz = () =>
     this.setState({ showQuiz: true })
-  }
 
   onCloseQuiz = () =>
     this.setState({ showQuiz: false })
@@ -43,9 +33,9 @@ export default class Home extends React.Component<Props, State> {
 
       {this.state.showQuiz &&
         <Quiz
+          card={this.state.card}
           close={this.onCloseQuiz}
-          gradeAnswer={this.props.gradeAnswer}
-          speak={this.speakForQuiz} />}
+          speakText={this.props.speakText} />}
     </div>
   }
 }

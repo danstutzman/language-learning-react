@@ -26,18 +26,13 @@ export default class App extends React.Component<Props, State> {
     }
   }
 
-  gradeAnswerForHome = (answer: string) => {
-    console.log('Answered', answer)
-  }
-
-  speakForHome = (script: string) => {
+  speakTextForHome = (script: string) => {
     this.props.speakText(script, this.state.selectedVoiceName)
   }
 
   renderHome = () =>
     <Home
-      gradeAnswer={this.gradeAnswerForHome}
-      speak={this.speakForHome} />
+      speakText={this.speakTextForHome} />
 
   renderPreferences = () =>
     <Preferences
