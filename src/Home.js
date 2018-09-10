@@ -48,10 +48,13 @@ export default class Home extends React.Component<Props, State> {
                   .replace('ll', 'l')
               const displayed = syllableBuckwalter
                 .replace('*', 'dh')
-                .replace('E', '`')
+                .replace('E', '\u1d9c')
+                // .replace('E', '\u02bf')
                 .replace('x', 'kh')
                 .replace('$', 'sh')
                 .replace('g', 'gh')
+                // .replace("'", '\u02bea')
+                .replace("'", '\u2019')
               return <button
                 key={syllableBuckwalter}
                 onClick={this.onClickWord}
