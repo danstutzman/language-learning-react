@@ -29,7 +29,7 @@ start
   }
 
 first
-  = "{l" c:[rSdD] { return [null, 'A', 'l' + c] }
+  = "{l" c:[rSdDs] { return [null, 'A', c] }
   / "{lo" { return [null, 'A', 'l'] }
   / "{l" { return [null, 'A', 'l'] }
   / "{" c:end_consonant? { return [null, 'i', c] }
@@ -41,7 +41,7 @@ first
   }
 
 last_consonant
-  = "l"
+  = [lns]
   / "F" { return "n" }
 
 vowel
@@ -61,7 +61,9 @@ start_consonant
   = "ll"
   / "bb"
   / "yy"
+  / "}" { return "'" }
   / [btvjHxd*rzs$SDTZEgfqklmnhwy]
 
 end_consonant
   = c:[btvjHxd*rzs$SDTZEgfqklmnhwy] "o" { return c }
+  / ">o" { return "A'" }

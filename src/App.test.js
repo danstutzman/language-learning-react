@@ -30,13 +30,13 @@ it('splits words into syllables', () => {
     ['h', 'i', null],
   ])
   expect(split('{lr~aHomani')).toEqual([
-    [null, 'A', 'lr'],
+    [null, 'A', 'r'],
     ['r', 'a', 'H'],
     ['m', 'a', null],
     ['n', 'i', null],
   ])
   expect(split('{lr~aHiymi')).toEqual([
-    [null, 'A', 'lr'],
+    [null, 'A', 'r'],
     ['r', 'a', null],
     ['H', 'iy', null],
     ['m', 'i', null],
@@ -63,13 +63,13 @@ it('splits words into syllables', () => {
     ['n', 'a', null],
   ])
   expect(split('{lr~aHoma`ni')).toEqual([
-    [null, 'A', 'lr'],
+    [null, 'A', 'r'],
     ['r', 'a', 'H'],
     ['m', 'a', null],
     ['n', 'i', null],
   ])
   expect(split('{lr~aHiymi')).toEqual([
-    [null, 'A', 'lr'],
+    [null, 'A', 'r'],
     ['r', 'a', null],
     ['H', 'iy', null],
     ['m', 'i', null],
@@ -84,7 +84,7 @@ it('splits words into syllables', () => {
     ['m', 'i', null],
   ])
   expect(split('{ld~iyni')).toEqual([
-    [null, 'A', 'ld'],
+    [null, 'A', 'd'],
     ['d', 'iy', null],
     ['n', 'i', null],
   ])
@@ -116,7 +116,7 @@ it('splits words into syllables', () => {
     ['n', 'aA', null],
   ])
   expect(split('{lS~ira`Ta')).toEqual([
-    [null, 'A', 'lS'],
+    [null, 'A', 'S'],
     ['S', 'i', null],
     ['r', 'a', null],
     ['T', 'a', null],
@@ -179,7 +179,7 @@ it('splits words into syllables', () => {
     ['l', 'aA', null],
   ])
   expect(split('{lD~aA^l~iyna')).toEqual([
-    [null, 'A', 'lD'],
+    [null, 'A', 'D'],
     ['D', 'aA', 'l'],
     ['l', 'iy', null],
     ['n', 'a', null],
@@ -223,6 +223,17 @@ it('splits words into syllables', () => {
   expect(split('>anota')).toEqual([
     ["'", 'a', 'n'],
     ['t', 'a', null],
+  ])
+  expect(split('xuroTuwmo')).toEqual([
+    ['x', 'u', 'r'],
+    ['T', 'uw', 'm'],
+  ])
+  expect(split('$amos')).toEqual([
+    ['$', 'a', 'ms'],
+  ])
+  expect(split('gaA}imo')).toEqual([
+    ['g', 'aA', null],
+    ["'", 'i', 'm'],
   ])
 })
 

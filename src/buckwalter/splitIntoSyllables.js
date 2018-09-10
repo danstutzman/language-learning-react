@@ -4,7 +4,8 @@ import { parse } from './buckwalterWord.js'
 const SQUIGGLE_REGEXP = new RegExp(
   '([btvjHxd*rzs$SDTZEgfqklmnhwyaA])([aiu])?~', 'g')
 
-export default function splitIntoSyllables(buckwalterWord: string): Array<string> {
+export default function splitIntoSyllables(buckwalterWord: string):
+  Array<[string | null, string, string | null]> {
   const doubled = buckwalterWord.replace(SQUIGGLE_REGEXP, '$1$1$2')
   return parse(doubled)
 }
