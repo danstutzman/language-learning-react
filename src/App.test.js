@@ -6,16 +6,16 @@ import splitIntoSyllables from './buckwalter/splitIntoSyllables.js'
 // import ReactDOM from 'react-dom'
 
 it('computes diff', () => {
-   expect(diffStrings('GCATGCU', 'GATTACA')).toEqual([
-     ['G', 'G'],
-     ['C', ''],
-     ['A', 'A'],
-     ['T', 'T'],
-     ['G', 'T'],
-     ['',  'A'],
-     ['C', 'C'],
-     ['U', 'A'],
-   ])
+  expect(diffStrings('GCATGCU', 'GATTACA')).toEqual([
+    ['G', 'G'],
+    ['C', ''],
+    ['A', 'A'],
+    ['T', 'T'],
+    ['G', 'T'],
+    ['',  'A'],
+    ['C', 'C'],
+    ['U', 'A'],
+  ])
 })
 
 it('splits words into syllables', () => {
@@ -90,7 +90,7 @@ it('splits words into syllables', () => {
   ])
   expect(split('<iy~aAka')).toEqual([
     ["'", 'i', 'y'],
-    ["y", 'aA', null],
+    ['y', 'aA', null],
     ['k', 'a', null],
   ])
   expect(split('naEobudu')).toEqual([
@@ -140,8 +140,8 @@ it('splits words into syllables', () => {
     ['n', 'a', null],
   ])
   expect(split('>anoEamo')).toEqual([
-    ["'", "a", "n"],
-    ["E", "a", "m"],
+    ["'", 'a', 'n'],
+    ['E', 'a', 'm'],
   ])
   expect(split('ta')).toEqual([
     ['t', 'a', null],
@@ -161,9 +161,9 @@ it('splits words into syllables', () => {
     [null, 'A', 'l'],
   ])
   expect(split('magoDuwbi')).toEqual([
-    ["m", "a", "g"],
-    ["D", "uw", null],
-    ["b", "i", null],
+    ['m', 'a', 'g'],
+    ['D', 'uw', null],
+    ['b', 'i', null],
   ])
   expect(split('Ealayo')).toEqual([
     ['E', 'a', null],

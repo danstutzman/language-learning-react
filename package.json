@@ -16,10 +16,14 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "eslint": "eslint src/**/*.js"
+    "eslint": "eslint src"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
     "eslint": "^5.5.0"
-  }
+  },
+  "eslintIgnore": [
+    "src/registerServiceWorker.js",
+    "src/buckwalter/buckwalterWord.js"
+  ]
 }
