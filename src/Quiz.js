@@ -37,7 +37,7 @@ export default class Quiz extends React.Component<Props, State> {
       e.preventDefault()
       const answer = (e.target: any).value
       const edits = diffStrings(
-        mergeDigraphs(this.props.card.roman), mergeDigraphs(answer))
+        this.props.card.romanized, mergeDigraphs(answer))
       this.setState({ edits })
     }
   }

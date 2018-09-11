@@ -62,33 +62,32 @@ const C2_TO_ROMANIZED = {
   y: 'y',
 }
 
-export function romanizeSyllables(
-  syllables: Array<[string | null, string, string | null]>): string {
-  return syllables.map((syllable) => {
-    const c1: string | null = syllable[0]
-    let c1Romanized = ''
-    if (c1 !== null) {
-      c1Romanized = C1_TO_ROMANIZED[c1]
-      if (c1Romanized === undefined) {
-        throw Error(`Can't romanize c1 ${c1}`)
-      }
-    }
+export function romanizeSyllableTriplet(
+  triplet: [string | null, string, string | null]): string {
 
-    const v: string = syllable[1]
-    const vRomanized = V_TO_ROMANIZED[v]
-    if (vRomanized === undefined) {
-      throw Error(`Can't romanize v ${v}`)
+  const c1: string | null = triplet[0]
+  let c1Romanized = ''
+  if (c1 !== null) {
+    c1Romanized = C1_TO_ROMANIZED[c1]
+    if (c1Romanized === undefined) {
+      throw Error(`Can't romanize c1 ${c1}`)
     }
+  }
 
-    const c2: string | null = syllable[2]
-    let c2Romanized = ''
-    if (c2 !== null) {
-      c2Romanized = C2_TO_ROMANIZED[c2]
-      if (c2Romanized === undefined) {
-        throw Error(`Can't romanize c2 ${c2}`)
-      }
+  const v: string = triplet[1]
+  const vRomanized = V_TO_ROMANIZED[v]
+  if (vRomanized === undefined) {
+    throw Error(`Can't romanize v ${v}`)
+  }
+
+  const c2: string | null = triplet[2]
+  let c2Romanized = ''
+  if (c2 !== null) {
+    c2Romanized = c2 // C2_TO_ROMANIZED[c2]
+    if (c2Romanized === undefined) {
+      throw Error(`Can't romanize c2 ${c2}`)
     }
+  }
 
-    return c1Romanized + vRomanized + c2Romanized
-  }).join('')
+  return c1Romanized + vRomanized + c2Romanized
 }

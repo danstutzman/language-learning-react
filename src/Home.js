@@ -1,10 +1,12 @@
 // @flow
 import type {Card} from './buckwalter/Card.js'
 import CARDS from './buckwalter/CARDS.js'
+import type {CardSyllable} from './buckwalter/Card.js'
+import type {CardWord} from './buckwalter/Card.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
+import {expandDigraphs} from './buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
 import React from 'react'
-import {romanizeSyllables} from './buckwalter/romanize.js'
 
 type Props = {|
   speakText: (script: string) => void,
@@ -30,7 +32,7 @@ export default class Home extends React.Component<Props, State> {
   onCloseQuiz = () =>
     this.setState({ showQuiz: false })
 
-  onClickWord = (e: Event) => {
+  onClickCard = (e: Event) => {
     const buckwalter = (e.target: any).getAttribute('data-buckwalter')
       .replace('ll', 'l')
     this.props.speakText(convertBuckwalterToArabic(buckwalter))
@@ -44,21 +46,26 @@ export default class Home extends React.Component<Props, State> {
         <li key={i}>
           <button
             key={card.buckwalter}
-            onClick={this.onClickWord}
+            onClick={this.onClickCard}
             data-buckwalter={card.buckwalter}>
-            {card.roman}
+            {expandDigraphs(card.romanized)}
           </button>
-          {card.syllables.map(
-            (syllable: [string | null, string, string | null], j: number) => {
-              const syllableBuckwalter =
-                `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`
-              return <button
-                key={j}
-                onClick={this.onClickWord}
-                data-buckwalter={syllableBuckwalter + 'o'}>
-                {romanizeSyllables([syllable])}
-              </button>
-            })}
+          {card.words.map((word: CardWord, j: number) => {
+            return <button
+              key={j}
+              onClick={this.onClickCard}
+              data-buckwalter={word.buckwalter}>
+              {expandDigraphs(word.romanizedIfLast)}
+            </button>
+          })}
+          {card.syllables.map((syllable: CardSyllable, j: number) => {
+            return <button
+              key={j + 100}
+              onClick={this.onClickCard}
+              data-buckwalter={syllable.buckwalter + 'o'}>
+              {expandDigraphs(syllable.romanized)}
+            </button>
+          })}
         </li>
       )}
 

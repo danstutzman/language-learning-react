@@ -1,7 +1,7 @@
 // @flow
 import App from './App.js' // eslint-disable-line no-unused-vars
 import diffStrings from './diffStrings.js'
-import splitIntoSyllables from './buckwalter/splitIntoSyllables.js'
+import {splitIntoSyllableTriplets} from './buckwalter/splitIntoSyllables.js'
 // import React from 'react'
 // import ReactDOM from 'react-dom'
 
@@ -19,7 +19,7 @@ it('computes diff', () => {
 })
 
 it('splits words into syllables', () => {
-  const split = splitIntoSyllables
+  const split = splitIntoSyllableTriplets
   expect(split('bisomi')).toEqual([
     ['b', 'i', 's'],
     ['m', 'i', null],
