@@ -2,8 +2,9 @@
 import './App.css'
 import type {Card} from './buckwalter/Card.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
-import {mergeDigraphs} from './buckwalter/convertBuckwalter'
+import {mergeDigraphs} from './buckwalter/digraphs.js'
 import diffStrings from './diffStrings.js'
+import {expandDigraphs} from './buckwalter/digraphs.js'
 import React from 'react'
 
 type Props = {|
@@ -56,8 +57,8 @@ export default class Quiz extends React.Component<Props, State> {
         <tbody>
           <tr>
             {this.state.edits.map((edit: [string, string], i: number) => {
-              const correct = edit[0]
-              const guess = edit[1]
+              const correct = expandDigraphs(edit[0])
+              const guess = expandDigraphs(edit[1])
               if (guess === correct) {
                 return <td key={i}></td>
               } else {
@@ -67,8 +68,8 @@ export default class Quiz extends React.Component<Props, State> {
           </tr>
           <tr>
             {this.state.edits.map((edit: [string, string], i: number) => {
-              const correct = edit[0]
-              const guess = edit[1]
+              const correct = expandDigraphs(edit[0])
+              const guess = expandDigraphs(edit[1])
               if (guess === correct) {
                 return <td key={i}>{guess}</td>
               } else {

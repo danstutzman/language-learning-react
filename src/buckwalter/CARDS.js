@@ -1,6 +1,6 @@
 // @flow
 import type {Card} from './Card.js'
-import {romanizeJoinedSyllables} from './convertBuckwalter.js'
+import {romanizeSyllables} from './romanize.js'
 import splitIntoSyllables from './splitIntoSyllables.js'
 
 export default ([
@@ -27,8 +27,7 @@ export default ([
   for (const word of buckwalter.split(' ')) {
     const wordSyllables = splitIntoSyllables(word)
     syllables = syllables.concat(wordSyllables)
-    const romanWord = romanizeJoinedSyllables(wordSyllables.map((syllable) =>
-      `${syllable[0] || ''}${syllable[1]}${syllable[2] || ''}`).join(''))
+    const romanWord = romanizeSyllables(wordSyllables)
     romanWords.push(romanWord)
   }
   const roman = romanWords.join(' ')

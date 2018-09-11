@@ -4,7 +4,7 @@ import CARDS from './buckwalter/CARDS.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
 import Quiz from './Quiz.js'
 import React from 'react'
-import {romanizeJoinedSyllables} from './buckwalter/convertBuckwalter.js'
+import {romanizeSyllables} from './buckwalter/romanize.js'
 
 type Props = {|
   speakText: (script: string) => void,
@@ -56,7 +56,7 @@ export default class Home extends React.Component<Props, State> {
                 key={j}
                 onClick={this.onClickWord}
                 data-buckwalter={syllableBuckwalter + 'o'}>
-                {romanizeJoinedSyllables(syllableBuckwalter)}
+                {romanizeSyllables([syllable])}
               </button>
             })}
         </li>

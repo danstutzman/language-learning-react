@@ -150,26 +150,3 @@ export function convertBuckwalterToMiddles(buckwalter: string): string {
     .join('')
     .replace(/\ufee0\ufe8e/, '\ufee0\ufeff\ufe8e') // split up l+a ligature
 }
-
-export function romanizeJoinedSyllables(joinedSyllables: string): string {
-  return joinedSyllables
-    .replace('*', 'dh')
-    .replace('E', '\u1d9c')
-    // .replace('E', '\u02bf')
-    .replace('x', 'kh')
-    .replace('$', 'sh')
-    .replace('g', 'gh')
-    // .replace("'", '\u02bea')
-    .replace("'", '\u2019')
-    .replace('o', '')
-}
-
-export function mergeDigraphs(userInput: string): string {
-  return userInput
-    .replace('c', 'E')
-    .replace('th', 'v')
-    .replace('kh', 'x')
-    .replace('dh', '*')
-    .replace('sh', '$')
-    .replace('gh', 'g')
-}
