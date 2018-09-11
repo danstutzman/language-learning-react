@@ -10,9 +10,7 @@ export function splitIntoSyllableTriplets(buckwalterWord: string):
   try {
     return parse(doubled)
   } catch (e) {
-    if (e.name === 'SyntaxError') {
-      console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
-    }
+    console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
     throw e
   }
 }
