@@ -47,18 +47,27 @@ const C2_TO_ROMANIZED = {
   E: 'E',
   H: 'H',
   S: 'S',
+  T: 'T',
   b: 'b',
+  bb: 'bb',
   d: 'd',
   g: 'g',
   h: 'h',
+  k: 'k',
   l: 'l',
   m: 'm',
+  md: 'md',
   ms: 'ms',
+  nt: 'nt',
   n: 'n',
   r: 'r',
   s: 's',
+  sm: 'sm',
   w: 'w',
+  wm: 'wm',
   y: 'y',
+  yf: 'yf',
+  yr: 'yr',
 }
 
 export function romanizeSyllableTriplet(
@@ -82,7 +91,7 @@ export function romanizeSyllableTriplet(
   const c2: string | null = triplet[2]
   let c2Romanized = ''
   if (c2 !== null) {
-    c2Romanized = c2 // C2_TO_ROMANIZED[c2]
+    c2Romanized = C2_TO_ROMANIZED[c2]
     if (c2Romanized === undefined) {
       throw Error(`Can't romanize c2 ${c2}`)
     }
