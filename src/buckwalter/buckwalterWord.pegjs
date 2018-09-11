@@ -8,21 +8,31 @@ start
       new_cvcs.push(first);
     }
     new_cvcs = new_cvcs.concat(cvcs);
-    if (last !== null) {
-      const last_cvc = new_cvcs[cvcs.length - 1];
+    if (last !== null && cvcs.length > 0) {
+      const last_cvc = cvcs[cvcs.length - 1];
       const new_last_cvc = [last_cvc[0], last_cvc[1], (last_cvc[2] || '') + last];
       new_cvcs = new_cvcs.slice(0, -1).concat([new_last_cvc])
     }
     for (let i = 1; i < new_cvcs.length; i++) {
-      if (new_cvcs[i][0] === 'bb') {
-        new_cvcs[i][0] = 'b';
-        new_cvcs[i - 1][2] = 'b';
-      } else if (new_cvcs[i][0] === 'll' && new_cvcs[i][1] !== 'a') {
-        new_cvcs[i][0] = 'l';
-        new_cvcs[i - 1][2] = 'l';
-      } else if (new_cvcs[i][0] === 'yy') {
-        new_cvcs[i][0] = 'y';
-        new_cvcs[i - 1][2] = 'y';
+      let prev = new_cvcs[i - 1];
+      let curr = new_cvcs[i];
+      let prevC2 = prev[2] || '';
+      if (curr[0] === 'bb') {
+        curr[0] = 'b';
+        prev[2] = prevC2 + 'b';
+      } else if (curr[0] === 'll' && curr[1] !== 'a') {
+        curr[0] = 'l';
+        prev[2] = prevC2 + 'l';
+      } else if (curr[0] === 'ss') {
+        curr[0] = 's';
+        if (prev[1] === 'Aa' && prevC2 == 'l') {
+          prev[2] = 's';
+        } else {
+          prev[2] = prevC2 + 's';
+        }
+      } else if (curr[0] === 'yy') {
+        curr[0] = 'y';
+        prev[2] = prevC2 + 'y';
       }
     }
     return new_cvcs;
@@ -35,7 +45,7 @@ first
   / "{" c:end_consonant? { return [null, 'i', c] }
   / ">a" c:end_consonant? { return ["'", 'a', c] }
   / "<i" { return ["'", 'i', null] }
-  / "Aals" { return [null, 'Aa', 'ls'] }
+  / "Aal" { return [null, 'Aa', 'l'] }
   / vowel:vowel end_consonant:end_consonant? {
     return [null, vowel, end_consonant]
   }
@@ -60,6 +70,7 @@ cvc
 start_consonant
   = "ll"
   / "bb"
+  / "ss"
   / "yy"
   / "}" { return "'" }
   / [btvjHxd*rzs$SDTZEgfqklmnhwy]

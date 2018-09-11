@@ -201,7 +201,7 @@ it('splits words into syllables', () => {
     ['b', 'A', 'n'],
   ])
   expect(split('Aalsa~laAmu')).toEqual([
-    [null, 'Aa', 'ls'],
+    [null, 'Aa', 's'],
     ['s', 'a', null],
     ['l', 'aA', null],
     ['m', 'u', null],

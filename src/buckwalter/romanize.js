@@ -52,7 +52,6 @@ const C2_TO_ROMANIZED = {
   g: 'g',
   h: 'h',
   l: 'l',
-  ls: 'ls',
   m: 'm',
   ms: 'ms',
   n: 'n',
