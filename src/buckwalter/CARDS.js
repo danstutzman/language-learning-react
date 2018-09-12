@@ -13,7 +13,7 @@ function makeCardSyllable(triplet: [string | null, string, string | null]):
   }
 }
 
-function makeCard(buckwalter: string): Card {
+function makeCards(buckwalter: string): Array<Card> {
   const words = buckwalter.split(' ').map((wordBuckwalter: string) => {
     const triplets = splitIntoSyllableTriplets(wordBuckwalter)
     const syllables = triplets.map(makeCardSyllable)
@@ -41,10 +41,30 @@ function makeCard(buckwalter: string): Card {
     }
   }
 
-  return { buckwalter, romanized, syllables, words }
+  const phraseCard = { buckwalter, romanized, syllables, words }
+  const wordCards = words.map((cardWord) => ({
+    buckwalter: cardWord.buckwalter,
+    romanized: cardWord.romanizedIfLast,
+    syllables: cardWord.syllables,
+    words: [cardWord],
+  }))
+  const syllableCards = syllables.map((cardSyllable) => ({
+    buckwalter: cardSyllable.buckwalter,
+    romanized: cardSyllable.romanized,
+    syllables: [cardSyllable],
+    words: [{
+      buckwalter: cardSyllable.buckwalter,
+      romanized: cardSyllable.romanized,
+      romanizedIfLast: cardSyllable.romanized,
+      syllables: [cardSyllable],
+      syllablesIfLast: [cardSyllable],
+    }],
+  }))
+
+  return [phraseCard].concat(wordCards).concat(syllableCards)
 }
 
-export default ([
+const phrases = [
   'Aisomiy daAniyaAl',
   'maroHabAF',
   'Aalsa~laAmu Ealayokumo',
@@ -62,4 +82,9 @@ export default ([
   '{hodinaA {lS~ira`Ta {lomusotaqiyma',
   'Sira`Ta {l~a*iyna >anoEamo ta Ealayo himo gayori ' +
     '{lo magoDuwbi Ealayo himo wa laA {lD~aA^l~iyna',
-].map(makeCard): Array<Card>)
+]
+
+export default ((phrases
+  .map(makeCards)
+  .reduce((accum: Array<Card>, cards: Array<Card>) => accum.concat(cards))
+): Array<Card>)

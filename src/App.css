@@ -2,6 +2,10 @@
   background-color: white;
 }
 
+button.faded {
+  color: #bbb;
+}
+
 .Quiz {
   position: fixed;
   border: 1px black solid;
