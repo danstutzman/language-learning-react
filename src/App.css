@@ -12,24 +12,20 @@
   left: 30px;
   background-color: white;
 }
-.Quiz ins {
-  color: red;
-  text-decoration: none;
+
+.Quiz .gradedChars div {
+  display: inline-block;
 }
-.Quiz del {
-  text-decoration: line-through;
+.Quiz .gradedChars .newSyllable {
+  margin-left: 4px;
 }
-.Quiz table.alignment {
-  border-spacing: 0;
-  border-collapse: collapse;
+.Quiz .gradedChars .newWord {
+  margin-left: 15px;
 }
-.Quiz table.alignment td {
-  padding: 0;
-  padding-right: 4px;
-}
-.Quiz table.alignment td.matches {
+.Quiz .gradedChars .correct {
   color: green;
 }
-.Quiz table.alignment td.endOfWord {
-  padding-right: 35px;
+.Quiz .gradedChars .incorrect {
+  background-color: red;
+  color: white;
 }

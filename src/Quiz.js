@@ -13,21 +13,22 @@ type Props = {|
   speakText: (script: string) => void,
 |}
 
-type SyllablePair = {|
-  correct: string,
-  guess: string,
-  isEndOfWord: boolean,
+type GradedChar = {|
+  char: string,
+  wasEnteredCorrectly: boolean,
+  beginsSyllable: boolean,
+  beginsWord: boolean,
 |}
 
 type State = {|
-  syllablePairs: Array<SyllablePair>,
+  gradedChars: Array<GradedChar>,
 |}
 
 export default class Quiz extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      syllablePairs: [],
+      gradedChars: [],
     }
   }
 
@@ -60,35 +61,20 @@ export default class Quiz extends React.Component<Props, State> {
         wordStarts[nextSyllableStart] = true
       }
 
-      const syllablePairs = []
-      let correctSoFar = ''
-      let guessSoFar = ''
+      const gradedChars = []
       for (const edit of edits) {
         const correctIndex = edit[0]
         const guessIndex = edit[1]
-        if (syllableStarts[correctIndex]) {
-          syllablePairs.push({
-            correct: correctSoFar,
-            guess: guessSoFar,
-            isEndOfWord: wordStarts[correctIndex],
-          })
-          correctSoFar = ''
-          guessSoFar = ''
-        }
-        if (edit[0] !== -1) {
-          correctSoFar += correct.charAt(correctIndex)
-        }
-        if (edit[1] !== -1) {
-          guessSoFar += guess.charAt(guessIndex)
-        }
+        const correctChar = correct.charAt(correctIndex)
+        const guessChar = guess.charAt(guessIndex)
+        gradedChars.push({
+          char: correctChar,
+          wasEnteredCorrectly: guessChar === correctChar,
+          beginsSyllable: syllableStarts[correctIndex],
+          beginsWord: wordStarts[correctIndex],
+        })
       }
-      syllablePairs.push({
-        correct: expandDigraphs(correctSoFar),
-        guess: expandDigraphs(guessSoFar),
-        isEndOfWord: true,
-      })
-
-      this.setState({ syllablePairs })
+      this.setState({ gradedChars })
     }
   }
 
@@ -104,30 +90,16 @@ export default class Quiz extends React.Component<Props, State> {
       <br />
       <br />
 
-      <table className='alignment'>
-        <tbody>
-          <tr>
-            {this.state.syllablePairs.map((pair: SyllablePair, i: number) => {
-              const className = pair.isEndOfWord ? 'endOfWord' : null
-              return <td key={i} className={className}>
-                {(pair.guess !== pair.correct) &&
-                  <ins>{expandDigraphs(pair.correct)}</ins>}
-              </td>
-            })}
-          </tr>
-          <tr>
-            {this.state.syllablePairs.map((pair: SyllablePair, i: number) => {
-              const className = (pair.isEndOfWord ? 'endOfWord' : '') +
-                (pair.guess === pair.correct ? ' matches' : '')
-              return <td key={i} className={className}>
-                {(pair.guess === pair.correct) ?
-                  expandDigraphs(pair.guess) :
-                  <del>{expandDigraphs(pair.guess)}</del>}
-              </td>
-            })}
-          </tr>
-        </tbody>
-      </table>
+      <div className='gradedChars'>
+        {this.state.gradedChars.map((char: GradedChar, i: number) => {
+          const className = (char.beginsSyllable ? 'newSyllable' : '') +
+            (char.beginsWord ? ' newWord' : '') +
+            (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
+          return <span key={i} className={className}>
+            {expandDigraphs(char.char)}
+          </span>
+        })}
+      </div>
     </div>
   }
 }
