@@ -6,7 +6,7 @@ const UP_LEFT = 3
 
 // Needleman–Wunsch algorithm
 export default function diffStrings(a: string, b: string):
-    Array<[string, string]> {
+    Array<[number, number]> {
   const maxScoreRows = []
   const arrowDirectionRows = []
 
@@ -57,13 +57,13 @@ export default function diffStrings(a: string, b: string):
   while (x >= 0 && y >= 0) {
     const arrowDirection = arrowDirectionRows[y][x]
     if (arrowDirection === LEFT) {
-      edits.unshift([a.charAt(x - 1), ''])
+      edits.unshift([x - 1, -1])
       x -= 1
     } else if (arrowDirection === UP) {
-      edits.unshift(['', b.charAt(y - 1)])
+      edits.unshift([-1, y - 1])
       y -= 1
     } else if (arrowDirection === UP_LEFT) {
-      edits.unshift([a.charAt(x - 1), b.charAt(y - 1)])
+      edits.unshift([x - 1, y - 1])
       x -= 1
       y -= 1
     } else {

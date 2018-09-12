@@ -148,5 +148,5 @@ export function convertBuckwalterToMiddles(buckwalter: string): string {
     .split('')
     .map(function (c) { return BUCKWALTER_TO_MIDDLES[c] })
     .join('')
-    .replace(/\ufee0\ufe8e/, '\ufee0\ufeff\ufe8e') // split up l+a ligature
+    .replace(/\ufee0\ufe8e/g, '\ufee0\ufeff\ufe8e') // split up l+a ligature
 }

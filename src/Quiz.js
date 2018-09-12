@@ -13,15 +13,21 @@ type Props = {|
   speakText: (script: string) => void,
 |}
 
+type SyllablePair = {|
+  correct: string,
+  guess: string,
+  isEndOfWord: boolean,
+|}
+
 type State = {|
-  edits: Array<[string, string]>,
+  syllablePairs: Array<SyllablePair>,
 |}
 
 export default class Quiz extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      edits: [],
+      syllablePairs: [],
     }
   }
 
@@ -35,10 +41,54 @@ export default class Quiz extends React.Component<Props, State> {
   onKeyPressInAnswer = (e: Event) => {
     if ((e: any).key === 'Enter') {
       e.preventDefault()
-      const answer = (e.target: any).value
-      const edits = diffStrings(
-        this.props.card.romanized, mergeDigraphs(answer))
-      this.setState({ edits })
+      const correct = this.props.card.romanized.replace(/ /g, '')
+      const guess = mergeDigraphs((e.target: any).value).replace(/ /g, '')
+      const edits = diffStrings(correct, guess)
+
+      const words = this.props.card.words
+      const syllableStarts = {}
+      const wordStarts = {}
+      let nextSyllableStart = 0
+      for (let i = 0; i < words.length; i++) {
+        const word = words[i]
+        const syllables = (i < words.length - 1) ?
+          word.syllables : word.syllablesIfLast
+        for (const syllable of syllables) {
+          nextSyllableStart += syllable.romanized.length
+          syllableStarts[nextSyllableStart] = true
+        }
+        wordStarts[nextSyllableStart] = true
+      }
+
+      const syllablePairs = []
+      let correctSoFar = ''
+      let guessSoFar = ''
+      for (const edit of edits) {
+        const correctIndex = edit[0]
+        const guessIndex = edit[1]
+        if (syllableStarts[correctIndex]) {
+          syllablePairs.push({
+            correct: correctSoFar,
+            guess: guessSoFar,
+            isEndOfWord: wordStarts[correctIndex],
+          })
+          correctSoFar = ''
+          guessSoFar = ''
+        }
+        if (edit[0] !== -1) {
+          correctSoFar += correct.charAt(correctIndex)
+        }
+        if (edit[1] !== -1) {
+          guessSoFar += guess.charAt(guessIndex)
+        }
+      }
+      syllablePairs.push({
+        correct: expandDigraphs(correctSoFar),
+        guess: expandDigraphs(guessSoFar),
+        isEndOfWord: true,
+      })
+
+      this.setState({ syllablePairs })
     }
   }
 
@@ -52,29 +102,28 @@ export default class Quiz extends React.Component<Props, State> {
         onKeyPress={this.onKeyPressInAnswer}
         autoFocus={true} />
       <br />
+      <br />
 
-      <table>
+      <table className='alignment'>
         <tbody>
           <tr>
-            {this.state.edits.map((edit: [string, string], i: number) => {
-              const correct = expandDigraphs(edit[0])
-              const guess = expandDigraphs(edit[1])
-              if (guess === correct) {
-                return <td key={i}></td>
-              } else {
-                return <td key={i}><ins>{correct}</ins></td>
-              }
+            {this.state.syllablePairs.map((pair: SyllablePair, i: number) => {
+              const className = pair.isEndOfWord ? 'endOfWord' : null
+              return <td key={i} className={className}>
+                {(pair.guess !== pair.correct) &&
+                  <ins>{expandDigraphs(pair.correct)}</ins>}
+              </td>
             })}
           </tr>
           <tr>
-            {this.state.edits.map((edit: [string, string], i: number) => {
-              const correct = expandDigraphs(edit[0])
-              const guess = expandDigraphs(edit[1])
-              if (guess === correct) {
-                return <td key={i}>{guess}</td>
-              } else {
-                return <td key={i}><del>{guess}</del></td>
-              }
+            {this.state.syllablePairs.map((pair: SyllablePair, i: number) => {
+              const className = (pair.isEndOfWord ? 'endOfWord' : '') +
+                (pair.guess === pair.correct ? ' matches' : '')
+              return <td key={i} className={className}>
+                {(pair.guess === pair.correct) ?
+                  expandDigraphs(pair.guess) :
+                  <del>{expandDigraphs(pair.guess)}</del>}
+              </td>
             })}
           </tr>
         </tbody>
