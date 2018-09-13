@@ -65,8 +65,8 @@ export default class Quiz extends React.Component<Props, State> {
       const morphemeStarts = { '0': true }
       let nextSyllableStart = 0
       for (const morpheme of morphemes) {
-        for (const syllableQalam1 of morpheme.syllableQalam1s) {
-          nextSyllableStart += syllableQalam1.replace(/-/g, '',).length
+        for (const syllable of morpheme.syllables) {
+          nextSyllableStart += syllable.qalam1.replace(/-/g, '',).length
           syllableStarts[nextSyllableStart] = true
         }
         morphemeStarts[nextSyllableStart] = true

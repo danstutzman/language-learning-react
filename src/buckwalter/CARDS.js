@@ -1,31 +1,32 @@
 // @flow
 import type {Card} from './Card.js'
 import type {CardMorpheme} from './Card.js'
+import type {CardSyllable} from './Card.js'
 import {splitIntoSyllables} from './splitIntoSyllables.js'
 
 function makeCards(buckwalterGlossPairs: Array<[string, string]>): Array<Card> {
   const morphemes: Array<CardMorpheme> = buckwalterGlossPairs.map((pair) => {
     const buckwalter = pair[0]
     const gloss = pair[1]
-    const syllableQalam1s = splitIntoSyllables(buckwalter)
-    const qalam1 = syllableQalam1s.join('')
-    return { buckwalter, gloss, qalam1, syllableQalam1s }
+    const syllables = splitIntoSyllables(buckwalter)
+    const qalam1 = syllables.join('')
+    return { buckwalter, gloss, qalam1, syllables }
   })
   const qalam1 = morphemes
-    .map((morpheme) => morpheme.syllableQalam1s.join(''))
+    .map((morpheme) => morpheme.syllables.map(s => s.qalam1).join(''))
     .join(' ')
     .replace(/(- -| -|- )/g, '')
 
-  let syllableQalam1s: Array<string> = []
+  let syllables: Array<CardSyllable> = []
   for (const morpheme of morphemes){
-    syllableQalam1s = syllableQalam1s.concat(morpheme.syllableQalam1s)
+    syllables = syllables.concat(morpheme.syllables)
   }
 
   const buckwalter = buckwalterGlossPairs
     .map((pair) => pair[0])
     .join(' ')
     .replace(/(- -| -|- )/g, '')
-  const phraseCard = { buckwalter, qalam1, syllableQalam1s, morphemes }
+  const phraseCard = { buckwalter, qalam1, syllables, morphemes }
 
   return [phraseCard]
 }

@@ -14,8 +14,11 @@ it('computes diff', () => {
     [[0, 0], [1, -1], [2, 1], [3, 2], [4, 3], [-1, 4], [5, 5], [6, 6]])
 })
 
+function split(buckwalterWord: string): Array<string> {
+  return splitIntoSyllables(buckwalterWord).map(output => output.qalam1)
+}
+
 it('splits words into syllables', () => {
-  const split = splitIntoSyllables
   expect(split('bisomi')).toEqual(['bis', 'mi'])
   expect(split('{ll~ahi')).toEqual(['al', 'lla', 'hi'])
   expect(split('{lr~aHomani')).toEqual(['alr', 'raH', 'ma', 'ni'])
@@ -33,7 +36,7 @@ it('splits words into syllables', () => {
   expect(split('naEobudu')).toEqual(['naE', 'bu', 'du'])
   expect(split('wa<iy~aAka')).toEqual(['wa', "'iy", 'yA', 'ka'])
   expect(split('nasotaEiynu')).toEqual(['nas', 'ta', 'Eiy', 'nu'])
-  expect(split('{hodinaA')).toEqual(['ih', 'di', 'nA'])
+  expect(split('{hodinaA')).toEqual(['ah', 'di', 'nA'])
   expect(split('{lS~ira`Ta')).toEqual(['alS', 'Si', 'ra', 'Ta'])
   expect(split('{lomusotaqiyma')).toEqual(['al', 'mus', 'ta', 'qiy', 'ma'])
   expect(split('Sira`Ta')).toEqual(['Si', 'ra', 'Ta'])
