@@ -1,5 +1,5 @@
 start
-  = wa:"wa"? first:first? cvcs:cvc* last:last_consonant? {
+  = wa:"wa"? first:first? cvcs:cvc* last:last_consonant? dash:"-"? {
     let new_cvcs = []
     if (wa !== null) {
       new_cvcs.push('wa');
@@ -8,9 +8,11 @@ start
       new_cvcs.push(first);
     }
     new_cvcs = new_cvcs.concat(cvcs);
-    if (last !== null && cvcs.length > 0) {
-      const last_cvc = cvcs[cvcs.length - 1];
-      new_cvcs = new_cvcs.slice(0, -1).concat([last_cvc + last])
+    if (new_cvcs.length > 0) {
+      const last_cvc = new_cvcs[new_cvcs.length - 1];
+      new_cvcs = new_cvcs
+        .slice(0, -1)
+        .concat([last_cvc + (last || '') + (dash || '')]);
     }
     return new_cvcs;
   }
@@ -29,7 +31,7 @@ first
   / vowel:vowel end_consonant:end_consonant? { return vowel + end_consonant }
 
 last_consonant
-  = [ns]
+  = [mns]
   / "l" !"l" { return "l" }
   / "F" { return "n" }
 

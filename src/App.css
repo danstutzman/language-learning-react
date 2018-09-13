@@ -23,8 +23,11 @@ button.faded {
 .Quiz .gradedChars .newSyllable {
   margin-left: 4px;
 }
-.Quiz .gradedChars .newWord {
+.Quiz .gradedChars .newMorpheme {
   margin-left: 15px;
+}
+.Quiz .gradedChars .newWord {
+  margin-left: 30px;
 }
 .Quiz .gradedChars .correct {
   color: green;

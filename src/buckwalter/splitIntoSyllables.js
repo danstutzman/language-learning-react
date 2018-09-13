@@ -6,11 +6,15 @@ const SQUIGGLE_REGEXP = new RegExp(
 
 export function splitIntoSyllables(buckwalterWord: string): Array<string> {
   const doubled = buckwalterWord.replace(SQUIGGLE_REGEXP, '$1$1$2')
-  try {
-    return parse(doubled)
-  } catch (e) {
-    console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
-    throw e
+  if (doubled.startsWith('-')) {
+    return [doubled]
+  } else {
+    try {
+      return parse(doubled)
+    } catch (e) {
+      console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
+      throw e
+    }
   }
 }
 

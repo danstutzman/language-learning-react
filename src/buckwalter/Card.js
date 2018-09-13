@@ -1,14 +1,15 @@
 // @flow
 
-export type CardWord = {|
+export type CardMorpheme = {|
   buckwalter: string,
+  gloss: string,
+  qalam1: string,
   syllableQalam1s: Array<string>,
-  syllableQalam1sIfLast: Array<string>,
 |}
 
 export type Card = {|
   buckwalter: string,
   qalam1: string,
-  words: Array<CardWord>,
+  morphemes: Array<CardMorpheme>,
   syllableQalam1s: Array<string>,
 |}

@@ -17,6 +17,7 @@ type GradedChar = {|
   char: string,
   wasEnteredCorrectly: boolean,
   beginsSyllable: boolean,
+  beginsMorpheme: boolean,
   beginsWord: boolean,
 |}
 
@@ -46,19 +47,23 @@ export default class Quiz extends React.Component<Props, State> {
       const guess = mergeToQalam1((e.target: any).value).replace(/ /g, '')
       const edits = diffStrings(correct, guess)
 
-      const words = this.props.card.words
+      const morphemes = this.props.card.morphemes
       const syllableStarts = {}
+      const morphemeStarts = {}
       const wordStarts = {}
       let nextSyllableStart = 0
-      for (let i = 0; i < words.length; i++) {
-        const word = words[i]
-        const syllableQalam1s = (i < words.length - 1) ?
-          word.syllableQalam1s : word.syllableQalam1sIfLast
-        for (const syllableQalam1 of syllableQalam1s) {
-          nextSyllableStart += syllableQalam1.length
+      for (let i = 0; i < morphemes.length; i++) {
+        const morpheme = morphemes[i]
+        for (const syllableQalam1 of morpheme.syllableQalam1s) {
+          nextSyllableStart += syllableQalam1.replace(/-/g, '',).length
           syllableStarts[nextSyllableStart] = true
         }
-        wordStarts[nextSyllableStart] = true
+        morphemeStarts[nextSyllableStart] = true
+
+        if (!morpheme.qalam1.endsWith('-') &&
+          morphemes[i + 1] && !morphemes[i + 1].qalam1.startsWith('-')) {
+          wordStarts[nextSyllableStart] = true
+        }
       }
 
       const gradedChars = []
@@ -71,6 +76,7 @@ export default class Quiz extends React.Component<Props, State> {
           char: correctChar,
           wasEnteredCorrectly: guessChar === correctChar,
           beginsSyllable: syllableStarts[correctIndex],
+          beginsMorpheme: morphemeStarts[correctIndex],
           beginsWord: wordStarts[correctIndex],
         })
       }
@@ -93,9 +99,11 @@ export default class Quiz extends React.Component<Props, State> {
       <div className='gradedChars'>
         {this.state.gradedChars.map((char: GradedChar, i: number) => {
           const className = (char.beginsSyllable ? 'newSyllable' : '') +
+            (char.beginsMorpheme && !char.beginsWord ? ' newMorpheme' : '') +
             (char.beginsWord ? ' newWord' : '') +
             (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
           return <span key={i} className={className}>
+            {char.beginsMorpheme && !char.beginsWord ? '-' : ''}
             {expandQalam1(char.char)}
           </span>
         })}

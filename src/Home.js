@@ -76,6 +76,7 @@ export default class Home extends React.Component<Props, State> {
   onClickCard = (e: Event) => {
     const buckwalter = (e.target: any).getAttribute('data-buckwalter')
       .replace(/^ll/, 'l')
+      .replace(/ss/g, 's~')
     this.props.speakText(convertBuckwalterToArabic(buckwalter))
   }
 
