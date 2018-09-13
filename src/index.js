@@ -14,11 +14,20 @@ const arabicVoices = window.speechSynthesis.getVoices().filter((voice) =>
 
 function speakText(script: string, selectedVoiceName: string | null) {
   const utterance = new SpeechSynthesisUtterance(script)
+
+  // Default to first Arabic voice, but allow override
+  for (const voice of window.speechSynthesis.getVoices()) {
+    if (voice.lang.startsWith('ar')) {
+      utterance.voice = voice
+      break
+    }
+  }
   for (const voice of window.speechSynthesis.getVoices()) {
     if (voice.name === selectedVoiceName) {
       utterance.voice = voice
     }
   }
+
   window.speechSynthesis.speak(utterance)
 }
 
