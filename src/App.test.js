@@ -43,8 +43,8 @@ it('splits words into syllables', () => {
     ['d', 'u', null],
   ])
   expect(split('lil~ahi')).toEqual([
-    ['l', 'i', null],
-    ['ll', 'a', null],
+    ['l', 'i', 'l'],
+    ['l', 'a', null],
     ['h', 'i', null],
   ])
   expect(split('rab~i')).toEqual([
