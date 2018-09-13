@@ -2,7 +2,7 @@
 import type {Card} from './buckwalter/Card.js'
 import CARDS from './buckwalter/CARDS.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
-import {expandDigraphs} from './buckwalter/digraphs.js'
+import {expandQalam1} from './buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
 import React from 'react'
 
@@ -94,7 +94,7 @@ export default class Home extends React.Component<Props, State> {
 
   doesCardMatchEnabledPhonemes = (card: Card): boolean => {
     const { enabledPhonemes } = this.state
-    for (const c of card.romanized) {
+    for (const c of card.qalam1) {
       if (enabledPhonemes[c] !== true) {
         return false
       }
@@ -117,7 +117,7 @@ export default class Home extends React.Component<Props, State> {
               onChange={this.onToggleGroupName}
               checked={this.state.enabledGroupNames[groupName]} />
             <label htmlFor={groupName}>
-              {expandDigraphs(phonemes.join(', '))}
+              {expandQalam1(phonemes.join(', '))}
             </label>
           </li>
         })}
@@ -129,7 +129,7 @@ export default class Home extends React.Component<Props, State> {
           className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}
           onClick={this.onClickCard}
           data-buckwalter={card.buckwalter}>
-          {expandDigraphs(card.romanized)}
+          {expandQalam1(card.qalam1)}
         </button>
       )}
       <br />

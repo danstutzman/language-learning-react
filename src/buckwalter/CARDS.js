@@ -1,7 +1,7 @@
 // @flow
 import type {Card} from './Card.js'
 import type {CardSyllable} from './Card.js'
-import {romanizeSyllableTriplet} from './romanize.js'
+import {convertSyllableTripletToQalam1} from './qalam.js'
 import {splitIntoSyllableTriplets} from './splitIntoSyllables.js'
 import {removeUnpronounced} from './splitIntoSyllables.js'
 
@@ -9,7 +9,7 @@ function makeCardSyllable(triplet: [string | null, string, string | null]):
   CardSyllable {
   return {
     buckwalter: `${triplet[0] || ''}${triplet[1]}${triplet[2] || ''}`,
-    romanized: romanizeSyllableTriplet(triplet),
+    qalam1: convertSyllableTripletToQalam1(triplet),
   }
 }
 
@@ -21,15 +21,15 @@ function makeCards(buckwalter: string): Array<Card> {
 
     return {
       buckwalter: wordBuckwalter,
-      romanized: syllables.map((syllable) => syllable.romanized).join(''),
-      romanizedIfLast:
-        syllablesIfLast.map((syllable) => syllable.romanized).join(''),
+      qalam1: syllables.map((syllable) => syllable.qalam1).join(''),
+      qalam1IfLast:
+        syllablesIfLast.map((syllable) => syllable.qalam1).join(''),
       syllables,
       syllablesIfLast,
     }
   })
-  const romanized = words.map((word, i) =>
-    (i < words.length - 1) ? word.romanized : word.romanizedIfLast).join(' ')
+  const qalam1 = words.map((word, i) =>
+    (i < words.length - 1) ? word.qalam1 : word.qalam1IfLast).join(' ')
 
   let syllables: Array<CardSyllable> = []
   for (let i = 0; i < words.length; i++) {
@@ -41,21 +41,21 @@ function makeCards(buckwalter: string): Array<Card> {
     }
   }
 
-  const phraseCard = { buckwalter, romanized, syllables, words }
+  const phraseCard = { buckwalter, qalam1, syllables, words }
   const wordCards = words.map((cardWord) => ({
     buckwalter: cardWord.buckwalter,
-    romanized: cardWord.romanizedIfLast,
+    qalam1: cardWord.qalam1IfLast,
     syllables: cardWord.syllables,
     words: [cardWord],
   }))
   const syllableCards = syllables.map((cardSyllable) => ({
     buckwalter: cardSyllable.buckwalter,
-    romanized: cardSyllable.romanized,
+    qalam1: cardSyllable.qalam1,
     syllables: [cardSyllable],
     words: [{
       buckwalter: cardSyllable.buckwalter,
-      romanized: cardSyllable.romanized,
-      romanizedIfLast: cardSyllable.romanized,
+      qalam1: cardSyllable.qalam1,
+      qalam1IfLast: cardSyllable.qalam1,
       syllables: [cardSyllable],
       syllablesIfLast: [cardSyllable],
     }],

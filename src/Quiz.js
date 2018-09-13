@@ -2,9 +2,9 @@
 import './App.css'
 import type {Card} from './buckwalter/Card.js'
 import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
-import {mergeDigraphs} from './buckwalter/digraphs.js'
 import diffStrings from './diffStrings.js'
-import {expandDigraphs} from './buckwalter/digraphs.js'
+import {expandQalam1} from './buckwalter/digraphs.js'
+import {mergeToQalam1} from './buckwalter/digraphs.js'
 import React from 'react'
 
 type Props = {|
@@ -42,8 +42,8 @@ export default class Quiz extends React.Component<Props, State> {
   onKeyPressInAnswer = (e: Event) => {
     if ((e: any).key === 'Enter') {
       e.preventDefault()
-      const correct = this.props.card.romanized.replace(/ /g, '')
-      const guess = mergeDigraphs((e.target: any).value).replace(/ /g, '')
+      const correct = this.props.card.qalam1.replace(/ /g, '')
+      const guess = mergeToQalam1((e.target: any).value).replace(/ /g, '')
       const edits = diffStrings(correct, guess)
 
       const words = this.props.card.words
@@ -55,7 +55,7 @@ export default class Quiz extends React.Component<Props, State> {
         const syllables = (i < words.length - 1) ?
           word.syllables : word.syllablesIfLast
         for (const syllable of syllables) {
-          nextSyllableStart += syllable.romanized.length
+          nextSyllableStart += syllable.qalam1.length
           syllableStarts[nextSyllableStart] = true
         }
         wordStarts[nextSyllableStart] = true
@@ -96,7 +96,7 @@ export default class Quiz extends React.Component<Props, State> {
             (char.beginsWord ? ' newWord' : '') +
             (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
           return <span key={i} className={className}>
-            {expandDigraphs(char.char)}
+            {expandQalam1(char.char)}
           </span>
         })}
       </div>
