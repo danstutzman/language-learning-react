@@ -39,7 +39,7 @@ start
   }
 
 first
-  = "{l" c:[rSdDs] { return [null, 'A', c] }
+  = "{l" c:[rSdDs] { return [null, 'A', 'l' + c] }
   / "{lo" { return [null, 'A', 'l'] }
   / "{l" { return [null, 'A', 'l'] }
   / "{" c:end_consonant? { return [null, 'i', c] }

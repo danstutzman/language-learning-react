@@ -186,7 +186,7 @@ function peg$parse(input, options) {
       peg$c4 = peg$literalExpectation("{l", false),
       peg$c5 = /^[rSdDs]/,
       peg$c6 = peg$classExpectation(["r", "S", "d", "D", "s"], false, false),
-      peg$c7 = function(c) { return [null, 'A', c] },
+      peg$c7 = function(c) { return [null, 'A', 'l' + c] },
       peg$c8 = "{lo",
       peg$c9 = peg$literalExpectation("{lo", false),
       peg$c10 = function() { return [null, 'A', 'l'] },
