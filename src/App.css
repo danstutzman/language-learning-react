@@ -30,20 +30,18 @@ button.faded {
 .Quiz .gradedChars .syllable-divider {
   color: #ccc;
 }
-.Quiz .gradedChars .morpheme-pair .gloss-left {
+.Quiz .gradedChars .morpheme {
   clear: both;
+}
+.Quiz .gradedChars .morpheme .gloss {
   float: left;
 }
-.Quiz .gradedChars .morpheme-pair .qalam-left {
-  clear: both;
+.Quiz .gradedChars .morpheme .qalam {
   float: left;
 }
-.Quiz .gradedChars .morpheme-pair .arabic-right {
+.Quiz .gradedChars .morpheme .arabic {
   float: right;
   font-family: "Kawkab Mono Light";
   font-weight: 100;
   font-size: 14pt;
-}
-.Quiz .gradedChars .morpheme-pair .gloss-right {
-  float: right;
 }
