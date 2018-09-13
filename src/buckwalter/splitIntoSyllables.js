@@ -4,8 +4,7 @@ import { parse } from './buckwalterWord.js'
 const SQUIGGLE_REGEXP = new RegExp(
   '([btvjHxd*rzs$SDTZEgfqklmnhwyaA])([aiu])?~', 'g')
 
-export function splitIntoSyllableTriplets(buckwalterWord: string):
-  Array<[string | null, string, string | null]> {
+export function splitIntoSyllables(buckwalterWord: string): Array<string> {
   const doubled = buckwalterWord.replace(SQUIGGLE_REGEXP, '$1$1$2')
   try {
     return parse(doubled)
@@ -15,38 +14,18 @@ export function splitIntoSyllableTriplets(buckwalterWord: string):
   }
 }
 
-// Returns array with 1st element: syllables if word is not last
-//                    2nd element, syllables if word is last
-export function splitIntoSyllables(buckwalterWord: string):
-  [Array<string>, Array<string>] {
-  const triplets = splitIntoSyllableTriplets(buckwalterWord)
-  const tripletsIfLast = removeUnpronounced(triplets)
-  const joined = triplets.map((triplet) =>
-    (triplet[0] || '') + triplet[1] + (triplet[2] || ''))
-  const joinedIfLast = tripletsIfLast.map((triplet) =>
-    (triplet[0] || '') + triplet[1] + (triplet[2] || ''))
-  return [joined, joinedIfLast]
-}
-
-function removeUnpronounced(
-  triplets: Array<[string | null, string, string | null]>):
-  Array<[string | null, string, string | null]> {
-  if (triplets.length < 2) {
-    return triplets
+export function removeUnpronounced(syllables: Array<string>): Array<string> {
+  if (syllables.length < 2) {
+    return syllables
   } else {
-    const penultimate = triplets[triplets.length - 2]
-    const last = triplets[triplets.length - 1]
-    if (last[0] !== null &&
-      ['a', 'i', 'u'].indexOf(last[1]) !== -1 &&
-      last[2] === null) {
-      const newLast = [
-        penultimate[0],
-        penultimate[1],
-        (penultimate[2] || '') + last[0],
-      ]
-      return triplets.slice(0, -2).concat([newLast])
+    const penultimate = syllables[syllables.length - 2]
+    const last = syllables[syllables.length - 1]
+    const match = /(.+)[aiu]$/.exec(last)
+    if (match !== null) {
+      const newLast = penultimate + match[1]
+      return syllables.slice(0, -2).concat([newLast])
     } else {
-      return triplets
+      return syllables
     }
   }
 }

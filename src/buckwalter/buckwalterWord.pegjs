@@ -2,7 +2,7 @@ start
   = wa:"wa"? first:first? cvcs:cvc* last:last_consonant? {
     let new_cvcs = []
     if (wa !== null) {
-      new_cvcs.push(['w', 'a', null]);
+      new_cvcs.push('wa');
     }
     if (first !== null) {
       new_cvcs.push(first);
@@ -10,26 +10,23 @@ start
     new_cvcs = new_cvcs.concat(cvcs);
     if (last !== null && cvcs.length > 0) {
       const last_cvc = cvcs[cvcs.length - 1];
-      const new_last_cvc = [last_cvc[0], last_cvc[1], (last_cvc[2] || '') + last];
-      new_cvcs = new_cvcs.slice(0, -1).concat([new_last_cvc])
+      new_cvcs = new_cvcs.slice(0, -1).concat([last_cvc + last])
     }
     return new_cvcs;
   }
 
 first
-  = "{l" c:[rSdDs] { return [null, 'a', 'l' + c] }
-  / "{lo" { return [null, 'a', 'l'] }
-  / "{l" { return [null, 'a', 'l'] }
-  / "{" c:end_consonant? { return [null, 'i', c] }
-  / ">a" c:end_consonant? { return ["'", 'a', c] }
-  / "<iy" & "y" { return ["'", 'i', 'y'] }
-  / "<i" { return ["'", 'i', null] }
-  / "Aals" & "s" { return [null, 'a', 'ls'] }
-  / "Aal" { return [null, 'a', 'l'] }
-  / "Ai" end_consonant:end_consonant? { return [null, "i", end_consonant] }
-  / vowel:vowel end_consonant:end_consonant? {
-    return [null, vowel, end_consonant]
-  }
+  = "{l" c:[rSdDs] { return 'al' + c }
+  / "{lo" { return 'al' }
+  / "{l" { return 'al' }
+  / "{" c:end_consonant? { return 'i' + c }
+  / ">a" c:end_consonant? { return "'a" + c }
+  / "<iy" & "y" { return "'iy" }
+  / "<i" { return "'i" }
+  / "Aals" & "s" { return 'als' }
+  / "Aal" { return 'al' }
+  / "Ai" end_consonant:end_consonant? { return 'i' + end_consonant }
+  / vowel:vowel end_consonant:end_consonant? { return vowel + end_consonant }
 
 last_consonant
   = [ns]
@@ -47,7 +44,7 @@ vowel
   / [aiuA]
 
 cvc
-  = start_consonant vowel end_consonant?
+  = c1:start_consonant v:vowel c2:end_consonant? { return c1 + v + (c2 || '') }
 
 start_consonant
   = "ll" & "ah" { return "ll" }

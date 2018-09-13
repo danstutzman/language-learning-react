@@ -1,7 +1,7 @@
 // @flow
 import App from './App.js' // eslint-disable-line no-unused-vars
 import diffStrings from './diffStrings.js'
-import {splitIntoSyllableTriplets} from './buckwalter/splitIntoSyllables.js'
+import {splitIntoSyllables} from './buckwalter/splitIntoSyllables.js'
 // import React from 'react'
 // import ReactDOM from 'react-dom'
 
@@ -15,222 +15,53 @@ it('computes diff', () => {
 })
 
 it('splits words into syllables', () => {
-  const split = splitIntoSyllableTriplets
-  expect(split('bisomi')).toEqual([
-    ['b', 'i', 's'],
-    ['m', 'i', null],
-  ])
-  expect(split('{ll~ahi')).toEqual([
-    [null, 'a', 'l'],
-    ['ll', 'a', null],
-    ['h', 'i', null],
-  ])
-  expect(split('{lr~aHomani')).toEqual([
-    [null, 'a', 'lr'],
-    ['r', 'a', 'H'],
-    ['m', 'a', null],
-    ['n', 'i', null],
-  ])
-  expect(split('{lr~aHiymi')).toEqual([
-    [null, 'a', 'lr'],
-    ['r', 'a', null],
-    ['H', 'iy', null],
-    ['m', 'i', null],
-  ])
-  expect(split('{loHamodu')).toEqual([
-    [null, 'a', 'l'],
-    ['H', 'a', 'm'],
-    ['d', 'u', null],
-  ])
-  expect(split('lil~ahi')).toEqual([
-    ['l', 'i', 'l'],
-    ['l', 'a', null],
-    ['h', 'i', null],
-  ])
-  expect(split('rab~i')).toEqual([
-    ['r', 'a', 'b'],
-    ['b', 'i', null],
-  ])
-  expect(split('{loEa`lamiyna')).toEqual([
-    [null, 'a', 'l'],
-    ['E', 'a', null],
-    ['l', 'a', null],
-    ['m', 'iy', null],
-    ['n', 'a', null],
-  ])
-  expect(split('{lr~aHoma`ni')).toEqual([
-    [null, 'a', 'lr'],
-    ['r', 'a', 'H'],
-    ['m', 'a', null],
-    ['n', 'i', null],
-  ])
-  expect(split('{lr~aHiymi')).toEqual([
-    [null, 'a', 'lr'],
-    ['r', 'a', null],
-    ['H', 'iy', null],
-    ['m', 'i', null],
-  ])
-  expect(split('ma`liki')).toEqual([
-    ['m', 'a', null],
-    ['l', 'i', null],
-    ['k', 'i', null],
-  ])
-  expect(split('yawomi')).toEqual([
-    ['y', 'a', 'w'],
-    ['m', 'i', null],
-  ])
-  expect(split('{ld~iyni')).toEqual([
-    [null, 'a', 'ld'],
-    ['d', 'iy', null],
-    ['n', 'i', null],
-  ])
-  expect(split('<iy~aAka')).toEqual([
-    ["'", 'i', 'y'],
-    ['y', 'A', null],
-    ['k', 'a', null],
-  ])
-  expect(split('naEobudu')).toEqual([
-    ['n', 'a', 'E'],
-    ['b', 'u', null],
-    ['d', 'u', null],
-  ])
-  expect(split('wa<iy~aAka')).toEqual([
-    ['w', 'a', null],
-    ["'", 'i', 'y'],
-    ['y', 'A', null],
-    ['k', 'a', null],
-  ])
-  expect(split('nasotaEiynu')).toEqual([
-    ['n', 'a', 's'],
-    ['t', 'a', null],
-    ['E', 'iy', null],
-    ['n', 'u', null],
-  ])
-  expect(split('{hodinaA')).toEqual([
-    [null, 'i', 'h'],
-    ['d', 'i', null],
-    ['n', 'A', null],
-  ])
-  expect(split('{lS~ira`Ta')).toEqual([
-    [null, 'a', 'lS'],
-    ['S', 'i', null],
-    ['r', 'a', null],
-    ['T', 'a', null],
-  ])
-  expect(split('{lomusotaqiyma')).toEqual([
-    [null, 'a', 'l'],
-    ['m', 'u', 's'],
-    ['t', 'a', null],
-    ['q', 'iy', null],
-    ['m', 'a', null],
-  ])
-  expect(split('Sira`Ta')).toEqual([
-    ['S', 'i', null],
-    ['r', 'a', null],
-    ['T', 'a', null],
-  ])
-  expect(split('{l~a*iyna')).toEqual([
-    [null, 'a', 'l'],
-    ['l', 'a', null],
-    ['*', 'iy', null],
-    ['n', 'a', null],
-  ])
-  expect(split('>anoEamo')).toEqual([
-    ["'", 'a', 'n'],
-    ['E', 'a', 'm'],
-  ])
-  expect(split('ta')).toEqual([
-    ['t', 'a', null],
-  ])
-  expect(split('Ealayo')).toEqual([
-    ['E', 'a', null],
-    ['l', 'a', 'y'],
-  ])
-  expect(split('himo')).toEqual([
-    ['h', 'i', 'm'],
-  ])
-  expect(split('gayori')).toEqual([
-    ['g', 'a', 'y'],
-    ['r', 'i', null],
-  ])
-  expect(split('{lo')).toEqual([
-    [null, 'a', 'l'],
-  ])
-  expect(split('magoDuwbi')).toEqual([
-    ['m', 'a', 'g'],
-    ['D', 'uw', null],
-    ['b', 'i', null],
-  ])
-  expect(split('Ealayo')).toEqual([
-    ['E', 'a', null],
-    ['l', 'a', 'y'],
-  ])
-  expect(split('himo')).toEqual([
-    ['h', 'i', 'm'],
-  ])
-  expect(split('wa')).toEqual([
-    ['w', 'a', null],
-  ])
-  expect(split('laA')).toEqual([
-    ['l', 'A', null],
-  ])
-  expect(split('{lD~aA^l~iyna')).toEqual([
-    [null, 'a', 'lD'],
-    ['D', 'A', 'l'],
-    ['l', 'iy', null],
-    ['n', 'a', null],
-  ])
+  const split = splitIntoSyllables
+  expect(split('bisomi')).toEqual(['bis', 'mi'])
+  expect(split('{ll~ahi')).toEqual(['al', 'lla', 'hi'])
+  expect(split('{lr~aHomani')).toEqual(['alr', 'raH', 'ma', 'ni'])
+  expect(split('{lr~aHiymi')).toEqual(['alr', 'ra', 'Hiy', 'mi'])
+  expect(split('{loHamodu')).toEqual(['al', 'Ham', 'du'])
+  expect(split('lil~ahi')).toEqual(['lil', 'la', 'hi'])
+  expect(split('rab~i')).toEqual(['rab', 'bi'])
+  expect(split('{loEa`lamiyna')).toEqual(['al', 'Ea', 'la', 'miy', 'na'])
+  expect(split('{lr~aHoma`ni')).toEqual(['alr', 'raH', 'ma', 'ni'])
+  expect(split('{lr~aHiymi')).toEqual(['alr', 'ra', 'Hiy', 'mi'])
+  expect(split('ma`liki')).toEqual(['ma', 'li', 'ki'])
+  expect(split('yawomi')).toEqual(['yaw', 'mi'])
+  expect(split('{ld~iyni')).toEqual(['ald', 'diy', 'ni'])
+  expect(split('<iy~aAka')).toEqual(["'iy", 'yA', 'ka'])
+  expect(split('naEobudu')).toEqual(['naE', 'bu', 'du'])
+  expect(split('wa<iy~aAka')).toEqual(['wa', "'iy", 'yA', 'ka'])
+  expect(split('nasotaEiynu')).toEqual(['nas', 'ta', 'Eiy', 'nu'])
+  expect(split('{hodinaA')).toEqual(['ih', 'di', 'nA'])
+  expect(split('{lS~ira`Ta')).toEqual(['alS', 'Si', 'ra', 'Ta'])
+  expect(split('{lomusotaqiyma')).toEqual(['al', 'mus', 'ta', 'qiy', 'ma'])
+  expect(split('Sira`Ta')).toEqual(['Si', 'ra', 'Ta'])
+  expect(split('{l~a*iyna')).toEqual(['al', 'la', '*iy', 'na'])
+  expect(split('>anoEamo')).toEqual(["'an", 'Eam'])
+  expect(split('ta')).toEqual(['ta'])
+  expect(split('Ealayo')).toEqual(['Ea', 'lay'])
+  expect(split('himo')).toEqual(['him'])
+  expect(split('gayori')).toEqual(['gay', 'ri'])
+  expect(split('{lo')).toEqual(['al'])
+  expect(split('magoDuwbi')).toEqual(['mag', 'Duw', 'bi'])
+  expect(split('Ealayo')).toEqual(['Ea', 'lay'])
+  expect(split('himo')).toEqual(['him'])
+  expect(split('wa')).toEqual(['wa'])
+  expect(split('laA')).toEqual(['lA'])
+  expect(split('{lD~aA^l~iyna')).toEqual(['alD', 'DAl', 'liy', 'na'])
 
-
-  expect(split('Aisomiy')).toEqual([
-    [null, 'i', 's'],
-    ['m', 'iy', null],
-  ])
-  expect(split('daAniyaAl')).toEqual([
-    ['d', 'A', null],
-    ['n', 'i', null],
-    ['y', 'A', 'l'],
-  ])
-  expect(split('maroHabAF')).toEqual([
-    ['m', 'a', 'r'],
-    ['H', 'a', null],
-    ['b', 'A', 'n'],
-  ])
-  expect(split('Aalsa~laAmu')).toEqual([
-    [null, 'a', 'ls'],
-    ['s', 'a', null],
-    ['l', 'A', null],
-    ['m', 'u', null],
-  ])
-  expect(split('Ealayokumo')).toEqual([
-    ['E', 'a', null],
-    ['l', 'a', 'y'],
-    ['k', 'u', 'm'],
-  ])
-  expect(split('kayofa')).toEqual([
-    ['k', 'a', 'y'],
-    ['f', 'a', null],
-  ])
-  expect(split('HaAluka')).toEqual([
-    ['H', 'A', null],
-    ['l', 'u', null],
-    ['k', 'a', null],
-  ])
-  expect(split('>anota')).toEqual([
-    ["'", 'a', 'n'],
-    ['t', 'a', null],
-  ])
-  expect(split('xuroTuwmo')).toEqual([
-    ['x', 'u', 'r'],
-    ['T', 'uw', 'm'],
-  ])
-  expect(split('$amos')).toEqual([
-    ['$', 'a', 'ms'],
-  ])
-  expect(split('gaA}imo')).toEqual([
-    ['g', 'A', null],
-    ["'", 'i', 'm'],
-  ])
+  expect(split('Aisomiy')).toEqual(['is', 'miy'])
+  expect(split('daAniyaAl')).toEqual(['dA', 'ni', 'yAl'])
+  expect(split('maroHabAF')).toEqual(['mar', 'Ha', 'bAn'])
+  expect(split('Aalsa~laAmu')).toEqual(['als', 'sa', 'lA', 'mu'])
+  expect(split('Ealayokumo')).toEqual(['Ea', 'lay', 'kum'])
+  expect(split('kayofa')).toEqual(['kay', 'fa'])
+  expect(split('HaAluka')).toEqual(['HA', 'lu', 'ka'])
+  expect(split('>anota')).toEqual(["'an", 'ta'])
+  expect(split('xuroTuwmo')).toEqual(['xur', 'Tuwm'])
+  expect(split('$amos')).toEqual(['$ams'])
+  expect(split('gaA}imo')).toEqual(['gA', "'im"])
 })
 
 it('renders without crashing', () => {

@@ -1,14 +1,15 @@
 // @flow
 import type {Card} from './Card.js'
 import type {CardWord} from './Card.js'
+import {removeUnpronounced} from './splitIntoSyllables.js'
 import {splitIntoSyllables} from './splitIntoSyllables.js'
 
 function makeCards(buckwalter: string): Array<Card> {
   const words: Array<CardWord> = buckwalter.split(' ').map(
     (wordBuckwalter: string) => {
-      const [syllableQalam1s, syllableQalam1sIfLast] =
-        splitIntoSyllables(wordBuckwalter)
-
+      const syllableQalam1s = splitIntoSyllables(wordBuckwalter)
+      const syllableQalam1sIfLast = removeUnpronounced(syllableQalam1s)
+      console.log(syllableQalam1s)
       return {
         buckwalter: wordBuckwalter,
         syllableQalam1s,
