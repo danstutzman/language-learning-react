@@ -9,6 +9,8 @@ import React from 'react'
 
 const MIDDLE_DOT = '\u00b7'
 
+const ALL_L2_FORMATS = ['ARABIC', 'QALAM']
+
 type Props = {|
   card: Card,
   close: () => void,
@@ -30,6 +32,7 @@ type GradedMorpheme = {|
 
 type State = {|
   gradedMorphemes: Array<GradedMorpheme>,
+  selectedL2Format: 'ARABIC' | 'QALAM',
 |}
 
 export default class Quiz extends React.Component<Props, State> {
@@ -37,6 +40,7 @@ export default class Quiz extends React.Component<Props, State> {
     super(props)
     this.state = {
       gradedMorphemes: [],
+      selectedL2Format: 'QALAM',
     }
   }
 
@@ -93,8 +97,11 @@ export default class Quiz extends React.Component<Props, State> {
     }
   }
 
+  onChangeL2Format = (e: Event) =>
+    this.setState({ selectedL2Format: (e.target: any).value })
+
   render() {
-    const { gradedMorphemes } = this.state
+    const { gradedMorphemes, selectedL2Format } = this.state
     return <div className='Quiz'>
       <button onClick={this.props.close}>X</button>
       <button onClick={this.onClickReplay}>Replay</button>
@@ -106,25 +113,47 @@ export default class Quiz extends React.Component<Props, State> {
       <br />
       <br />
 
+      {ALL_L2_FORMATS.map((l2Format) => <span key={l2Format}>
+        <input
+          type='radio'
+          id={l2Format}
+          name='l2Format'
+          checked={selectedL2Format === l2Format}
+          value={l2Format}
+          onChange={this.onChangeL2Format} />
+        <label htmlFor={l2Format}>
+          {l2Format}
+        </label>
+      </span>)}
+      <br/>
+      <br/>
+
       <div className='gradedChars'>
         {gradedMorphemes.map((morpheme: GradedMorpheme, i: number) =>
           <div className='morpheme-pair' key={i}>
-            <div className='qalam'>
+            {selectedL2Format === 'ARABIC' &&
+              <div className='gloss-left'>{morpheme.gloss}</div>}
+            <div className={selectedL2Format === 'QALAM' ?
+              'qalam-left' : 'arabic-right'}>
               {morpheme.startsWithHyphen ? '-' : ''}
               {morpheme.chars.map((char: GradedChar, j: number) => {
                 const className =
                   (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
-                return <span key={j} className={className}>
+                return <span key={j}>
                   {(char.beginsSyllable && j > 0) ?
-                    <span className='syllable-divider'>{MIDDLE_DOT}</span> : ''}
-                  {expandQalam1(char.char)}
+                    <span className='syllable-divider'>{MIDDLE_DOT}</span> :
+                    null}
+                  <span className={className}>
+                    {(selectedL2Format === 'QALAM') ?
+                      expandQalam1(char.char) :
+                      convertBuckwalterToArabic(char.char)}
+                  </span>
                 </span>
               })}
               {morpheme.endsWithHyphen ? '-' : ''}
             </div>
-            <div className='gloss'>
-              {morpheme.gloss}
-            </div>
+            {selectedL2Format === 'QALAM' &&
+              <div className='gloss-right'>{morpheme.gloss}</div>}
           </div>
         )}
       </div>
