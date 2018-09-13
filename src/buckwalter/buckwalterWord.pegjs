@@ -17,15 +17,16 @@ start
   }
 
 first
-  = "{l" c:[rSdDs] { return [null, 'A', 'l' + c] }
-  / "{lo" { return [null, 'A', 'l'] }
-  / "{l" { return [null, 'A', 'l'] }
+  = "{l" c:[rSdDs] { return [null, 'a', 'l' + c] }
+  / "{lo" { return [null, 'a', 'l'] }
+  / "{l" { return [null, 'a', 'l'] }
   / "{" c:end_consonant? { return [null, 'i', c] }
   / ">a" c:end_consonant? { return ["'", 'a', c] }
   / "<iy" & "y" { return ["'", 'i', 'y'] }
   / "<i" { return ["'", 'i', null] }
-  / "Aals" & "s" { return [null, 'A', 'ls'] }
-  / "Aal" { return [null, 'A', 'l'] }
+  / "Aals" & "s" { return [null, 'a', 'ls'] }
+  / "Aal" { return [null, 'a', 'l'] }
+  / "Ai" end_consonant:end_consonant? { return [null, "i", end_consonant] }
   / vowel:vowel end_consonant:end_consonant? {
     return [null, vowel, end_consonant]
   }
