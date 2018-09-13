@@ -7,6 +7,8 @@ import {expandQalam1} from './buckwalter/digraphs.js'
 import {mergeToQalam1} from './buckwalter/digraphs.js'
 import React from 'react'
 
+const MIDDLE_DOT = '\u00b7'
+
 type Props = {|
   card: Card,
   close: () => void,
@@ -17,19 +19,24 @@ type GradedChar = {|
   char: string,
   wasEnteredCorrectly: boolean,
   beginsSyllable: boolean,
-  beginsMorpheme: boolean,
-  beginsWord: boolean,
+|}
+
+type GradedMorpheme = {|
+  chars: Array<GradedChar>,
+  startsWithHyphen: boolean,
+  endsWithHyphen: boolean,
+  gloss: string,
 |}
 
 type State = {|
-  gradedChars: Array<GradedChar>,
+  gradedMorphemes: Array<GradedMorpheme>,
 |}
 
 export default class Quiz extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
-      gradedChars: [],
+      gradedMorphemes: [],
     }
   }
 
@@ -49,42 +56,45 @@ export default class Quiz extends React.Component<Props, State> {
 
       const morphemes = this.props.card.morphemes
       const syllableStarts = {}
-      const morphemeStarts = {}
-      const wordStarts = {}
+      const morphemeStarts = { '0': true }
       let nextSyllableStart = 0
-      for (let i = 0; i < morphemes.length; i++) {
-        const morpheme = morphemes[i]
+      for (const morpheme of morphemes) {
         for (const syllableQalam1 of morpheme.syllableQalam1s) {
           nextSyllableStart += syllableQalam1.replace(/-/g, '',).length
           syllableStarts[nextSyllableStart] = true
         }
         morphemeStarts[nextSyllableStart] = true
-
-        if (!morpheme.qalam1.endsWith('-') &&
-          morphemes[i + 1] && !morphemes[i + 1].qalam1.startsWith('-')) {
-          wordStarts[nextSyllableStart] = true
-        }
       }
 
-      const gradedChars = []
+      const charsByMorpheme = []
       for (const edit of edits) {
         const correctIndex = edit[0]
         const guessIndex = edit[1]
         const correctChar = correct.charAt(correctIndex)
         const guessChar = guess.charAt(guessIndex)
-        gradedChars.push({
+        if (morphemeStarts[correctIndex]) {
+          charsByMorpheme.push({ chars: [] })
+        }
+        charsByMorpheme[charsByMorpheme.length - 1].chars.push({
           char: correctChar,
           wasEnteredCorrectly: guessChar === correctChar,
           beginsSyllable: syllableStarts[correctIndex],
-          beginsMorpheme: morphemeStarts[correctIndex],
-          beginsWord: wordStarts[correctIndex],
         })
       }
-      this.setState({ gradedChars })
+
+      const gradedMorphemes = morphemes.map((morpheme, i) => ({
+        chars: charsByMorpheme[i].chars,
+        startsWithHyphen: morpheme.buckwalter.startsWith('-'),
+        endsWithHyphen: morpheme.buckwalter.endsWith('-'),
+        gloss: morpheme.gloss,
+      }))
+
+      this.setState({ gradedMorphemes })
     }
   }
 
   render() {
+    const { gradedMorphemes } = this.state
     return <div className='Quiz'>
       <button onClick={this.props.close}>X</button>
       <button onClick={this.onClickReplay}>Replay</button>
@@ -97,16 +107,26 @@ export default class Quiz extends React.Component<Props, State> {
       <br />
 
       <div className='gradedChars'>
-        {this.state.gradedChars.map((char: GradedChar, i: number) => {
-          const className = (char.beginsSyllable ? 'newSyllable' : '') +
-            (char.beginsMorpheme && !char.beginsWord ? ' newMorpheme' : '') +
-            (char.beginsWord ? ' newWord' : '') +
-            (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
-          return <span key={i} className={className}>
-            {char.beginsMorpheme && !char.beginsWord ? '-' : ''}
-            {expandQalam1(char.char)}
-          </span>
-        })}
+        {gradedMorphemes.map((morpheme: GradedMorpheme, i: number) =>
+          <div className='morpheme-pair' key={i}>
+            <div className='qalam'>
+              {morpheme.startsWithHyphen ? '-' : ''}
+              {morpheme.chars.map((char: GradedChar, j: number) => {
+                const className =
+                  (char.wasEnteredCorrectly ? ' correct' : ' incorrect')
+                return <span key={j} className={className}>
+                  {(char.beginsSyllable && j > 0) ?
+                    <span className='syllable-divider'>{MIDDLE_DOT}</span> : ''}
+                  {expandQalam1(char.char)}
+                </span>
+              })}
+              {morpheme.endsWithHyphen ? '-' : ''}
+            </div>
+            <div className='gloss'>
+              {morpheme.gloss}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   }

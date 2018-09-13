@@ -17,17 +17,8 @@ button.faded {
   background-color: white;
 }
 
-.Quiz .gradedChars div {
-  display: inline-block;
-}
 .Quiz .gradedChars .newSyllable {
   margin-left: 4px;
-}
-.Quiz .gradedChars .newMorpheme {
-  margin-left: 15px;
-}
-.Quiz .gradedChars .newWord {
-  margin-left: 30px;
 }
 .Quiz .gradedChars .correct {
   color: green;
@@ -35,4 +26,14 @@ button.faded {
 .Quiz .gradedChars .incorrect {
   background-color: red;
   color: white;
+}
+.Quiz .gradedChars .syllable-divider {
+  color: #ccc;
+}
+.Quiz .gradedChars .morpheme-pair .qalam {
+  clear: both;
+  float: left;
+}
+.Quiz .gradedChars .morpheme-pair .gloss {
+  float: right;
 }
