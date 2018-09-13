@@ -15,7 +15,20 @@ export function splitIntoSyllableTriplets(buckwalterWord: string):
   }
 }
 
-export function removeUnpronounced(
+// Returns array with 1st element: syllables if word is not last
+//                    2nd element, syllables if word is last
+export function splitIntoSyllables(buckwalterWord: string):
+  [Array<string>, Array<string>] {
+  const triplets = splitIntoSyllableTriplets(buckwalterWord)
+  const tripletsIfLast = removeUnpronounced(triplets)
+  const joined = triplets.map((triplet) =>
+    (triplet[0] || '') + triplet[1] + (triplet[2] || ''))
+  const joinedIfLast = tripletsIfLast.map((triplet) =>
+    (triplet[0] || '') + triplet[1] + (triplet[2] || ''))
+  return [joined, joinedIfLast]
+}
+
+function removeUnpronounced(
   triplets: Array<[string | null, string, string | null]>):
   Array<[string | null, string, string | null]> {
   if (triplets.length < 2) {

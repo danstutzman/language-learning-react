@@ -86,7 +86,7 @@ it('splits words into syllables', () => {
   ])
   expect(split('<iy~aAka')).toEqual([
     ["'", 'i', 'y'],
-    ['y', 'aA', null],
+    ['y', 'A', null],
     ['k', 'a', null],
   ])
   expect(split('naEobudu')).toEqual([
@@ -97,7 +97,7 @@ it('splits words into syllables', () => {
   expect(split('wa<iy~aAka')).toEqual([
     ['w', 'a', null],
     ["'", 'i', 'y'],
-    ['y', 'aA', null],
+    ['y', 'A', null],
     ['k', 'a', null],
   ])
   expect(split('nasotaEiynu')).toEqual([
@@ -109,7 +109,7 @@ it('splits words into syllables', () => {
   expect(split('{hodinaA')).toEqual([
     [null, 'i', 'h'],
     ['d', 'i', null],
-    ['n', 'aA', null],
+    ['n', 'A', null],
   ])
   expect(split('{lS~ira`Ta')).toEqual([
     [null, 'A', 'lS'],
@@ -172,11 +172,11 @@ it('splits words into syllables', () => {
     ['w', 'a', null],
   ])
   expect(split('laA')).toEqual([
-    ['l', 'aA', null],
+    ['l', 'A', null],
   ])
   expect(split('{lD~aA^l~iyna')).toEqual([
     [null, 'A', 'lD'],
-    ['D', 'aA', 'l'],
+    ['D', 'A', 'l'],
     ['l', 'iy', null],
     ['n', 'a', null],
   ])
@@ -187,9 +187,9 @@ it('splits words into syllables', () => {
     ['m', 'iy', null],
   ])
   expect(split('daAniyaAl')).toEqual([
-    ['d', 'aA', null],
+    ['d', 'A', null],
     ['n', 'i', null],
-    ['y', 'aA', 'l'],
+    ['y', 'A', 'l'],
   ])
   expect(split('maroHabAF')).toEqual([
     ['m', 'a', 'r'],
@@ -197,9 +197,9 @@ it('splits words into syllables', () => {
     ['b', 'A', 'n'],
   ])
   expect(split('Aalsa~laAmu')).toEqual([
-    [null, 'Aa', 'ls'],
+    [null, 'A', 'ls'],
     ['s', 'a', null],
-    ['l', 'aA', null],
+    ['l', 'A', null],
     ['m', 'u', null],
   ])
   expect(split('Ealayokumo')).toEqual([
@@ -212,7 +212,7 @@ it('splits words into syllables', () => {
     ['f', 'a', null],
   ])
   expect(split('HaAluka')).toEqual([
-    ['H', 'aA', null],
+    ['H', 'A', null],
     ['l', 'u', null],
     ['k', 'a', null],
   ])
@@ -228,7 +228,7 @@ it('splits words into syllables', () => {
     ['$', 'a', 'ms'],
   ])
   expect(split('gaA}imo')).toEqual([
-    ['g', 'aA', null],
+    ['g', 'A', null],
     ["'", 'i', 'm'],
   ])
 })

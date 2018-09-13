@@ -52,10 +52,10 @@ export default class Quiz extends React.Component<Props, State> {
       let nextSyllableStart = 0
       for (let i = 0; i < words.length; i++) {
         const word = words[i]
-        const syllables = (i < words.length - 1) ?
-          word.syllables : word.syllablesIfLast
-        for (const syllable of syllables) {
-          nextSyllableStart += syllable.qalam1.length
+        const syllableQalam1s = (i < words.length - 1) ?
+          word.syllableQalam1s : word.syllableQalam1sIfLast
+        for (const syllableQalam1 of syllableQalam1s) {
+          nextSyllableStart += syllableQalam1.length
           syllableStarts[nextSyllableStart] = true
         }
         wordStarts[nextSyllableStart] = true

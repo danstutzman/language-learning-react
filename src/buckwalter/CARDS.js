@@ -1,67 +1,44 @@
 // @flow
 import type {Card} from './Card.js'
-import type {CardSyllable} from './Card.js'
-import {convertSyllableTripletToQalam1} from './qalam.js'
-import {splitIntoSyllableTriplets} from './splitIntoSyllables.js'
-import {removeUnpronounced} from './splitIntoSyllables.js'
-
-function makeCardSyllable(triplet: [string | null, string, string | null]):
-  CardSyllable {
-  return {
-    buckwalter: `${triplet[0] || ''}${triplet[1]}${triplet[2] || ''}`,
-    qalam1: convertSyllableTripletToQalam1(triplet),
-  }
-}
+import type {CardWord} from './Card.js'
+import {splitIntoSyllables} from './splitIntoSyllables.js'
 
 function makeCards(buckwalter: string): Array<Card> {
-  const words = buckwalter.split(' ').map((wordBuckwalter: string) => {
-    const triplets = splitIntoSyllableTriplets(wordBuckwalter)
-    const syllables = triplets.map(makeCardSyllable)
-    const syllablesIfLast = removeUnpronounced(triplets).map(makeCardSyllable)
+  const words: Array<CardWord> = buckwalter.split(' ').map(
+    (wordBuckwalter: string) => {
+      const [syllableQalam1s, syllableQalam1sIfLast] =
+        splitIntoSyllables(wordBuckwalter)
 
-    return {
-      buckwalter: wordBuckwalter,
-      qalam1: syllables.map((syllable) => syllable.qalam1).join(''),
-      qalam1IfLast:
-        syllablesIfLast.map((syllable) => syllable.qalam1).join(''),
-      syllables,
-      syllablesIfLast,
-    }
-  })
+      return {
+        buckwalter: wordBuckwalter,
+        syllableQalam1s,
+        syllableQalam1sIfLast,
+      }
+    })
   const qalam1 = words.map((word, i) =>
-    (i < words.length - 1) ? word.qalam1 : word.qalam1IfLast).join(' ')
+    (i < words.length - 1) ?
+      word.syllableQalam1s.join('') : word.syllableQalam1sIfLast.join('')
+  ).join(' ')
 
-  let syllables: Array<CardSyllable> = []
+  let syllableQalam1s: Array<string> = []
   for (let i = 0; i < words.length; i++) {
     const word = words[i]
     if (i < words.length - 1) {
-      syllables = syllables.concat(word.syllables)
+      syllableQalam1s = syllableQalam1s.concat(word.syllableQalam1s)
     } else {
-      syllables = syllables.concat(word.syllablesIfLast)
+      syllableQalam1s = syllableQalam1s.concat(word.syllableQalam1sIfLast)
     }
   }
 
-  const phraseCard = { buckwalter, qalam1, syllables, words }
+  const phraseCard = { buckwalter, qalam1, syllableQalam1s, words }
   const wordCards = words.map((cardWord) => ({
     buckwalter: cardWord.buckwalter,
-    qalam1: cardWord.qalam1IfLast,
-    syllables: cardWord.syllables,
+    qalam1: cardWord.syllableQalam1sIfLast.join(''),
+    syllableQalam1s: cardWord.syllableQalam1sIfLast,
     words: [cardWord],
   }))
-  const syllableCards = syllables.map((cardSyllable) => ({
-    buckwalter: cardSyllable.buckwalter,
-    qalam1: cardSyllable.qalam1,
-    syllables: [cardSyllable],
-    words: [{
-      buckwalter: cardSyllable.buckwalter,
-      qalam1: cardSyllable.qalam1,
-      qalam1IfLast: cardSyllable.qalam1,
-      syllables: [cardSyllable],
-      syllablesIfLast: [cardSyllable],
-    }],
-  }))
 
-  return [phraseCard].concat(wordCards).concat(syllableCards)
+  return [phraseCard].concat(wordCards)
 }
 
 const phrases = [

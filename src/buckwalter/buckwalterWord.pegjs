@@ -24,8 +24,8 @@ first
   / ">a" c:end_consonant? { return ["'", 'a', c] }
   / "<iy" & "y" { return ["'", 'i', 'y'] }
   / "<i" { return ["'", 'i', null] }
-  / "Aals" & "s" { return [null, 'Aa', 'ls'] }
-  / "Aal" { return [null, 'Aa', 'l'] }
+  / "Aals" & "s" { return [null, 'A', 'ls'] }
+  / "Aal" { return [null, 'A', 'l'] }
   / vowel:vowel end_consonant:end_consonant? {
     return [null, vowel, end_consonant]
   }
@@ -38,8 +38,8 @@ last_consonant
 vowel
   = "Ai"
   / "a`" { return "a" }
-  / "aA^" { return "aA" }
-  / "aA"
+  / "aA^" { return "A" }
+  / "aA" { return "A" }
   / "ay" !"o" { return "ay" }
   / "iy" !"a" { return "iy" }
   / "uw"
