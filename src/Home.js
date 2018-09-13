@@ -116,7 +116,7 @@ export default class Home extends React.Component<Props, State> {
               type="checkbox"
               data-group-name={groupName}
               onChange={this.onToggleGroupName}
-              checked={this.state.enabledGroupNames[groupName]} />
+              checked={this.state.enabledGroupNames[groupName] || false} />
             <label htmlFor={groupName}>
               {expandQalam1(phonemes.join(', '))}
             </label>
