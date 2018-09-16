@@ -3,6 +3,7 @@ import React from 'react'
 import type {Recording} from './Recording.js'
 
 type Props = {|
+  log: (event: string, details?: {}) => void,
   recordings: Array<Recording>,
   startRecording: (timeslice?: number) => void,
   stopRecording: () => void,
@@ -21,11 +22,13 @@ export default class Recorder extends React.Component<Props, State> {
   }
 
   onClickStartRecording = () => {
+    this.props.log('RecorderOnClickStartRecording')
     this.setState({ isRecording: true })
     this.props.startRecording()
   }
 
   onClickStopRecording = () => {
+    this.props.log('RecorderOnClickStopRecording')
     this.setState({ isRecording: false })
     this.props.stopRecording()
   }

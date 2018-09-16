@@ -36,8 +36,9 @@ export default class RecorderService {
   micAudioStream: any
   slicing: IntervalID
   onGraphSetupWithInputStream: (AudioNode) => void | void
+  log: { event: string } => void
 
-  constructor(baseUrl: string) {
+  constructor(baseUrl: string, log: (logEvent: { event: string }) => void) {
     this.baseUrl = baseUrl
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext
@@ -64,6 +65,8 @@ export default class RecorderService {
       stopTracksAndCloseCtxWhenFinished: true,
       userMediaConstraints: {audio: true},
     }
+
+    this.log = log
   }
 
   createWorker(fn: () => void) {
@@ -149,13 +152,15 @@ export default class RecorderService {
     }
 
     // This will prompt user for permission if needed
+    this.log('BrowserGetUserMedia')
     return (navigator.mediaDevices: any).getUserMedia(this.config.userMediaConstraints)
       .then((stream) => {
+        this.log('BrowserGetUserMediaSuccess')
         this._startRecordingWithStream(stream, timeslice)
       })
       .catch((error) => {
-        alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
-        console.log(error)
+        this.log('BrowserGetUserMediaFailure', { error: error.message })
+        // alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
       })
   }
 

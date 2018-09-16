@@ -18,33 +18,46 @@ type Props = {|
 |}
 
 type State = {|
+  logEvents: Array<{}>,
   recordings: Array<Recording>,
   selectedVoiceName: string | null,
 |}
 
 export default class App extends React.Component<Props, State> {
   recorderService: RecorderService
+  log: (event: string, details?: {}) => void
 
   constructor(props: Props) {
     super(props)
 
     this.state = {
+      logEvents: [],
       recordings: [],
       selectedVoiceName: props.arabicVoices[0] ?
         props.arabicVoices[0].name : null,
     }
 
-    this.recorderService = new RecorderService('BASE_URL')
+    this.log = (event: string, details?: {}) => {
+      const logEvents = [{
+        time: new Date().getTime(),
+        event,
+        ...details,
+      }]
+      this.setState(prevState => ({
+        logEvents: prevState.logEvents.concat(logEvents),
+      }))
+    }
+    this.recorderService = new RecorderService('BASE_URL', this.log)
     this.recorderService.em.addEventListener('recording', (e) =>
       this.setState(prevState => ({
         recordings: prevState.recordings.concat([(e: any).detail.recording]),
       })))
   }
 
-  onClickStartRecording = () =>
+  startRecording = () =>
     this.recorderService.startRecording()
 
-  onClickStopRecording = () =>
+  stopRecording = () =>
     this.recorderService.stopRecording()
 
   speakTextForHome = (script: string) => {
@@ -64,9 +77,10 @@ export default class App extends React.Component<Props, State> {
 
   renderRecorder = () =>
     <Recorder
+      log={this.log}
       recordings={this.state.recordings}
-      startRecording={this.onClickStartRecording}
-      stopRecording={this.onClickStopRecording} />
+      startRecording={this.startRecording}
+      stopRecording={this.stopRecording} />
 
   setSelectedVoiceNameForPreferences = (selectedVoiceName: string) =>
     this.setState({ selectedVoiceName })
@@ -90,6 +104,12 @@ export default class App extends React.Component<Props, State> {
           <li>
             <Link to="/topics">Topics</Link>
           </li>
+        </ul>
+        <hr />
+
+        <ul>
+          {this.state.logEvents.map((logEvent, i) =>
+            <li key={i}>{JSON.stringify(logEvent)}</li>)}
         </ul>
         <hr />
 
