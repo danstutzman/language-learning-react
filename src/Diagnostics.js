@@ -142,8 +142,9 @@ function revokeDevicePermissions(stream: any) {
 }
 
 function getSupportedMimeTypes(): Array<string> {
-  if (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported) {
-    return MIME_TYPES.filter(type => MediaRecorder.isTypeSupported(type))
+  const mediaRecorder = window.MediaRecorder
+  if (typeof mediaRecorder !== 'undefined' && mediaRecorder.isTypeSupported) {
+    return MIME_TYPES.filter(type => mediaRecorder.isTypeSupported(type))
   } else {
     console.log('(manual encoding required)')
     return []
@@ -189,8 +190,7 @@ export default class Diagnostics extends React.Component<{}, State> {
       mediaDevicesStr: exists(navigator.mediaDevices),
       getUserMediaStr: exists(navigator.mediaDevices &&
         navigator.mediaDevices.getUserMedia),
-      mediaRecorderOrigStr:
-        typeof(MediaRecorder) !== 'undefined' ? 'true' : 'false',
+      mediaRecorderOrigStr: exists(window.MediaRecorder),
       analyserNode: exists(window.AnalyserNode),
       dynamicsCompressorNode: exists(window.DynamicsCompressorNode),
       availableDeviceNames: [],
