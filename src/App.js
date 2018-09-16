@@ -1,5 +1,6 @@
 // @flow
 import './App.css'
+import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
 import { Link } from 'react-router-dom'
@@ -35,6 +36,8 @@ export default class App extends React.Component<Props, State> {
     <Home
       speakText={this.speakTextForHome} />
 
+  renderDiagnostics = () => <Diagnostics />
+
   renderPreferences = () =>
     <Preferences
       selectedVoiceName={this.state.selectedVoiceName}
@@ -51,6 +54,9 @@ export default class App extends React.Component<Props, State> {
             <Link to="/">Home</Link>
           </li>
           <li>
+            <Link to="/diagnostics">Diagnostics</Link>
+          </li>
+          <li>
             <Link to="/preferences">Preferences</Link>
           </li>
           <li>
@@ -60,6 +66,7 @@ export default class App extends React.Component<Props, State> {
         <hr />
 
         <Route exact path="/" render={this.renderHome} />
+        <Route path="/diagnostics" render={this.renderDiagnostics} />
         <Route path="/preferences" render={this.renderPreferences} />
         <Route path="/topics" component={Topics} />
       </div>
