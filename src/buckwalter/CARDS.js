@@ -52,7 +52,7 @@ const phrases = [
   [['daAlo', 'dal']],
   [['*aAlo', 'thal']],
   [["raA'", 'reh']],
-  [['zaAyi', 'zain']],
+  [['zaAyo', 'zain']],
   [['siyno', 'seen']],
   [['$iyno', 'sheen']],
   [['SaAdo', 'sad']],
