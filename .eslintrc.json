@@ -8,6 +8,7 @@
     "plugin:react/recommended"
   ],
   "globals": {
+    "IntervalID": true,
     "expect": true,
     "it": true,
     "process": true
