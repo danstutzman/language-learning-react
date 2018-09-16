@@ -182,8 +182,11 @@ type State = {|
 |}
 
 export default class Diagnostics extends React.Component<{}, State> {
+  isStillMounted: boolean
+
   constructor(props: {}) {
     super(props)
+    this.isStillMounted = true
     this.state = {
       audioContextStr: exists(window.AudioContext),
       webkitAudioContextStr: exists(window.webkitAudioContext),
@@ -202,15 +205,21 @@ export default class Diagnostics extends React.Component<{}, State> {
       supportedDeviceConstraints: getSupportedDeviceConstraints(),
     }
     enumerateDevices()
-      .then(enumeratedDevices =>
-        this.setState(setupAvailDeviceNames(enumeratedDevices)))
-      .then(output => this.setState(output))
+      .then(enumeratedDevices => {
+        if (this.isStillMounted) {
+          this.setState(setupAvailDeviceNames(enumeratedDevices))
+        }
+      })
     this.onClickRequestDevicePermissions()
+  }
+
+  componentWillUnmount() {
+    this.isStillMounted = false
   }
 
   onClickRequestDevicePermissions = () =>
     requestDevicePermissions().then(output => {
-      if (output.stream !== undefined) {
+      if (output.stream !== undefined && this.isStillMounted) {
         this.setState({
           ...output,
           enumeratedDevicesPermissionNeeded: false,
@@ -222,10 +231,14 @@ export default class Diagnostics extends React.Component<{}, State> {
   onClickRevokeDevicePermissions = () => {
     revokeDevicePermissions(this.state.stream)
     enumerateDevices()
-      .then(enumeratedDevices => this.setState({
-        ...setupAvailDeviceNames(enumeratedDevices),
-        enumeratedDevicesPermissionRevokable: false,
-      }))
+      .then(enumeratedDevices => {
+        if (this.isStillMounted) {
+          this.setState({
+            ...setupAvailDeviceNames(enumeratedDevices),
+            enumeratedDevicesPermissionRevokable: false,
+          })
+        }
+      })
   }
 
   renderWebAudioRecordingSupport = () => <div>
