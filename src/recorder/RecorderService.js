@@ -36,9 +36,9 @@ export default class RecorderService {
   micAudioStream: any
   slicing: IntervalID
   onGraphSetupWithInputStream: (AudioNode) => void | void
-  log: { event: string } => void
+  log: (event: string, details?: {}) => void
 
-  constructor(baseUrl: string, log: (logEvent: { event: string }) => void) {
+  constructor(baseUrl: string, log: (event: string, details?: {}) => void) {
     this.baseUrl = baseUrl
 
     window.AudioContext = window.AudioContext || window.webkitAudioContext
