@@ -13,37 +13,35 @@ import Recorder from './Recorder.js'
 import RecorderService from './services/recorder/RecorderService.js'
 import type {Recording} from './services/recorder/Recording.js'
 import { Route } from 'react-router-dom'
+import SpeechSynthesisService from './services/SpeechSynthesisService.js'
 import Topics from './Topics.js'
 
 type Props = {|
-  arabicVoices: Array<{| lang: string, name: string |}>,
-  speakText: (script: string, selectedVoiceName: string | null) => void,
 |}
 
 type State = {|
   logs: Array<{}>,
   preferences: Preferences,
   recordings: Array<Recording>,
-  selectedVoiceName: string | null,
 |}
 
 export default class App extends React.Component<Props, State> {
   logStorage: LogStorage
   preferencesStorage: PreferencesStorage
   recorderService: RecorderService
+  speechSynthesisService: SpeechSynthesisService
 
   constructor(props: Props) {
     super(props)
 
     this.logStorage = new LogStorage(window.localStorage)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
+    this.speechSynthesisService = new SpeechSynthesisService()
 
     this.state = {
       logs: this.logStorage.getTodaysLogs(),
       preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
-      selectedVoiceName: props.arabicVoices[0] ?
-        props.arabicVoices[0].name : null,
     }
 
     this.recorderService = new RecorderService('BASE_URL', this.log)
@@ -64,13 +62,12 @@ export default class App extends React.Component<Props, State> {
   stopRecording = () =>
     this.recorderService.stopRecording()
 
-  speakTextForHome = (script: string) => {
-    this.props.speakText(script, this.state.selectedVoiceName)
-  }
+  speakText = (script: string) =>
+    this.speechSynthesisService.speakText(
+      script, this.state.preferences.speechSynthesisVoiceName)
 
   renderHome = () =>
-    <Home
-      speakText={this.speakTextForHome} />
+    <Home speakText={this.speakText} />
 
   renderDiagnostics = () => <Diagnostics />
 
@@ -90,9 +87,6 @@ export default class App extends React.Component<Props, State> {
       recordings={this.state.recordings}
       startRecording={this.startRecording}
       stopRecording={this.stopRecording} />
-
-  setSelectedVoiceNameForPreferences = (selectedVoiceName: string) =>
-    this.setState({ selectedVoiceName })
 
   render() {
     return <HashRouter>
