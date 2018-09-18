@@ -36,6 +36,7 @@ export default class App extends React.Component<Props, State> {
 
     this.logStorage = new LogStorage(window.localStorage)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
+    this.recorderService = new RecorderService('BASE_URL', this.log)
     this.speechSynthesisService = new SpeechSynthesisService()
 
     this.state = {
@@ -43,13 +44,21 @@ export default class App extends React.Component<Props, State> {
       preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
     }
-
-    this.recorderService = new RecorderService('BASE_URL', this.log)
-    this.recorderService.em.addEventListener('recording', (e) =>
-      this.setState(prevState => ({
-        recordings: prevState.recordings.concat([(e: any).detail.recording]),
-      })))
   }
+
+  componentDidMount() {
+    this.recorderService.em.addEventListener('recording', this.onNewRecording)
+  }
+
+  componentWillUnmount() {
+    this.recorderService.em.removeEventListener(
+      'recording', this.onNewRecording)
+  }
+
+  onNewRecording = (e: any) =>
+    this.setState(prevState => ({
+      recordings: prevState.recordings.concat([e.detail.recording]),
+    }))
 
   log = (event: string, details?: {}) => {
     const logs = this.logStorage.log(event, details)
