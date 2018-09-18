@@ -4,6 +4,7 @@ import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
 import { Link } from 'react-router-dom'
+import LogStorage from './services/storage/LogStorage.js'
 import type {Preferences} from './services/storage/Preferences.js'
 import PreferencesScreen from './PreferencesScreen.js'
 import PreferencesStorage from './services/storage/PreferencesStorage.js'
@@ -20,45 +21,41 @@ type Props = {|
 |}
 
 type State = {|
-  logEvents: Array<{}>,
+  logs: Array<{}>,
   preferences: Preferences,
   recordings: Array<Recording>,
   selectedVoiceName: string | null,
 |}
 
 export default class App extends React.Component<Props, State> {
+  logStorage: LogStorage
   preferencesStorage: PreferencesStorage
   recorderService: RecorderService
-  log: (event: string, details?: {}) => void
 
   constructor(props: Props) {
     super(props)
 
+    this.logStorage = new LogStorage(window.localStorage)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
 
     this.state = {
-      logEvents: [],
+      logs: this.logStorage.getTodaysLogs(),
       preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
       selectedVoiceName: props.arabicVoices[0] ?
         props.arabicVoices[0].name : null,
     }
 
-    this.log = (event: string, details?: {}) => {
-      const logEvents = [{
-        time: new Date().getTime(),
-        event,
-        ...details,
-      }]
-      this.setState(prevState => ({
-        logEvents: prevState.logEvents.concat(logEvents),
-      }))
-    }
     this.recorderService = new RecorderService('BASE_URL', this.log)
     this.recorderService.em.addEventListener('recording', (e) =>
       this.setState(prevState => ({
         recordings: prevState.recordings.concat([(e: any).detail.recording]),
       })))
+  }
+
+  log = (event: string, details?: {}) => {
+    const logs = this.logStorage.log(event, details)
+    this.setState({ logs })
   }
 
   startRecording = () =>
@@ -120,8 +117,8 @@ export default class App extends React.Component<Props, State> {
         <hr />
 
         <ul>
-          {this.state.logEvents.map((logEvent, i) =>
-            <li key={i}>{JSON.stringify(logEvent)}</li>)}
+          {this.state.logs.map((log, i) =>
+            <li key={i}>{JSON.stringify(log)}</li>)}
         </ul>
         <hr />
 
