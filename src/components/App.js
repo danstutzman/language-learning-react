@@ -129,7 +129,7 @@ export default class App extends React.Component<Props, State> {
         <hr />
 
         <ul>
-          {this.state.logs.map((log, i) =>
+          {this.state.logs.slice(-3).map((log, i) =>
             <li key={i}>{JSON.stringify(log)}</li>)}
         </ul>
         <button onClick={this.onClickDownloadCards}>Download cards</button>
