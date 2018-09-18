@@ -1,5 +1,6 @@
 // @flow
 import './App.css'
+import CardsService from '../services/CardsService.js'
 import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
@@ -26,6 +27,7 @@ type State = {|
 |}
 
 export default class App extends React.Component<Props, State> {
+  cardsService: CardsService
   logStorage: LogStorage
   preferencesStorage: PreferencesStorage
   recorderService: RecorderService
@@ -35,6 +37,8 @@ export default class App extends React.Component<Props, State> {
     super(props)
 
     this.logStorage = new LogStorage(window.localStorage)
+    this.cardsService = new CardsService(
+      window.localStorage, 'http://localhost:4000/ar/new-cards.json', this.log)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
     this.recorderService = new RecorderService('BASE_URL', this.log)
     this.speechSynthesisService = new SpeechSynthesisService()
@@ -98,6 +102,10 @@ export default class App extends React.Component<Props, State> {
       startRecording={this.startRecording}
       stopRecording={this.stopRecording} />
 
+  onClickDownloadCards = () =>
+    this.cardsService.downloadCards()
+      .then(response => console.log('downloadCards', response))
+
   render() {
     return <HashRouter>
       <div className="App">
@@ -124,6 +132,7 @@ export default class App extends React.Component<Props, State> {
           {this.state.logs.map((log, i) =>
             <li key={i}>{JSON.stringify(log)}</li>)}
         </ul>
+        <button onClick={this.onClickDownloadCards}>Download cards</button>
         <hr />
 
         <Route exact path="/" render={this.renderHome} />
