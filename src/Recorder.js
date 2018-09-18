@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import type {Recording} from './Recording.js'
+import type {Recording} from './services/recorder/Recording.js'
 
 type Props = {|
   log: (event: string, details?: {}) => void,
