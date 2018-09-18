@@ -6,7 +6,7 @@ type Props = {|
   setSelectedVoiceName: (string) => void,
 |}
 
-export default class Preferences extends React.Component<Props> {
+export default class PreferencesScreen extends React.Component<Props> {
   onChangeVoice = (e: Event) =>
     this.props.setSelectedVoiceName((e.target: any).value)
 

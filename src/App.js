@@ -4,7 +4,7 @@ import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
 import { Link } from 'react-router-dom'
-import Preferences from './Preferences.js'
+import PreferencesScreen from './PreferencesScreen.js'
 import React from 'react'
 import Recorder from './Recorder.js'
 import RecorderService from './services/recorder/RecorderService.js'
@@ -70,8 +70,8 @@ export default class App extends React.Component<Props, State> {
 
   renderDiagnostics = () => <Diagnostics />
 
-  renderPreferences = () =>
-    <Preferences
+  renderPreferencesScreen = () =>
+    <PreferencesScreen
       selectedVoiceName={this.state.selectedVoiceName}
       setSelectedVoiceName={this.setSelectedVoiceNameForPreferences} />
 
@@ -115,7 +115,7 @@ export default class App extends React.Component<Props, State> {
 
         <Route exact path="/" render={this.renderHome} />
         <Route path="/diagnostics" render={this.renderDiagnostics} />
-        <Route path="/preferences" render={this.renderPreferences} />
+        <Route path="/preferences" render={this.renderPreferencesScreen} />
         <Route path="/recorder" render={this.renderRecorder} />
         <Route path="/topics" component={Topics} />
       </div>
