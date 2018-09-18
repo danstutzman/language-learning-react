@@ -4,10 +4,11 @@
 [include]
 
 [libs]
+interfaces/html5/LocalStorage.js
+interfaces/html5/MediaRecorder.js
+interfaces/html5/SpeechSynthesisUtterance.js
 interfaces/jest/globals.js
 interfaces/react-router-dom/react-router-dom_v4.x.x.js
-interfaces/web-speech-api/MediaRecorder.js
-interfaces/web-speech-api/SpeechSynthesisUtterance.js
 
 [lints]
 

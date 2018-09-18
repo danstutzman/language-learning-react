@@ -8,9 +8,10 @@
     "plugin:react/recommended"
   ],
   "globals": {
-    "IntervalID": true,
     "expect": true,
+    "IntervalID": true,
     "it": true,
+    "LocalStorage": true,
     "process": true
   },
   "parser": "babel-eslint",

@@ -1,14 +1,18 @@
 // @flow
+import type {Preferences} from './services/storage/Preferences.js'
 import React from 'react'
 
 type Props = {|
-  selectedVoiceName: string | null,
-  setSelectedVoiceName: (string) => void,
+  preferences: Preferences,
+  setPreferences: (Preferences) => void,
 |}
 
 export default class PreferencesScreen extends React.Component<Props> {
-  onChangeVoice = (e: Event) =>
-    this.props.setSelectedVoiceName((e.target: any).value)
+  onChangeSpeechSynthesisVoiceName = (e: Event) =>
+    this.props.setPreferences({
+      ...this.props.preferences,
+      speechSynthesisVoiceName: (e.target: any).value,
+    })
 
   render() {
     const voices = window.speechSynthesis.getVoices().filter((voice) =>
@@ -17,8 +21,9 @@ export default class PreferencesScreen extends React.Component<Props> {
     return <div>
       <h2>Preferences</h2>
       <select
-        onChange={this.onChangeVoice}
-        value={this.props.selectedVoiceName || undefined}>
+        onChange={this.onChangeSpeechSynthesisVoiceName}
+        value={this.props.preferences.speechSynthesisVoiceName}>
+        <option value=''>(default)</option>
         {voices.map((voice) => <option key={voice.name} value={voice.name}>
           {voice.name} {voice.lang}
         </option>)}

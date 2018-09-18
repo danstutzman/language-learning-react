@@ -4,7 +4,9 @@ import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
 import { Link } from 'react-router-dom'
+import type {Preferences} from './services/storage/Preferences.js'
 import PreferencesScreen from './PreferencesScreen.js'
+import PreferencesStorage from './services/storage/PreferencesStorage.js'
 import React from 'react'
 import Recorder from './Recorder.js'
 import RecorderService from './services/recorder/RecorderService.js'
@@ -19,19 +21,24 @@ type Props = {|
 
 type State = {|
   logEvents: Array<{}>,
+  preferences: Preferences,
   recordings: Array<Recording>,
   selectedVoiceName: string | null,
 |}
 
 export default class App extends React.Component<Props, State> {
+  preferencesStorage: PreferencesStorage
   recorderService: RecorderService
   log: (event: string, details?: {}) => void
 
   constructor(props: Props) {
     super(props)
 
+    this.preferencesStorage = new PreferencesStorage(window.localStorage)
+
     this.state = {
       logEvents: [],
+      preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
       selectedVoiceName: props.arabicVoices[0] ?
         props.arabicVoices[0].name : null,
@@ -70,10 +77,15 @@ export default class App extends React.Component<Props, State> {
 
   renderDiagnostics = () => <Diagnostics />
 
+  onSetPreferences = (preferences: Preferences) =>
+    this.setState({
+      preferences: this.preferencesStorage.setPreferences(preferences),
+    })
+
   renderPreferencesScreen = () =>
     <PreferencesScreen
-      selectedVoiceName={this.state.selectedVoiceName}
-      setSelectedVoiceName={this.setSelectedVoiceNameForPreferences} />
+      preferences={this.state.preferences}
+      setPreferences={this.onSetPreferences} />
 
   renderRecorder = () =>
     <Recorder
