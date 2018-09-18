@@ -76,7 +76,7 @@ export default class App extends React.Component<Props, State> {
       script, this.state.preferences.speechSynthesisVoiceName)
 
   renderHome = () =>
-    <Home speakText={this.speakText} />
+    <Home log={this.log} speakText={this.speakText} />
 
   renderDiagnostics = () => <Diagnostics />
 
@@ -87,6 +87,7 @@ export default class App extends React.Component<Props, State> {
 
   renderPreferencesScreen = () =>
     <PreferencesScreen
+      log={this.log}
       preferences={this.state.preferences}
       setPreferences={this.onSetPreferences} />
 

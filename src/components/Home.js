@@ -33,6 +33,7 @@ const DEFAULT_ENABLED_GROUP_NAMES = {
 }
 
 type Props = {|
+  log: (event: string, details?: {}) => void,
   speakText: (script: string) => void,
 |}
 
@@ -65,6 +66,10 @@ export default class Home extends React.Component<Props, State> {
       enabledPhonemes: listEnabledPhonemes(DEFAULT_ENABLED_GROUP_NAMES),
       showQuiz: false,
     }
+  }
+
+  componentDidMount() {
+    this.props.log('VisitHome')
   }
 
   onClickShowQuiz = () =>

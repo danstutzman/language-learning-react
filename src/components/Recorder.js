@@ -21,6 +21,10 @@ export default class Recorder extends React.Component<Props, State> {
     }
   }
 
+  componentDidMount() {
+    this.props.log('VisitRecorder')
+  }
+
   onClickStartRecording = () => {
     this.props.log('RecorderOnClickStartRecording')
     this.setState({ isRecording: true })

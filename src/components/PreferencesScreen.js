@@ -3,11 +3,16 @@ import type {Preferences} from '../services/storage/Preferences.js'
 import React from 'react'
 
 type Props = {|
+  log: (event: string, details?: {}) => void,
   preferences: Preferences,
   setPreferences: (Preferences) => void,
 |}
 
 export default class PreferencesScreen extends React.Component<Props> {
+  componentDidMount() {
+    this.props.log('VisitPreferencesScreen')
+  }
+
   onChangeSpeechSynthesisVoiceName = (e: Event) =>
     this.props.setPreferences({
       ...this.props.preferences,
