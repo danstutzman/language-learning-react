@@ -1,8 +1,8 @@
 // @flow
-import type {Card} from './buckwalter/Card.js'
-import CARDS from './buckwalter/CARDS.js'
-import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter.js'
-import {expandQalam1} from './buckwalter/digraphs.js'
+import type {Card} from '../buckwalter/Card.js'
+import CARDS from '../buckwalter/CARDS.js'
+import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter.js'
+import {expandQalam1} from '../buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
 import React from 'react'
 

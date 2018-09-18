@@ -1,5 +1,5 @@
 // @flow
-import type {Preferences} from './services/storage/Preferences.js'
+import type {Preferences} from '../services/storage/Preferences.js'
 import React from 'react'
 
 type Props = {|

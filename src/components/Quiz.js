@@ -1,10 +1,10 @@
 // @flow
 import './App.css'
-import type {Card} from './buckwalter/Card.js'
-import {convertBuckwalterToArabic} from './buckwalter/convertBuckwalter'
-import diffStrings from './diffStrings.js'
-import {expandQalam1} from './buckwalter/digraphs.js'
-import {mergeToQalam1} from './buckwalter/digraphs.js'
+import type {Card} from '../buckwalter/Card.js'
+import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter'
+import diffStrings from '../diffStrings'
+import {expandQalam1} from '../buckwalter/digraphs'
+import {mergeToQalam1} from '../buckwalter/digraphs'
 import React from 'react'
 
 const MIDDLE_DOT = '\u00b7'
