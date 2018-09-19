@@ -1,6 +1,6 @@
 // @flow
 import React from 'react'
-import type {RecorderProps} from '../index.js'
+import type {RecorderProps} from '../services/recorder/RecorderService.js'
 
 type Props = {|
   log: (event: string, details?: {}) => void,
@@ -20,6 +20,7 @@ export default class Recorder extends React.PureComponent<Props> {
       <button onClick={this.props.recorder.stopRecording}>
         Stop Recording
       </button>
+      state={this.props.recorder.state}
       <ol>
         {this.props.recorder.recordings.map((recording, i) =>
           <li key={i}>

@@ -3,6 +3,14 @@
 import EncoderWav from './encoder-wav-worker.js'
 import EncoderMp3 from './encoder-mp3-worker.js'
 import EncoderOgg from './encoder-ogg-worker.js'
+import type {Recording} from './Recording.js'
+
+export type RecorderProps = {|
+  state: 'RESTING' | 'STARTING' | 'RECORDING' | 'ENCODING',
+  recordings: Array<Recording>,
+  startRecording: (timeslice?: number) => void,
+  stopRecording: () => void,
+|}
 
 export default class RecorderService {
   baseUrl: string
@@ -37,6 +45,7 @@ export default class RecorderService {
   slicing: IntervalID
   onGraphSetupWithInputStream: (AudioNode) => void | void
   log: (event: string, details?: {}) => void
+  props: RecorderProps
 
   constructor(baseUrl: string, log: (event: string, details?: {}) => void) {
     this.baseUrl = baseUrl
@@ -69,6 +78,23 @@ export default class RecorderService {
     this.log = log
   }
 
+  init() {
+    this.props = {
+      state: 'RESTING',
+      recordings: [],
+      startRecording: this.startRecording,
+      stopRecording: this.stopRecording,
+    }
+    this.em.addEventListener('recording', (e: any) => {
+      this.props = {
+        ...this.props,
+        recordings: this.props.recordings.concat([e.detail.recording]),
+        state: 'RESTING',
+      }
+      this.em.dispatchEvent(new CustomEvent('recordings'))
+    })
+  }
+
   createWorker(fn: () => void) {
     var js = fn
       .toString()
@@ -83,6 +109,9 @@ export default class RecorderService {
     if (this.state !== 'inactive') {
       return
     }
+
+    this.props = { ...this.props, state: 'STARTING' }
+    this.em.dispatchEvent(new CustomEvent('recordings'))
 
     // This is the case on ios/chrome, when clicking links from within ios/slack (sometimes), etc.
     if (!navigator || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
@@ -162,6 +191,8 @@ export default class RecorderService {
       .catch((error) => {
         this.log('BrowserGetUserMediaFailure', { error: error.message })
         // alert('Error with getUserMedia: ' + error.message) // temp: helps when testing for strange issues on ios/safari
+        this.props = { ...this.props, state: 'RESTING' }
+        this.em.dispatchEvent(new CustomEvent('recordings'))
       })
   }
 
@@ -218,6 +249,8 @@ export default class RecorderService {
     }
 
     this.state = 'recording'
+    this.props = { ...this.props, state: 'RECORDING' }
+    this.em.dispatchEvent(new CustomEvent('recordings'))
 
     if (this.processorNode) {
       const processorNode = this.processorNode
@@ -339,10 +372,14 @@ export default class RecorderService {
     }
     if (this.usingMediaRecorder) {
       this.state = 'inactive'
+      this.props = { ...this.props, state: 'ENCODING' }
+      this.em.dispatchEvent(new CustomEvent('recordings'))
       this.mediaRecorder.stop()
     }
     else {
       this.state = 'inactive'
+      this.props = { ...this.props, state: 'ENCODING' }
+      this.em.dispatchEvent(new CustomEvent('recordings'))
       if (this.audioCtx === null) {
         throw Error('Null audioCtx')
       }
