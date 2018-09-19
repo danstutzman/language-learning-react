@@ -1,5 +1,6 @@
 // @flow
 import type {Card} from '../services/CardsService.js'
+import type {CardsProps} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter.js'
 import {expandQalam1} from '../buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
@@ -33,7 +34,7 @@ const DEFAULT_ENABLED_GROUP_NAMES = {
 }
 
 type Props = {|
-  cards: Array<Card>,
+  cards: CardsProps,
   log: (event: string, details?: {}) => void,
   speechSynthesis: SpeechSynthesisProps,
 |}
@@ -62,8 +63,9 @@ export default class Home extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
 
+    const cards = props.cards.cards
     this.state = {
-      currentQuizCard: props.cards[Math.floor(Math.random() * props.cards.length)],
+      currentQuizCard: cards[Math.floor(Math.random() * cards.length)],
       enabledGroupNames: DEFAULT_ENABLED_GROUP_NAMES,
       enabledPhonemes: listEnabledPhonemes(DEFAULT_ENABLED_GROUP_NAMES),
       showQuiz: false,
@@ -131,7 +133,7 @@ export default class Home extends React.PureComponent<Props, State> {
         })}
       </ul>
 
-      {this.props.cards.map((card: Card, i: number) =>
+      {this.props.cards.cards.map((card: Card, i: number) =>
         <button
           key={i}
           className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}

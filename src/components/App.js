@@ -1,7 +1,6 @@
 // @flow
 import './App.css'
-import type {Card} from '../services/CardsService.js'
-import CardsService from '../services/CardsService.js'
+import type {CardsProps} from '../services/CardsService.js'
 import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
 import Home from './Home.js'
@@ -18,31 +17,27 @@ import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
 import Topics from './Topics.js'
 
 type Props = {|
+  cards: CardsProps,
   log: (event: string, details?: {}) => void,
   speechSynthesis: SpeechSynthesisProps,
 |}
 
 type State = {|
-  cards: Array<Card>,
   preferences: Preferences,
   recordings: Array<Recording>,
 |}
 
 export default class App extends React.PureComponent<Props, State> {
-  cardsService: CardsService
   preferencesStorage: PreferencesStorage
   recorderService: RecorderService
 
   constructor(props: Props) {
     super(props)
 
-    this.cardsService = new CardsService(window.localStorage,
-      'http://localhost:4000/ar/new-cards.json', props.log)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
     this.recorderService = new RecorderService('BASE_URL', props.log)
 
     this.state = {
-      cards: this.cardsService.getCardsFromStorage(),
       preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
     }
@@ -73,11 +68,12 @@ export default class App extends React.PureComponent<Props, State> {
 
   renderHome = () =>
     <Home
-      cards={this.state.cards}
+      cards={this.props.cards}
       log={this.props.log}
       speechSynthesis={this.props.speechSynthesis} />
 
-  renderDiagnostics = () => <Diagnostics />
+  renderDiagnostics = () =>
+    <Diagnostics />
 
   onSetPreferences = (preferences: Preferences) =>
     this.setState({
@@ -96,10 +92,6 @@ export default class App extends React.PureComponent<Props, State> {
       recordings={this.state.recordings}
       startRecording={this.startRecording}
       stopRecording={this.stopRecording} />
-
-  onClickDownloadCards = () =>
-    this.cardsService.downloadCards()
-      .then(response => this.setState({ cards: response.cards }))
 
   render() {
     return <HashRouter>
@@ -123,7 +115,9 @@ export default class App extends React.PureComponent<Props, State> {
         </ul>
         <hr />
 
-        <button onClick={this.onClickDownloadCards}>Download cards</button>
+        <button onClick={this.props.cards.downloadCards}>
+          Download cards (networkState={this.props.cards.networkState})
+        </button>
         <hr />
 
         <Route exact path="/" render={this.renderHome} />

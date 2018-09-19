@@ -1,4 +1,5 @@
 // @flow
+import EventEmitter from 'eventemitter3'
 import {toQalam1} from '../buckwalter/qalam1.js'
 
 export type Syllable = {|
@@ -36,6 +37,12 @@ export type Card = {|
 const FETCH_TIMEOUT_MILLIS = 5000
 const CARDS_STORAGE_KEY = 'cards'
 
+export type CardsProps = {|
+  cards: Array<Card>,
+  downloadCards: () => void,
+  networkState: 'ASSUMED_OK' | 'WAITING' | 'TIMEOUT' | 'BAD_RESPONSE',
+|}
+
 function expandCardsSerialized(cards: Array<CardSerialized>): Array<Card> {
   return cards.map(card => {
     const morphemesExpanded: Array<Morpheme> = card.morphemes.map(morpheme => {
@@ -72,61 +79,84 @@ function expandCardsSerialized(cards: Array<CardSerialized>): Array<Card> {
 }
 
 export default class CardsService {
+  eventEmitter: EventEmitter
   localStorage: LocalStorage
   apiUrl: string
   log: (event: string, details?: {}) => void
+  props: CardsProps
 
   constructor(
     localStorage: LocalStorage,
     apiUrl: string,
     log: (event: string, details?: {},
   ) => void) {
+    this.eventEmitter = new EventEmitter()
     this.localStorage = localStorage
     this.apiUrl = apiUrl
     this.log = log
   }
 
-  getCardsFromStorage(): Array<Card> {
+  init() {
     const json = this.localStorage.getItem(CARDS_STORAGE_KEY)
     const cardsSerialized = (json !== null) ? JSON.parse(json) : []
-    return expandCardsSerialized(cardsSerialized)
+    this.props = {
+      networkState: 'ASSUMED_OK',
+      cards: expandCardsSerialized(cardsSerialized),
+      downloadCards: this.downloadCards,
+    }
   }
 
-  downloadCards = (): Promise<{cards: Array<Card>}> =>
-    new Promise((resolve, reject) => {
-      this.log('DownloadCardsStart')
-      const timeout = setTimeout(
-        () => {
-          this.log('DownloadCardsFailure', { timeout: FETCH_TIMEOUT_MILLIS })
-          reject(new Error(`Timeout from ${this.apiUrl}`))
-        },
-        FETCH_TIMEOUT_MILLIS)
-      fetch(this.apiUrl)
-        .then(response => {
-          return response.text().then(text => {
-            if (response.ok) {
-              clearTimeout(timeout)
-              try {
-                this.log('DownloadCardsSuccess')
-                const { cards } = JSON.parse(text)
-                this.localStorage.setItem(
-                  CARDS_STORAGE_KEY, JSON.stringify(cards))
-                resolve({ cards: expandCardsSerialized(cards) })
-              } catch (e) {
-                this.log('DownloadCardsFailure', { error: e })
-                console.error('Error parsing JSON', text, e) // eslint-disable-line
-                reject(e)
-              }
-            } else {
-              this.log('DownloadCardsFailure', {
-                status: response.status,
-                text: response.text,
-              })
-              reject(new Error(`Got status ${response.status} and text ${
-                text} from ${this.apiUrl}`))
-            }
-          })
-        })
-    })
+  downloadCards = () => {
+    this.log('DownloadCardsStart')
+    let timedOut = false
+    const timeout = setTimeout(
+      () => {
+        timedOut = true
+        this.log('DownloadCardsTimeout', { timeout: FETCH_TIMEOUT_MILLIS })
+        this.props = { ...this.props, networkState: 'TIMEOUT' }
+        this.eventEmitter.emit('cards')
+      },
+      FETCH_TIMEOUT_MILLIS)
+    fetch(this.apiUrl)
+      .then(response => {
+        if (!timedOut) {
+          clearTimeout(timeout)
+          this.handleResponse(response)
+        }
+      })
+      .catch(e => {
+        this.log('DownloadCardsError', { error: e })
+        this.props = { ...this.props, networkState: 'BAD_RESPONSE' }
+        this.eventEmitter.emit('cards')
+      })
+  }
 
+  handleResponse = (response: Response) =>
+    response.text().then(text => {
+      if (response.ok) {
+        try {
+          this.log('DownloadCardsSuccess')
+          const cardsSerialized = JSON.parse(text).cards
+          this.localStorage.setItem(
+            CARDS_STORAGE_KEY, JSON.stringify(cardsSerialized))
+          this.props = {
+            ...this.props,
+            networkState: 'ASSUMED_OK',
+            cards: expandCardsSerialized(cardsSerialized),
+          }
+          this.eventEmitter.emit('cards')
+        } catch (e) {
+          this.log('DownloadCardsFailure', { error: e })
+          this.props = { ...this.props, networkState: 'BAD_RESPONSE' }
+          this.eventEmitter.emit('cards')
+        }
+      } else {
+        this.log('DownloadCardsFailure', {
+          status: response.status,
+          text: response.text,
+        })
+        this.props = { ...this.props, networkState: 'BAD_RESPONSE' }
+        this.eventEmitter.emit('cards')
+      }
+    })
 }
