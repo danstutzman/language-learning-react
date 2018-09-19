@@ -1,9 +1,4 @@
 // @flow
-import type {CardSyllable} from './Card.js'
-import {parse} from './buckwalterWord.js'
-
-const SQUIGGLE_REGEXP = new RegExp(
-  '([btvjHxd*rzs$SDTZEgfqklmnhwyaA])([aiu])?~', 'g')
 
 const C1_BUCKWALTER_TO_QALAM1 = {
   '': '',
@@ -15,6 +10,7 @@ const C1_BUCKWALTER_TO_QALAM1 = {
   Z: 'Z',
   b: 'b',
   d: 'd',
+  'd-': 'd',
   f: 'f',
   g: 'g',
   h: 'h',
@@ -36,6 +32,11 @@ const C1_BUCKWALTER_TO_QALAM1 = {
   '$': '$',
   '}': "'",
   '*': '*',
+  '-b': '-b',
+  '-k': '-k',
+  '-m': '-m',
+  '-n': '-n',
+  '-z': '-z',
 }
 
 const V_BUCKWALTER_TO_QALAM1 = {
@@ -49,82 +50,102 @@ const V_BUCKWALTER_TO_QALAM1 = {
   iy: 'iy',
   u: 'u',
   uw: 'uw',
+  y: 'y',
   '': '',
   'a`': 'a', // dagger
   'aA^': 'A',
   '>a': "'a",
   '<i': "'i",
   '{': 'a', // how to handle alef wasla?
+  '-a': '-a',
+  '-iy': '-iy',
+  '-u': '-u',
+  '-uw': '-uw',
+  '`': 'a', // dagger
 }
 
 const C2_BUCKWALTER_TO_QALAM1 = {
   '': '',
   Eo: 'E',
+  'E-': 'E-',
   F: 'n',
   Ho: 'H',
+  Y: 'Y', // ?
   b: 'b',
+  bo: 'b',
+  'b-': 'b-',
   d: 'd',
   do: 'd',
+  'f-': 'f-',
   fo: 'f',
   go: 'g',
+  'k-': 'k',
+  h: 'h',
   ho: 'h',
   l: 'l',
+  'l-': 'l-',
   lD: 'lD', // should combine?
   lS: 'lS', // should combine?
   ld: 'ld', // should combine?
   lo: 'l',
+  'lo-': 'l-',
   lr: 'lr', // should combine?
   ls: 'ls', // should combine?
+  'ls-': 'ls-', // should combine?
   m: 'm',
   mo: 'm',
   mos: 'ms',
   n: 'n',
+  'n-': 'n-',
   no: 'n',
   p: '', // teh marbuta should become a t sometimes?
+  r: 'r',
+  rK: 'rK',
+  'r-': 'r-',
   ro: 'r',
+  's-': 's-',
   so: 's',
   som: 'sm',
   to: 't',
   w: 'w',
+  'w-': 'w-',
   wo: 'w',
+  xo: 'x',
   y: 'y',
   yo: 'y',
   "'": "'",
+  '-': '-',
+  '-Eo': '-E',
+  '-do': '-d',
+  '-jo': '-j',
+  '-ko': '-k',
+  '-so': '-s',
+  '-o': '-',
+  '$-': '$-',
+  '-?': '-?',
+  '-.': '-.',
+  '-!': '-!',
+  '$oq': '$q',
 }
 
-export function splitIntoSyllables(buckwalterWord: string): Array<CardSyllable>{
-  if (buckwalterWord.startsWith('-')) {
-    return [{ buckwalter: buckwalterWord, qalam1: buckwalterWord }]
+export function toQalam1(triplet: [string, string, string]): string {
+  const c1 = C1_BUCKWALTER_TO_QALAM1[triplet[0]]
+  if (c1 === undefined) {
+    throw new Error(`No C1_BUCKWALTER_TO_QALAM for ${triplet[0]}`)
   }
 
-  const dashAfter = buckwalterWord.endsWith('-') ? '-' : ''
-  const doubled = buckwalterWord
-    .replace(/-$/, '').replace(SQUIGGLE_REGEXP, '$1$1$2')
-
-  try {
-    const triplets = parse(doubled)
-    return triplets.map((triplet: [string, string, string]) => {
-      const c1 = C1_BUCKWALTER_TO_QALAM1[triplet[0]]
-      if (c1 === undefined) {
-        throw new Error(`No C1_BUCKWALTER_TO_QALAM for ${triplet[0]}`)
-      }
-
-      const v = V_BUCKWALTER_TO_QALAM1[triplet[1]]
-      if (v === undefined) {
-        throw new Error(`No V_BUCKWALTER_TO_QALAM for ${triplet[1]}`)
-      }
-
-      const c2 = C2_BUCKWALTER_TO_QALAM1[triplet[2]]
-      if (c2 === undefined) {
-        throw new Error(`No C2_BUCKWALTER_TO_QALAM for ${triplet[2]}`)
-      }
-
-      return { buckwalter: buckwalterWord + dashAfter, qalam1: c1 + v + c2 }
-    })
-  } catch (e) {
-    console.warn(`Error when parsing ${doubled}`) // eslint-disable-line no-console
-    throw e
+  const v = V_BUCKWALTER_TO_QALAM1[triplet[1]]
+  if (v === undefined) {
+    throw new Error(`No V_BUCKWALTER_TO_QALAM for ${triplet[1]}`)
   }
+
+  const c2 = C2_BUCKWALTER_TO_QALAM1[triplet[2]]
+  if (c2 === undefined) {
+    throw new Error(`No C2_BUCKWALTER_TO_QALAM for ${triplet[2]}`)
+  }
+
+  const dashAfter = ''
+  return c1 + v + c2
 }
 
 export function removeUnpronounced(syllables: Array<string>): Array<string> {

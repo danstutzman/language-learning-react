@@ -1,5 +1,6 @@
 // @flow
 import './App.css'
+import type {Card} from '../services/CardsService.js'
 import CardsService from '../services/CardsService.js'
 import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
@@ -21,6 +22,7 @@ type Props = {|
 |}
 
 type State = {|
+  cards: Array<Card>,
   logs: Array<{}>,
   preferences: Preferences,
   recordings: Array<Recording>,
@@ -44,6 +46,7 @@ export default class App extends React.Component<Props, State> {
     this.speechSynthesisService = new SpeechSynthesisService()
 
     this.state = {
+      cards: this.cardsService.getCardsFromStorage(),
       logs: this.logStorage.getTodaysLogs(),
       preferences: this.preferencesStorage.getPreferences(),
       recordings: [],
@@ -80,7 +83,10 @@ export default class App extends React.Component<Props, State> {
       script, this.state.preferences.speechSynthesisVoiceName)
 
   renderHome = () =>
-    <Home log={this.log} speakText={this.speakText} />
+    <Home
+      cards={this.state.cards}
+      log={this.log}
+      speakText={this.speakText} />
 
   renderDiagnostics = () => <Diagnostics />
 
@@ -104,7 +110,7 @@ export default class App extends React.Component<Props, State> {
 
   onClickDownloadCards = () =>
     this.cardsService.downloadCards()
-      .then(response => console.log('downloadCards', response))
+      .then(response => this.setState({ cards: response.cards }))
 
   render() {
     return <HashRouter>

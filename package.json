@@ -4,7 +4,6 @@
   "private": true,
   "dependencies": {
     "flow-bin": "^0.80.0",
-    "pegjs": "^0.10.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-router-dom": "^4.3.1",
@@ -16,7 +15,6 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "pegjs": "pegjs -o out.js src/buckwalter/buckwalterWord.pegjs && echo '/* eslint-disable */' > disable.js && cat disable.js out.js > src/buckwalter/buckwalterWord.js && rm disable.js out.js",
     "eslint": "eslint src"
   },
   "devDependencies": {

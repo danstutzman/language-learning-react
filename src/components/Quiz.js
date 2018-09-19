@@ -1,6 +1,6 @@
 // @flow
 import './App.css'
-import type {Card} from '../buckwalter/Card.js'
+import type {Card} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter'
 import diffStrings from '../diffStrings'
 import {expandQalam1} from '../buckwalter/digraphs'
@@ -51,7 +51,7 @@ export default class Quiz extends React.Component<Props, State> {
   }
 
   onClickReplay = () =>
-    this.props.speakText(convertBuckwalterToArabic(this.props.card.buckwalter))
+    this.props.speakText(convertBuckwalterToArabic(this.props.card.l2))
 
   onKeyPressInAnswer = (e: Event) => {
     if ((e: any).key === 'Enter') {
@@ -90,8 +90,8 @@ export default class Quiz extends React.Component<Props, State> {
 
       const gradedMorphemes = morphemes.map((morpheme, i) => ({
         chars: charsByMorpheme[i].chars,
-        startsWithHyphen: morpheme.buckwalter.startsWith('-'),
-        endsWithHyphen: morpheme.buckwalter.endsWith('-'),
+        startsWithHyphen: morpheme.l2.startsWith('-'),
+        endsWithHyphen: morpheme.l2.endsWith('-'),
         gloss: morpheme.gloss,
       }))
 

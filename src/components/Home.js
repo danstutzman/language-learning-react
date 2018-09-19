@@ -1,6 +1,5 @@
 // @flow
-import type {Card} from '../buckwalter/Card.js'
-import CARDS from '../buckwalter/CARDS.js'
+import type {Card} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter.js'
 import {expandQalam1} from '../buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
@@ -33,12 +32,13 @@ const DEFAULT_ENABLED_GROUP_NAMES = {
 }
 
 type Props = {|
+  cards: Array<Card>,
   log: (event: string, details?: {}) => void,
   speakText: (script: string) => void,
 |}
 
 type State = {|
-  card: Card,
+  currentQuizCard: Card,
   enabledGroupNames: {[string]: boolean},
   enabledPhonemes: {[string]: true},
   showQuiz: boolean,
@@ -60,8 +60,9 @@ function listEnabledPhonemes(enabledGroupNames: {[string]: boolean}):
 export default class Home extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props)
+
     this.state = {
-      card: CARDS[Math.floor(Math.random() * CARDS.length)],
+      currentQuizCard: props.cards[Math.floor(Math.random() * props.cards.length)],
       enabledGroupNames: DEFAULT_ENABLED_GROUP_NAMES,
       enabledPhonemes: listEnabledPhonemes(DEFAULT_ENABLED_GROUP_NAMES),
       showQuiz: false,
@@ -129,12 +130,12 @@ export default class Home extends React.Component<Props, State> {
         })}
       </ul>
 
-      {CARDS.map((card: Card, i: number) =>
+      {this.props.cards.map((card: Card, i: number) =>
         <button
           key={i}
           className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}
           onClick={this.onClickCard}
-          data-buckwalter={card.buckwalter}>
+          data-buckwalter={card.l2}>
           {expandQalam1(card.qalam1)}
         </button>
       )}
@@ -145,7 +146,7 @@ export default class Home extends React.Component<Props, State> {
 
       {this.state.showQuiz &&
         <Quiz
-          card={this.state.card}
+          card={this.state.currentQuizCard}
           close={this.onCloseQuiz}
           speakText={this.props.speakText} />}
     </div>
