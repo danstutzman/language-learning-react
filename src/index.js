@@ -1,16 +1,16 @@
 // @flow
 import App from './components/App'
 import './index.css'
+import LogStorage from './services/storage/LogStorage.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import registerServiceWorker from './registerServiceWorker'
 import SpeechSynthesisService from './services/SpeechSynthesisService.js'
 
-function log(event: string, details?: {}) {
-  console.log('TODO DELETE ME', event, details)
-}
+const logStorage = new LogStorage(window.localStorage)
+
 const speechSynthesisService =
-  new SpeechSynthesisService(window.speechSynthesis, log)
+  new SpeechSynthesisService(window.speechSynthesis, logStorage.log)
 speechSynthesisService.init()
 speechSynthesisService.eventEmitter.on('props', render)
 
@@ -20,6 +20,7 @@ if (rootElement === null) {
 }
 function render() {
   ReactDOM.render(<App
+    log={logStorage.log}
     speechSynthesis={speechSynthesisService.props}
   />, rootElement)
 }
