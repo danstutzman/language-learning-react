@@ -3,6 +3,7 @@ import App from './components/App'
 import CardsService from './services/CardsService.js'
 import './index.css'
 import LogStorage from './services/storage/LogStorage.js'
+import PreferencesStorage from './services/storage/PreferencesStorage.js'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import registerServiceWorker from './registerServiceWorker'
@@ -14,6 +15,10 @@ const cardsService = new CardsService(window.localStorage,
   'http://localhost:4000/ar/new-cards.json', logStorage.log)
 cardsService.init()
 cardsService.eventEmitter.on('cards', render)
+
+const preferencesStorage = new PreferencesStorage(window.localStorage)
+preferencesStorage.init()
+preferencesStorage.eventEmitter.on('preferences', render)
 
 const speechSynthesisService =
   new SpeechSynthesisService(window.speechSynthesis, logStorage.log)
@@ -28,6 +33,7 @@ function render() {
   ReactDOM.render(<App
     cards={cardsService.props}
     log={logStorage.log}
+    preferences={preferencesStorage.props}
     speechSynthesis={speechSynthesisService.props}
   />, rootElement)
 }
