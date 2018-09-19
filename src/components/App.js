@@ -9,8 +9,7 @@ import type {PreferencesProps} from '../services/storage/PreferencesStorage.js'
 import PreferencesScreen from './PreferencesScreen.js'
 import React from 'react'
 import Recorder from './Recorder.js'
-import RecorderService from '../services/recorder/RecorderService.js'
-import type {Recording} from '../services/recorder/Recording.js'
+import type {RecorderProps} from '../index.js'
 import { Route } from 'react-router-dom'
 import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
 import Topics from './Topics.js'
@@ -19,46 +18,11 @@ type Props = {|
   cards: CardsProps,
   log: (event: string, details?: {}) => void,
   preferences: PreferencesProps,
+  recorder: RecorderProps,
   speechSynthesis: SpeechSynthesisProps,
 |}
 
-type State = {|
-  recordings: Array<Recording>,
-|}
-
-export default class App extends React.PureComponent<Props, State> {
-  recorderService: RecorderService
-
-  constructor(props: Props) {
-    super(props)
-
-    this.recorderService = new RecorderService('BASE_URL', props.log)
-
-    this.state = {
-      recordings: [],
-    }
-  }
-
-  componentDidMount() {
-    this.recorderService.em.addEventListener('recording', this.onNewRecording)
-  }
-
-  componentWillUnmount() {
-    this.recorderService.em.removeEventListener(
-      'recording', this.onNewRecording)
-  }
-
-  onNewRecording = (e: any) =>
-    this.setState(prevState => ({
-      recordings: prevState.recordings.concat([e.detail.recording]),
-    }))
-
-  startRecording = () =>
-    this.recorderService.startRecording()
-
-  stopRecording = () =>
-    this.recorderService.stopRecording()
-
+export default class App extends React.PureComponent<Props> {
   speakText = (script: string) =>
     this.props.speechSynthesis.speakText(script)
 
@@ -79,9 +43,7 @@ export default class App extends React.PureComponent<Props, State> {
   renderRecorder = () =>
     <Recorder
       log={this.props.log}
-      recordings={this.state.recordings}
-      startRecording={this.startRecording}
-      stopRecording={this.stopRecording} />
+      recorder={this.props.recorder} />
 
   render() {
     return <HashRouter>

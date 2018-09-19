@@ -79,6 +79,7 @@ export default class RecorderService {
   }
 
   startRecording = (timeslice?: number) => {
+    this.log('StartRecording')
     if (this.state !== 'inactive') {
       return
     }
@@ -332,6 +333,7 @@ export default class RecorderService {
   }
 
   stopRecording = () => {
+    this.log('StopRecording')
     if (this.state === 'inactive') {
       return
     }

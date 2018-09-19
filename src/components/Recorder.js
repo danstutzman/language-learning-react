@@ -1,48 +1,27 @@
 // @flow
 import React from 'react'
-import type {Recording} from '../services/recorder/Recording.js'
+import type {RecorderProps} from '../index.js'
 
 type Props = {|
   log: (event: string, details?: {}) => void,
-  recordings: Array<Recording>,
-  startRecording: (timeslice?: number) => void,
-  stopRecording: () => void,
+  recorder: RecorderProps,
 |}
 
-type State = {|
-  isRecording: boolean,
-|}
-
-export default class Recorder extends React.PureComponent<Props, State> {
-  constructor(props: Props) {
-    super(props)
-    this.state = {
-      isRecording: false,
-    }
-  }
-
+export default class Recorder extends React.PureComponent<Props> {
   componentDidMount() {
     this.props.log('VisitRecorder')
   }
 
-  onClickStartRecording = () => {
-    this.props.log('RecorderOnClickStartRecording')
-    this.setState({ isRecording: true })
-    this.props.startRecording()
-  }
-
-  onClickStopRecording = () => {
-    this.props.log('RecorderOnClickStopRecording')
-    this.setState({ isRecording: false })
-    this.props.stopRecording()
-  }
-
   render() {
     return <div>
-      <button onClick={this.onClickStartRecording}>Start Recording</button>
-      <button onClick={this.onClickStopRecording}>Stop Recording</button>
+      <button onClick={this.props.recorder.startRecording}>
+        Start Recording
+      </button>
+      <button onClick={this.props.recorder.stopRecording}>
+        Stop Recording
+      </button>
       <ol>
-        {this.props.recordings.map((recording, i) =>
+        {this.props.recorder.recordings.map((recording, i) =>
           <li key={i}>
             <audio src={recording.blobUrl} controls={true} />
             , size={recording.size}
