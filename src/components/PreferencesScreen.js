@@ -8,7 +8,7 @@ type Props = {|
   setPreferences: (Preferences) => void,
 |}
 
-export default class PreferencesScreen extends React.Component<Props> {
+export default class PreferencesScreen extends React.PureComponent<Props> {
   componentDidMount() {
     this.props.log('VisitPreferencesScreen')
   }

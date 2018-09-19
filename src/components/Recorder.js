@@ -13,7 +13,7 @@ type State = {|
   isRecording: boolean,
 |}
 
-export default class Recorder extends React.Component<Props, State> {
+export default class Recorder extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {

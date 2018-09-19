@@ -15,10 +15,11 @@ import Recorder from './Recorder.js'
 import RecorderService from '../services/recorder/RecorderService.js'
 import type {Recording} from '../services/recorder/Recording.js'
 import { Route } from 'react-router-dom'
-import SpeechSynthesisService from '../services/SpeechSynthesisService.js'
+import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
 import Topics from './Topics.js'
 
 type Props = {|
+  speechSynthesis: SpeechSynthesisProps,
 |}
 
 type State = {|
@@ -28,22 +29,20 @@ type State = {|
   recordings: Array<Recording>,
 |}
 
-export default class App extends React.Component<Props, State> {
+export default class App extends React.PureComponent<Props, State> {
   cardsService: CardsService
   logStorage: LogStorage
   preferencesStorage: PreferencesStorage
   recorderService: RecorderService
-  speechSynthesisService: SpeechSynthesisService
 
   constructor(props: Props) {
     super(props)
 
     this.logStorage = new LogStorage(window.localStorage)
-    this.cardsService = new CardsService(
-      window.localStorage, 'http://localhost:4000/ar/new-cards.json', this.log)
+    this.cardsService = new CardsService(window.localStorage,
+      'http://localhost:4000/ar/new-cards.json', this.logStorage.log)
     this.preferencesStorage = new PreferencesStorage(window.localStorage)
-    this.recorderService = new RecorderService('BASE_URL', this.log)
-    this.speechSynthesisService = new SpeechSynthesisService()
+    this.recorderService = new RecorderService('BASE_URL', this.logStorage.log)
 
     this.state = {
       cards: this.cardsService.getCardsFromStorage(),
@@ -53,24 +52,24 @@ export default class App extends React.Component<Props, State> {
     }
   }
 
+  onLogsUpdated = () =>
+    this.setState({ logs: this.logStorage.todaysLogs })
+
   componentDidMount() {
     this.recorderService.em.addEventListener('recording', this.onNewRecording)
+    this.logStorage.eventEmitter.on('logs', this.onLogsUpdated)
   }
 
   componentWillUnmount() {
     this.recorderService.em.removeEventListener(
       'recording', this.onNewRecording)
+    this.logStorage.eventEmitter.removeListener('logs', this.onLogsUpdated)
   }
 
   onNewRecording = (e: any) =>
     this.setState(prevState => ({
       recordings: prevState.recordings.concat([e.detail.recording]),
     }))
-
-  log = (event: string, details?: {}) => {
-    const logs = this.logStorage.log(event, details)
-    this.setState({ logs })
-  }
 
   startRecording = () =>
     this.recorderService.startRecording()
@@ -79,14 +78,13 @@ export default class App extends React.Component<Props, State> {
     this.recorderService.stopRecording()
 
   speakText = (script: string) =>
-    this.speechSynthesisService.speakText(
-      script, this.state.preferences.speechSynthesisVoiceName)
+    this.props.speechSynthesis.speakText(script)
 
   renderHome = () =>
     <Home
       cards={this.state.cards}
-      log={this.log}
-      speakText={this.speakText} />
+      log={this.logStorage.log}
+      speechSynthesis={this.props.speechSynthesis} />
 
   renderDiagnostics = () => <Diagnostics />
 
@@ -97,13 +95,13 @@ export default class App extends React.Component<Props, State> {
 
   renderPreferencesScreen = () =>
     <PreferencesScreen
-      log={this.log}
+      log={this.logStorage.log}
       preferences={this.state.preferences}
       setPreferences={this.onSetPreferences} />
 
   renderRecorder = () =>
     <Recorder
-      log={this.log}
+      log={this.logStorage.log}
       recordings={this.state.recordings}
       startRecording={this.startRecording}
       stopRecording={this.stopRecording} />

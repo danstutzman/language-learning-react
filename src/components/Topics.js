@@ -9,7 +9,7 @@ type Props = {|
   match: Match
 |}
 
-export default class Topics extends React.Component<Props> {
+export default class Topics extends React.PureComponent<Props> {
   render() {
     const { match } = this.props
     return <div>

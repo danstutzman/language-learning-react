@@ -12,7 +12,8 @@
     "IntervalID": true,
     "it": true,
     "LocalStorage": true,
-    "process": true
+    "process": true,
+    "SpeechSynthesis": true
   },
   "parser": "babel-eslint",
   "parserOptions": {

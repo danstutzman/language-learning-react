@@ -4,8 +4,10 @@
 [include]
 
 [libs]
+interfaces/eventemitter3/eventemitter3_v3.x.x.js
 interfaces/html5/LocalStorage.js
 interfaces/html5/MediaRecorder.js
+interfaces/html5/SpeechSynthesis.js
 interfaces/html5/SpeechSynthesisUtterance.js
 interfaces/jest/globals.js
 interfaces/react-router-dom/react-router-dom_v4.x.x.js

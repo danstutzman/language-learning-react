@@ -4,6 +4,7 @@ import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter.js'
 import {expandQalam1} from '../buckwalter/digraphs.js'
 import Quiz from './Quiz.js'
 import React from 'react'
+import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
 
 const PHONEME_GROUPS = {
   a_A: ['a', 'A'],
@@ -34,7 +35,7 @@ const DEFAULT_ENABLED_GROUP_NAMES = {
 type Props = {|
   cards: Array<Card>,
   log: (event: string, details?: {}) => void,
-  speakText: (script: string) => void,
+  speechSynthesis: SpeechSynthesisProps,
 |}
 
 type State = {|
@@ -57,7 +58,7 @@ function listEnabledPhonemes(enabledGroupNames: {[string]: boolean}):
   return enabledPhonemes
 }
 
-export default class Home extends React.Component<Props, State> {
+export default class Home extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
 
@@ -83,7 +84,7 @@ export default class Home extends React.Component<Props, State> {
     const buckwalter = (e.target: any).getAttribute('data-buckwalter')
       .replace(/^ll/, 'l')
       .replace(/ss/g, 's~')
-    this.props.speakText(convertBuckwalterToArabic(buckwalter))
+    this.props.speechSynthesis.speakText(convertBuckwalterToArabic(buckwalter))
   }
 
   onToggleGroupName = (e: Event) => {
@@ -137,18 +138,24 @@ export default class Home extends React.Component<Props, State> {
           onClick={this.onClickCard}
           data-buckwalter={card.l2}>
           {expandQalam1(card.qalam1)}
+          {this.props.speechSynthesis.voicesState !== 'FOUND' &&
+            ` (voicesState=${this.props.speechSynthesis.voicesState})`}
         </button>
       )}
       <br />
       <br />
 
-      <button onClick={this.onClickShowQuiz}>Show Quiz</button>
+      <button onClick={this.onClickShowQuiz}>
+        Show Quiz
+        {this.props.speechSynthesis.voicesState !== 'FOUND' &&
+          ` (voicesState=${this.props.speechSynthesis.voicesState})`}
+      </button>
 
       {this.state.showQuiz &&
         <Quiz
           card={this.state.currentQuizCard}
           close={this.onCloseQuiz}
-          speakText={this.props.speakText} />}
+          speechSynthesis={this.props.speechSynthesis} />}
     </div>
   }
 }

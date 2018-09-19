@@ -6,7 +6,7 @@ type Props = {|
   match: Match
 |}
 
-export default class Topic extends React.Component<Props> {
+export default class Topic extends React.PureComponent<Props> {
   render() {
     const { match } = this.props
     return <div>

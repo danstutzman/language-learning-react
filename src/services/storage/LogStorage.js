@@ -1,12 +1,16 @@
 // @flow
+import EventEmitter from 'eventemitter3'
+
 const LOG_STORAGE_KEY_PREFIX = 'logs.'
 
 export default class LogStorage {
+  eventEmitter: EventEmitter
   localStorage: LocalStorage
   todaysLogKey: string
   todaysLogs: Array<{}>
 
   constructor(localStorage: LocalStorage) {
+    this.eventEmitter = new EventEmitter()
     this.localStorage = localStorage
     this.todaysLogKey = this.getTodaysLogKey()
     this.todaysLogs = this.getTodaysLogs()
@@ -21,11 +25,18 @@ export default class LogStorage {
     return (json !== null) ? JSON.parse(json) : []
   }
 
-  log(event: string, details?: {}): Array<{}> {
+  log = (event: string, details?: {}) => {
+    if (details !== undefined) {
+      console.log(event, details) // eslint-disable-line no-console
+    } else {
+      console.log(event) // eslint-disable-line no-console
+    }
+
     const log = { time: new Date().getTime(), event, ...details }
     this.todaysLogs.push(log)
     this.localStorage.setItem(
       this.todaysLogKey, JSON.stringify(this.todaysLogs))
-    return this.todaysLogs
+
+    this.eventEmitter.emit('logs')
   }
 }

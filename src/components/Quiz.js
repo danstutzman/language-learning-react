@@ -6,13 +6,14 @@ import diffStrings from '../diffStrings'
 import {expandQalam1} from '../buckwalter/digraphs'
 import {mergeToQalam1} from '../buckwalter/digraphs'
 import React from 'react'
+import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
 
 const MIDDLE_DOT = '\u00b7'
 
 type Props = {|
   card: Card,
   close: () => void,
-  speakText: (script: string) => void,
+  speechSynthesis: SpeechSynthesisProps,
 |}
 
 type GradedChar = {|
@@ -35,7 +36,7 @@ type State = {|
   showQalam: boolean,
 |}
 
-export default class Quiz extends React.Component<Props, State> {
+export default class Quiz extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
     this.state = {
@@ -51,7 +52,8 @@ export default class Quiz extends React.Component<Props, State> {
   }
 
   onClickReplay = () =>
-    this.props.speakText(convertBuckwalterToArabic(this.props.card.l2))
+    this.props.speechSynthesis.speakText(
+      convertBuckwalterToArabic(this.props.card.l2))
 
   onKeyPressInAnswer = (e: Event) => {
     if ((e: any).key === 'Enter') {
