@@ -86,9 +86,11 @@ export default class RecorderService {
       stopRecording: this.stopRecording,
     }
     this.em.addEventListener('recording', (e: any) => {
+      const { recording } = e.detail
+      this.log('RecorderNewRecording', recording)
       this.props = {
         ...this.props,
-        recordings: this.props.recordings.concat([e.detail.recording]),
+        recordings: this.props.recordings.concat([recording]),
         state: 'RESTING',
       }
       this.em.dispatchEvent(new CustomEvent('recordings'))
@@ -105,11 +107,11 @@ export default class RecorderService {
   }
 
   startRecording = (timeslice?: number) => {
-    this.log('StartRecording')
     if (this.state !== 'inactive') {
       return
     }
 
+    this.log('RecorderStarting')
     this.props = { ...this.props, state: 'STARTING' }
     this.em.dispatchEvent(new CustomEvent('recordings'))
 
@@ -182,10 +184,8 @@ export default class RecorderService {
     }
 
     // This will prompt user for permission if needed
-    this.log('BrowserGetUserMedia')
     return (navigator.mediaDevices: any).getUserMedia(this.config.userMediaConstraints)
       .then((stream) => {
-        this.log('BrowserGetUserMediaSuccess')
         this._startRecordingWithStream(stream, timeslice)
       })
       .catch((error) => {
@@ -249,6 +249,7 @@ export default class RecorderService {
     }
 
     this.state = 'recording'
+    this.log('RecorderRecording')
     this.props = { ...this.props, state: 'RECORDING' }
     this.em.dispatchEvent(new CustomEvent('recordings'))
 
@@ -366,18 +367,19 @@ export default class RecorderService {
   }
 
   stopRecording = () => {
-    this.log('StopRecording')
     if (this.state === 'inactive') {
       return
     }
     if (this.usingMediaRecorder) {
       this.state = 'inactive'
+      this.log('RecorderEncoding')
       this.props = { ...this.props, state: 'ENCODING' }
       this.em.dispatchEvent(new CustomEvent('recordings'))
       this.mediaRecorder.stop()
     }
     else {
       this.state = 'inactive'
+      this.log('RecorderEncoding')
       this.props = { ...this.props, state: 'ENCODING' }
       this.em.dispatchEvent(new CustomEvent('recordings'))
       if (this.audioCtx === null) {
