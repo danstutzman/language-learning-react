@@ -162,8 +162,10 @@ export default class Home extends React.PureComponent<Props, State> {
         </thead>
         <tbody>
           {cardsSorted.map((card: Card, i: number) =>
-            <tr key={i} onClick={this.onClickCard} data-buckwalter={card.l2}>
-              <td>{expandQalam1(card.qalam1)}</td>
+            <tr key={i}>
+              <td onClick={this.onClickCard} data-buckwalter={card.l2}>
+                {expandQalam1(card.qalam1)}
+              </td>
               <td>{numHardPhonemesByCardId[card.id]}</td>
               <td>
                 {JSON.stringify(this.props.grades.gradeByCardId[card.id])}
