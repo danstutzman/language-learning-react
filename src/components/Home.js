@@ -45,6 +45,7 @@ type State = {|
   currentQuizCard: Card,
   enabledGroupNames: {[string]: boolean},
   enabledPhonemes: {[string]: true},
+  numHardPhonemesByCardId: {[cardId: number]: number},
   showQuiz: boolean,
 |}
 
@@ -61,15 +62,34 @@ function listEnabledPhonemes(enabledGroupNames: {[string]: boolean}):
   return enabledPhonemes
 }
 
+function countNumHardPhonemes(
+  cards: Array<Card>,
+  enabledPhonemes: {[string]: true},
+): {[cardId: number]: number} {
+  const numHardPhonemesByCardId: {[cardId: number]: number} = {}
+  for (const card of cards) {
+    let hardPhonemes = {}
+    for (const c of card.qalam1) {
+      if (enabledPhonemes[c] !== true) {
+        hardPhonemes[c] = true
+      }
+    }
+    numHardPhonemesByCardId[card.id] = Object.keys(hardPhonemes).length
+  }
+  return numHardPhonemesByCardId
+}
+
 export default class Home extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props)
 
     const cards = props.cards.cards
+    const enabledPhonemes = listEnabledPhonemes(DEFAULT_ENABLED_GROUP_NAMES)
     this.state = {
       currentQuizCard: cards[Math.floor(Math.random() * cards.length)],
       enabledGroupNames: DEFAULT_ENABLED_GROUP_NAMES,
-      enabledPhonemes: listEnabledPhonemes(DEFAULT_ENABLED_GROUP_NAMES),
+      enabledPhonemes,
+      numHardPhonemesByCardId: countNumHardPhonemes(cards, enabledPhonemes),
       showQuiz: false,
     }
   }
@@ -92,6 +112,7 @@ export default class Home extends React.PureComponent<Props, State> {
   }
 
   onToggleGroupName = (e: Event) => {
+    const cards = this.props.cards.cards
     const clickedEnabled = (e.target: any).checked
     const clickedGroupName = (e.target: any).getAttribute('data-group-name')
     this.setState(prevState => {
@@ -100,21 +121,17 @@ export default class Home extends React.PureComponent<Props, State> {
         [clickedGroupName]: clickedEnabled,
       }
       const enabledPhonemes = listEnabledPhonemes(enabledGroupNames)
-      return { enabledGroupNames, enabledPhonemes }
+      const numHardPhonemesByCardId =
+        countNumHardPhonemes(cards, enabledPhonemes)
+      return { enabledGroupNames, enabledPhonemes, numHardPhonemesByCardId }
     })
   }
 
-  doesCardMatchEnabledPhonemes = (card: Card): boolean => {
-    const { enabledPhonemes } = this.state
-    for (const c of card.qalam1) {
-      if (enabledPhonemes[c] !== true) {
-        return false
-      }
-    }
-    return true
-  }
-
   render() {
+    const { enabledGroupNames, numHardPhonemesByCardId } = this.state
+    const cardsSorted = this.props.cards.cards.slice()
+    cardsSorted.sort((a, b) =>
+      numHardPhonemesByCardId[a.id] < numHardPhonemesByCardId[b.id] ? -1 : 1)
     return <div>
       <h2>Home</h2>
 
@@ -127,7 +144,7 @@ export default class Home extends React.PureComponent<Props, State> {
               type="checkbox"
               data-group-name={groupName}
               onChange={this.onToggleGroupName}
-              checked={this.state.enabledGroupNames[groupName] || false} />
+              checked={enabledGroupNames[groupName] || false} />
             <label htmlFor={groupName}>
               {expandQalam1(phonemes.join(', '))}
             </label>
@@ -139,17 +156,15 @@ export default class Home extends React.PureComponent<Props, State> {
         <thead>
           <tr>
             <th>qalam1</th>
+            <th># hard phonemes</th>
             <th>grade</th>
           </tr>
         </thead>
         <tbody>
-          {this.props.cards.cards.map((card: Card, i: number) =>
-            <tr
-              key={i}
-              className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}
-              onClick={this.onClickCard}
-              data-buckwalter={card.l2}>
+          {cardsSorted.map((card: Card, i: number) =>
+            <tr key={i} onClick={this.onClickCard} data-buckwalter={card.l2}>
               <td>{expandQalam1(card.qalam1)}</td>
+              <td>{numHardPhonemesByCardId[card.id]}</td>
               <td>
                 {JSON.stringify(this.props.grades.gradeByCardId[card.id])}
               </td>
