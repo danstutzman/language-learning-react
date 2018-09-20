@@ -12,3 +12,7 @@
 
 ## How to build for production
 - `npm run build`
+
+## How to build PEG grammars
+- `npm run pegjs`
+- To add tracing, run `node_modules/.bin/pegjs --trace src/buckwalter/qalamToBuckwalter.pegjs`

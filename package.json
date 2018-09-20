@@ -5,6 +5,7 @@
   "dependencies": {
     "eventemitter3": "^3.1.0",
     "flow-bin": "^0.80.0",
+    "pegjs": "^0.10.0",
     "react": "^16.5.0",
     "react-dom": "^16.5.0",
     "react-router-dom": "^4.3.1",
@@ -16,7 +17,8 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject",
     "flow": "flow",
-    "eslint": "eslint src"
+    "eslint": "eslint src",
+    "pegjs": "pegjs src/buckwalter/qalamToBuckwalter.pegjs"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
@@ -25,6 +27,6 @@
   },
   "eslintIgnore": [
     "src/registerServiceWorker.js",
-    "src/buckwalter/buckwalterWord.js"
+    "src/buckwalter/qalamToBuckwalter.js"
   ]
 }
