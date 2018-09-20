@@ -3,6 +3,7 @@ import type {Card} from '../services/CardsService.js'
 import type {CardsProps} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter.js'
 import {expandQalam1} from '../buckwalter/digraphs.js'
+import type {GradesProps} from '../services/GradesService.js'
 import Quiz from './Quiz.js'
 import React from 'react'
 import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
@@ -35,6 +36,7 @@ const DEFAULT_ENABLED_GROUP_NAMES = {
 
 type Props = {|
   cards: CardsProps,
+  grades: GradesProps,
   log: (event: string, details?: {}) => void,
   speechSynthesis: SpeechSynthesisProps,
 |}
@@ -133,17 +135,28 @@ export default class Home extends React.PureComponent<Props, State> {
         })}
       </ul>
 
-      {this.props.cards.cards.map((card: Card, i: number) =>
-        <button
-          key={i}
-          className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}
-          onClick={this.onClickCard}
-          data-buckwalter={card.l2}>
-          {expandQalam1(card.qalam1)}
-          {this.props.speechSynthesis.voicesState !== 'FOUND' &&
-            ` (voicesState=${this.props.speechSynthesis.voicesState})`}
-        </button>
-      )}
+      <table border='1'>
+        <thead>
+          <tr>
+            <th>qalam1</th>
+            <th>grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          {this.props.cards.cards.map((card: Card, i: number) =>
+            <tr
+              key={i}
+              className={this.doesCardMatchEnabledPhonemes(card) ? '' : 'faded'}
+              onClick={this.onClickCard}
+              data-buckwalter={card.l2}>
+              <td>{expandQalam1(card.qalam1)}</td>
+              <td>
+                {JSON.stringify(this.props.grades.gradeByCardId[card.id])}
+              </td>
+            </tr>
+          )}
+        </tbody>
+      </table>
       <br />
       <br />
 
@@ -157,6 +170,7 @@ export default class Home extends React.PureComponent<Props, State> {
         <Quiz
           card={this.state.currentQuizCard}
           close={this.onCloseQuiz}
+          grades={this.props.grades}
           speechSynthesis={this.props.speechSynthesis} />}
     </div>
   }

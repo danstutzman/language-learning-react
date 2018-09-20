@@ -4,6 +4,7 @@ import type {Card} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter'
 import diffStrings from '../diffStrings'
 import {expandQalam1} from '../buckwalter/digraphs'
+import type {GradesProps} from '../services/GradesService.js'
 import {mergeToQalam1} from '../buckwalter/digraphs'
 import React from 'react'
 import type {SpeechSynthesisProps} from '../services/SpeechSynthesisService.js'
@@ -13,6 +14,7 @@ const MIDDLE_DOT = '\u00b7'
 type Props = {|
   card: Card,
   close: () => void,
+  grades: GradesProps,
   speechSynthesis: SpeechSynthesisProps,
 |}
 
@@ -149,11 +151,20 @@ export default class Quiz extends React.PureComponent<Props, State> {
       {morpheme.endsWithHyphen ? '-' : ''}
     </div>
 
+  onClickForgot = () =>
+    this.props.grades.setGrade(this.props.card.id, { stageNum: -1 })
+
+  onClickRemembered = () =>
+    this.props.grades.setGrade(this.props.card.id, { stageNum: 1 })
+
   render() {
     const { gradedMorphemes, showArabic, showGloss, showQalam } = this.state
     return <div className='Quiz'>
       <button onClick={this.props.close}>X</button>
       <button onClick={this.onClickReplay}>Replay</button>
+      <button onClick={this.onClickForgot}>Forgot</button>
+      <button onClick={this.onClickRemembered}>Remembered</button>
+
       Transcribe what you hear:
       <input
         type="text"

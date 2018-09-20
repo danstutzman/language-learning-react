@@ -3,6 +3,7 @@ import './App.css'
 import type {CardsProps} from '../services/CardsService.js'
 import Diagnostics from './Diagnostics.js'
 import { HashRouter } from 'react-router-dom'
+import type {GradesProps} from '../services/GradesService.js'
 import Home from './Home.js'
 import { Link } from 'react-router-dom'
 import type {PreferencesProps} from '../services/storage/PreferencesStorage.js'
@@ -16,6 +17,7 @@ import Topics from './Topics.js'
 
 type Props = {|
   cards: CardsProps,
+  grades: GradesProps,
   log: (event: string, details?: {}) => void,
   preferences: PreferencesProps,
   recorder: RecorderProps,
@@ -29,6 +31,7 @@ export default class App extends React.PureComponent<Props> {
   renderHome = () =>
     <Home
       cards={this.props.cards}
+      grades={this.props.grades}
       log={this.props.log}
       speechSynthesis={this.props.speechSynthesis} />
 

@@ -1,6 +1,7 @@
 // @flow
 import App from './components/App'
 import CardsService from './services/CardsService.js'
+import GradesService from './services/GradesService.js'
 import './index.css'
 import LogStorage from './services/storage/LogStorage.js'
 import PreferencesStorage from './services/storage/PreferencesStorage.js'
@@ -16,6 +17,13 @@ const cardsService = new CardsService(window.localStorage,
   'http://localhost:4000/ar/new-cards.json', logStorage.log)
 cardsService.init()
 cardsService.eventEmitter.on('cards', render)
+
+const gradesService = new GradesService(window.localStorage, logStorage.log)
+gradesService.init()
+gradesService.eventEmitter.on('grades', () => {
+  console.log('grades', gradesService.props)
+  render()
+})
 
 const preferencesStorage = new PreferencesStorage(window.localStorage)
 preferencesStorage.init()
@@ -37,6 +45,7 @@ if (rootElement === null) {
 function render() {
   ReactDOM.render(<App
     cards={cardsService.props}
+    grades={gradesService.props}
     log={logStorage.log}
     preferences={preferencesStorage.props}
     recorder={recorderService.props}

@@ -21,7 +21,7 @@ export type Morpheme = {|
 |}
 
 type CardSerialized = {|
-  id: string,
+  id: number,
   enTask: string,
   enContent: string,
   morphemes: Array<MorphemeSerialized>,
