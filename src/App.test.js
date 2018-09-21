@@ -36,7 +36,7 @@ it('converts Qalam to Buckwalter correctly', () => {
             .parse(word, {
               // tracer: { trace: (event) => console.log('trace', event) },
             })
-            .replace(/([STZbdfjklmnrwy])o?\1/g, '$1~')
+            .replace(/([STZbdfjklmnrwy$])o?\1/g, '$1~')
             .replace(/l~l/, 'll~') + endPunctuation
         } catch (e) {
           console.error('Error parsing', word)
