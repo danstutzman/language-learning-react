@@ -33,9 +33,11 @@ it('converts Qalam to Buckwalter correctly', () => {
         const word = wordWithPunctuation.replace(/[?.]$/, '')
         try {
           return qalamToBuckwalter
-            .parse(word)
-            .replace(/lll/, 'll~')
-            .replace(/([Tdnrwy])o?\1/g, '$1~') + endPunctuation
+            .parse(word, {
+              // tracer: { trace: (event) => console.log('trace', event) },
+            })
+            .replace(/([STZbdfjklmnrwy])o?\1/g, '$1~')
+            .replace(/l~l/, 'll~') + endPunctuation
         } catch (e) {
           console.error('Error parsing', word)
           throw e
