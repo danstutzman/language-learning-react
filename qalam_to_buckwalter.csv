@@ -9,7 +9,7 @@ ruler,Haakim,,HAkim
 fire,naar,,nAr
 system,niZaam,,niZAm
 leader,qaa'id,,qA}id
-lighthouse,manaara,manaarah,manArap
+lighthouse,manaara,manaarah,manArap,
 neighbor,jaar,,jAr
 
 # 4.2.1.2 Spelling variants of 'alif
@@ -18,5 +18,106 @@ four,'arbaca,'arbacah,>arobaEap
 brothers,'ixwaan,,<ixowAn
 pipe,'unbuub,,>unobwb
 August,'aab,,|b
-instrument,'aala,'aalah,|lap
+instrument,'aala,'aalah,|lap,
 other-MASC,'aaxar,,|xar
+north/left,shamaal,,$amAl
+she said,qaalat,,qAlato
+side,jaanib,,jAnib
+peace,salaam,,salAm
+Jordan,al-'urdun,'al-'urdun,Al>rodun
+no,laa,,lA
+here,hunaa,,hunA
+Malta,maalTaa,,mAlTA,mAloTA
+this-MASC,haadha,hAdhaa,h*A,h`*A
+welcome,'ahl-an,'ahl-aN,>aholAF
+tomorrow,ghad-an,ghad-aN,gadAF
+thanks,shukr-an,shukr-aN,$ukorAF
+greatly,kathiir-an,kathiir-aN,kavyrAF
+very,jidd-an,jidd-aN,jid~AF
+finally,'axiir-an,'axiir-aN,>axyrAF
+They noticed.,laaHaZ-uu.,laaHaZ-uuaa.,lAHaZwA.
+They were like that.,kaan-uu ka-dhaalika.,kaan-uuaa ka-dhAlika.,kAnwA ka*`lika.
+They carried it on their backs.,Hamal-uu-haa calaa Zuhuur-i-him.,Hamal-uu-haa calae Zuhuur-i-him.,HamalwhA EalY Zuhwrihimo.
+
+# 4.2.1.4 Dagger 'alif
+God,allaah,'alllAh,All~`h
+god,'ilaah,'ilAh,<il`h
+this-MASC,haadha,hAdhaa,h`*A,h`*A
+this-FEM,haadhihi,hAdhihi,h`*ihi
+#these,haa'ulaa'i,hA'ulA'i,h`&lA'i
+that-MASC,dhaalika,dhAlika,*`lik,*`lika
+thus,haakadhaa,hAkadhaa,h`ka*A
+but,laakinna,lAkinna,l`kin~a
+
+# 4.1.2.4 'alif maqSura
+Leila,laylaa,laylae,layolY
+Mona,munaa,munae,munY
+Moses,muusaa,muusae,mwsY
+Mustafa,muSTafaa,muSTafae,mSTfY,muSoTafY
+he built,banaa,banae,banY
+upon,calaa,calae,EalY
+to/toward,'ilaa,'ilae,<ilY
+piety,taqwaa,taqwae,taqowY
+greatest-FEM,kubraa,kubrae,kuborY
+hospital,mustashfan,mustashfaeN,musota$fYF,musota$ofYF
+echo,Sadan,SadaeN,SadYF
+coffeehouse,maqhan,maqhaeN,maqohYF
+level/status,mustawan,mustawaeN,musotawYF
+his status,mustawaa-hu,,musotawAhu
+villages,quran,quraeN,qurYF
+our villages,quraa-naa,,qurAnA
+he threw,ramaa,ramae,ramY
+he threw it-FEM,ramaa-haa,,ramAhA
+with/at,ladaa,ladae,ladY
+with her,laday-haa,,ladayohA
+to/toward,'ilaa,'ilae,<ilY
+to them-MASC,'ilay-him,,<ilayohm,<ilayohimo
+on/upon,calaa,calae,EalY
+upon you PL,calay-kum,,Ealayokum
+
+
+# 4.2.2 Semivowels/semiconsonants waa and yaa'
+# 4.2.2.1 Sounds of waaw
+boy,walad,,walad
+season,mawsim,,mawosim
+state,wilaaya,wilaayah,wilAyap
+first,'awwal,,>aw~al
+breakfast,faTuur,,faTwr
+light,nuur,,nwr
+entry,duxuul,,duxwl
+forbidden,mamnuuc,,mamonwE
+
+# 4.2.2.2 Sounds of yaa'
+Yemen,yaman,,yaman
+white,'abyaD,,>aboyaD
+day,yawm,,yawom
+elephant,fiil,,fyl
+dune,kathiib,,kavyb
+religion,diin,,dyn
+
+# 4.3 Short vowels and sukuun
+# 4.3.1 fatHa
+country,balad,,balad
+she danced,raqaSat,,raqaSat
+mint,nacnac,,naEonaE
+
+
+# 4.3.2 kasra
+pepper,filfil,,filofil
+skin,jild,,jilod
+apricots,mishmish,,mi$omi$
+
+# 4.3.3 damma
+cities,mudun,,mudun
+ear,'udhun,,>u*un
+quarter,rubc,,ruboE
+
+# 4.3.4 absence of vowel: sukuun
+room,ghurfa,ghurfah,gurofap
+template,macbad,,maEobad
+we drink,nashrab,,na$orab
+sand,raml,,ramol
+
+# 4.3.5 extra short or helping vowels
+The newspaper published the news.,nasharat-i l-jariidat-u l-'axbaar-a.,nasharat-i el-jariidat-u el-'axbaar-a.,na$arati Alojarydapu Al>xobAra.,na$arati Alojarydapu Al>axobAra.
+

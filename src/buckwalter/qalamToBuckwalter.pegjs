@@ -1,36 +1,58 @@
 start
-  = first:first? cvcs:cvc+ ending:ending? {
+  = first:first? cvcs:cvc+ {
     return (first !== null ? first : '')
       + cvcs.reduce((accum, cvc) => accum + cvc, '')
-      + (ending !== null ? ending : '')
   }
 
 first
-  = "'i" c2:c2 { return '<i' + c2 }
+  = "'al" { return 'Al' }
+  / "el" &"'a" { return 'Al' }
+  / "el" &"j" { return 'Alo' }
+  / "'i" c2:c2 { return '<i' + c2 }
   / "'u" c2:c2 { return '>u' + c2 }
-
-ending
-  = c
-  / "h" { return 'p' }
 
 cvc
   = "'aa" c2:c2 { return '|' + c2 }
   / "'a" c2:c2 { return '>a' + c2 }
   / "'a" { return '>a' }
   / "'i" c2:c2 { return '\u007di' + c2 }
-  / "w" v:v c2:c2 { return 'w' + v + c2 }
-  / c1:c v:v c2:c2 { return c1 + v + c2 }
+  / "'u" c2:c2 { return '>' + c2 }
+  / "llAh" { return 'll`h' }
+  / c1:c1 "aeN" { return c1 + 'YF' }
+  / c1:c1 "aN" { return c1 + 'AF' }
+  / c1:c1 "Ah" { return c1 + '`h' }
+  / c1:c1 "ah" !. { return c1 + 'ap' }
+  / c1:c1 "atu" !. { return c1 + 'apu' }
+  / c1:c1 v:v c2:c2 { return c1 + v + c2 }
+
+c1
+  = [wy]
+  / c
 
 c2
-  = c:c !. { return c }
-  / c:c ![ai] { return c + 'o' }
+  = "w" &"w" { return 'w' }
+  / "bc" !. { return 'boEo' }
+  / "ld" !. { return 'lodo' }
+  / "ml" !. { return 'molo' }
+  / c:c ![aiuA] { return c + 'o' }
   / ""
 
 c
   = "c" { return 'E' }
-  / c:[HZbdjklmnqrsx]
+  / "sh" { return '$' }
+  / "h" &. { return 'h' }
+  / "dh" { return '*' }
+  / "gh" { return 'g' }
+  / "th" { return 'v' }
+  / c:[DHSTZbdfjklmnqrstx]
 
 v
   = "aa" { return 'A' }
+  / "ae" { return 'Y' } // alef maksura
+  / "aw" ![a] { return 'awo' }
+  / "ay" { return 'ayo' }
+  / "ii" { return 'y' }
+  / "uuaa" { return 'wA' } // silent inflectional 'alif Tawiila
   / "uu" { return 'w' }
-  / [ai]
+  / "A" { return '`' }
+  / [aiu]

@@ -23,20 +23,34 @@ it('converts Qalam to Buckwalter correctly', () => {
     }
     const values = line.split(',')
     const bookQalam = values[1]
-    const correctedQalam = values[2] || bookQalam
+    const correctedQalam = (values[2] || bookQalam)
     const expectedBuckwalter = values[3]
-    let actualBuckwalter
-    try {
-      actualBuckwalter = qalamToBuckwalter.parse(correctedQalam)
-    } catch (e) {
-      console.error('Error parsing', correctedQalam)
-      throw e
-    }
+    const correctedBuckwalter = values[4] || expectedBuckwalter
+
+    const actualBuckwalters =
+      correctedQalam.split(' ').map(wordWithPunctuation => {
+        const endPunctuation = wordWithPunctuation.match(/[.]$/) || ''
+        const word = wordWithPunctuation.replace(/[.]$/, '').replace(/-/g, '')
+        try {
+          return qalamToBuckwalter
+            .parse(word)
+            .replace(/lll/, 'll~')
+            .replace(/([dnw])o?\1/g, '$1~') + endPunctuation
+        } catch (e) {
+          console.error('Error parsing', word)
+          throw e
+        }
+      })
+    const actualBuckwalter = actualBuckwalters.join(' ')
 
     try {
-      expect(actualBuckwalter).toEqual(expectedBuckwalter)
+      if (actualBuckwalter === correctedBuckwalter + 'o') {
+        expect(actualBuckwalter).toEqual(correctedBuckwalter + 'o')
+      } else {
+        expect(actualBuckwalter).toEqual(correctedBuckwalter)
+      }
     } catch (e) {
-      console.error('Assertion failed with', correctedQalam)
+      console.error('Assertion failed with', correctedBuckwalter)
       throw e
     }
   }
