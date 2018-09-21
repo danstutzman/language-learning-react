@@ -29,13 +29,13 @@ it('converts Qalam to Buckwalter correctly', () => {
 
     const actualBuckwalters =
       correctedQalam.split(' ').map(wordWithPunctuation => {
-        const endPunctuation = wordWithPunctuation.match(/[.]$/) || ''
-        const word = wordWithPunctuation.replace(/[.]$/, '').replace(/-/g, '')
+        const endPunctuation = wordWithPunctuation.match(/[?.]$/) || ''
+        const word = wordWithPunctuation.replace(/[?.]$/, '')
         try {
           return qalamToBuckwalter
             .parse(word)
             .replace(/lll/, 'll~')
-            .replace(/([dnw])o?\1/g, '$1~') + endPunctuation
+            .replace(/([Tdnrwy])o?\1/g, '$1~') + endPunctuation
         } catch (e) {
           console.error('Error parsing', word)
           throw e

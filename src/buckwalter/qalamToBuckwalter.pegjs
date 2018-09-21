@@ -5,9 +5,13 @@ start
   }
 
 first
-  = "'al" { return 'Al' }
-  / "el" &"'a" { return 'Al' }
-  / "el" &"j" { return 'Alo' }
+  = "'al" "-"? { return 'Al' }
+  / "el" "-"? &"'a" { return "Al" }
+  / "el" "-"? &"r" { return 'Alr' }
+  / "el" "-"? &"T" { return 'AlT' }
+  / "el" "-"? &[bjm] { return 'Alo' }
+  / "e" !"l" c2:c2 "-"? { return 'A' + c2 }
+  / "i" c2:c2 { return 'Ai' + c2 }
   / "'i" c2:c2 { return '<i' + c2 }
   / "'u" c2:c2 { return '>u' + c2 }
 
@@ -19,11 +23,12 @@ cvc
   / "'u" c2:c2 { return '>' + c2 }
   / "llAh" { return 'll`h' }
   / c1:c1 "aeN" { return c1 + 'YF' }
-  / c1:c1 "aN" { return c1 + 'AF' }
+  / c1:c1 "-"? "aN" { return c1 + 'AF' }
   / c1:c1 "Ah" { return c1 + '`h' }
   / c1:c1 "ah" !. { return c1 + 'ap' }
-  / c1:c1 "atu" !. { return c1 + 'apu' }
-  / c1:c1 v:v c2:c2 { return c1 + v + c2 }
+  / c1:c1 "-"? "at" "-"? "u" !. { return c1 + 'apu' }
+  / c1:c1 "u'" { return c1 + 'u&o' }
+  / c1:c1 "-"? v:v "-"? c2:c2 "-"? { return c1 + v + c2 }
 
 c1
   = [wy]
@@ -31,10 +36,11 @@ c1
 
 c2
   = "w" &"w" { return 'w' }
+  / "y" &"y" { return 'y' }
   / "bc" !. { return 'boEo' }
   / "ld" !. { return 'lodo' }
   / "ml" !. { return 'molo' }
-  / c:c ![aiuA] { return c + 'o' }
+  / c:c !("-"? [aiuA]) { return c + 'o' }
   / ""
 
 c
