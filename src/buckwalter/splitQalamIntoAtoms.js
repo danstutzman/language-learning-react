@@ -19,7 +19,7 @@ export default function splitQalamIntoAtoms(qalam: string): Array<string> {
       phonemes.push('ii')
       i += 2
     } else if (char === 'u' && nextChar === 'u') {
-      phonemes.push('ii')
+      phonemes.push('uu')
       i += 2
     } else if (char === 's' && nextChar === 'h') {
       phonemes.push('sh')

@@ -15,4 +15,4 @@
 
 ## How to build PEG grammars
 - `npm run pegjs`
-- To add tracing, run `node_modules/.bin/pegjs --trace src/buckwalter/qalamToBuckwalter.pegjs`
+- To add tracing, run `node_modules/.bin/pegjs --trace src/buckwalter/convertBuckwalterToQalam.pegjs`

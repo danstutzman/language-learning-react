@@ -22,7 +22,7 @@ visa,ta'shiira,ta'shiirah,ta>o$yrap
 she asked,sa'alat,,sa>alato
 head,ra's,,ra>os
 measures,'ijraa'aat,,<ijorA'At
-attacks,ictidaa'aat,,AiEotidA'At
+attacks,ictidaa'aat,ectidaa'aat,AiEotidA'At,{EotidA'At
 manliness/valor,muruu'a,muruu'ah,murw'ap
 he wondered,tasaa'ala,,tasA'ala
 
@@ -37,54 +37,54 @@ prophecy,tanabbu',,tanab~u&
 shore,shaaTi',,$ATi}
 warm,daafi',,dAf},dAfi}
 principle,mabda',,maboda>
-friends-NOM,'aSdiqaa'-u,,>aSodiqA'u
-our-friends-NOM,'aSdiqaa'-u-naa,,>aSodiqA&unA
-our-friends-GEN,'aSdiqaa'-i-naa,,>aSodiqA}inA
-our-friends-ACC,'aSdiqaa'-a-naa,,>aSodiqA'anA
-he read,qara'-a,,qara>a
-we read,qara'-naa,,qara>onA
-they-MASC-read,qara'-uu,,qara&wA
-you-FEM-are-reading,ta-qra'-iina,,taqora}yna
+friends-NOM,'aSdiqaa'-u,,>aSodiqA'u,>aSodiqA' -u
+our-friends-NOM,'aSdiqaa'-u-naa,,>aSodiqA&unA,>aSodiqA& -u -nA
+our-friends-GEN,'aSdiqaa'-i-naa,,>aSodiqA}inA,>aSodiqA} -i -nA
+our-friends-ACC,'aSdiqaa'-a-naa,,>aSodiqA'anA,>aSodiqA' -a -nA
+he read,qara'-a,,qara>a,qara> -a
+we read,qara'-naa,,qara>onA,qara>o -nA
+they-MASC-read,qara'-uuaa,,qara&wA,qara& -wA
+you-FEM-are-reading,ta-qra'-iina,,taqora}yna,ta- qora} -yna
 
 # 3.3.2 hamza plus long /aa/ madda
 Asia,'aasiyaa,,|syA,|siyA
 final,'aaxir,,|xir
 mirror,mir'aah,,miro|p
 minarets,ma'aadhin,,ma|*in
-the Quran,al-qur'aan,,Aloqur|n,Aloquro|no
+the Quran,al-qur'aan,el-qur'aan,Aloqur|n,{lo- quro|no
 establishments,munsha'aat,,muno$a|t
 they-DUAL-began,bada'aa,,bada|
 
-## 3.3.3 weak hamza (hamza-al-waSl)
-The ministry is (over) there.,al-wizaarat-u hunaaka.,al-wizaarah-u hunaaka.,AlowizArapu hunAk.,AlowizArapu hunAka.
-Competition is strong.,al-munaafasat-u qawiyyat-un.,al-munaafasah-u qawiyyah-uN.,AlomunAfasapu qawiy~apN.
-They are at the ministry.,hum fii l-wizaarat-i.,hum fii el-wizaarah-i.,humo fy AlowizArapi.
-But the competition is strong.,laakinna l-munaafasat-a qawiyyat-un.,lAkinna el-munaafasah-a qawiyyah-uN.,lkin~a AlomunAfasapa qawiy~apN.,l`kin~a AlomunAfasapa qawiy~apN.
+# 3.3.3 weak hamza (hamza-al-waSl)
+The ministry is (over) there.,al-wizaarat-u hunaaka.,el-wizaarah-u hunaaka.,AlowizArapu hunAk.,{lo- wizArap -u hunAka.
+Competition is strong.,al-munaafasat-u qawiyyat-un.,el-munaafasah-u qawiyyah-uN.,AlomunAfasapu qawiy~apN.,{lo- munAfasap -u qawiy~ap -N.
+They are at the ministry.,hum fii l-wizaarat-i.,hum fii el-wizaarah-i.,humo fy AlowizArapi.,humo fy {lo- wizArap -i.
+But the competition is strong.,laakinna l-munaafasat-a qawiyyat-un.,lAkinna el-munaafasah-a qawiyyah-uN.,lkin~a AlomunAfasapa qawiy~apN.,l`kin~a {lo- munAfasap -a qawiy~ap -N.
 
 # 3.3.3.2 Certain Common Words
-son,ibn,,Aibon
-name,ism,,Aisom
-woman,imra'a,imra'ah,Aimor>ap,Aimora>ap
-two,ithnaan,,AivonAn
-My son is traveling.,ibn-ii musaafir-un.,ibn-ii musaafir-uN.,Aibony musAfirN.
-The name of God.,ism-u llah-i.,ism-u el-llAh-i.,Aisomu All~h.,Aisomu All~`hi.
-He traveled with my son.,saafar-a maca ebn-ii.,,sAfara maEa Abony.
-in the name of God,bi-sm-i-llaaah-i,bi-esm-i el-llAh-i,biAsom All~h,biAsomi All~`hi
+son,ibn,'ibn,Aibon,<ibon
+name,ism,esm,Aisom,{som
+woman,imra'a,emra'ah,Aimor>ap,{mora>ap
+two,ithnaan,'ithnaan,AivonAn,<ivonAn
+My son is traveling.,ibn-ii musaafir-un.,'ibn-ii musaafir-uN.,Aibony musAfirN.,<ibon -y musAfir -N.
+The name of God.,ism-u llah-i.,'ism-u elllAh-i.,Aisomu All~h.,<isom -u {ll~`h -i.
+He traveled with my son.,saafar-a maca ebn-ii.,,sAfar -a maEa {bon -y.
+in the name of God,bi-sm-i-llaaah-i,bi-esm-i elllAh-i,biAsom All~h,bi- {som -i {ll~`h -i
 
 # 3.3.3.3 Forms VII-X verbal nouns and past tense verbs
-The people elected a new president.,intaxab-a l-shacb-u ra'iis-an jadiid-an.,intaxab-a el-shacb-u ra'iis-aN jadiid-aN.,Ainotaxaba Al$~aEobu ra}ysAF jadydAF.
-And the people elected a new president.,wa-ntaxab-a l-shacb-u ra'iis-an jadiid-an.,wa-entaxab-a el-shacb-u ra'iis-aN jadiid-aN.,waAnotaxaba Al$~aEobu ra}ysAF jadydAF.
+The people elected a new president.,intaxab-a l-shacb-u ra'iis-an jadiid-an.,entaxab-a elsh-shacb-u ra'iis-aN jadiid-aN.,Ainotaxaba Al$~aEobu ra}ysAF jadydAF.,{notaxab -a {l$- $aEob -u ra}ys -AF jadyd -AF.
+And the people elected a new president.,wa-ntaxab-a l-shacb-u ra'iis-an jadiid-an.,wa-entaxab-a elsh-shacb-u ra'iis-aN jadiid-aN.,waAnotaxaba Al$~aEobu ra}ysAF jadydAF.,wa- {notaxab -a {l$- $aEob -u ra}ys -AF jadyd -AF.
 
 # 3.3.3.4 Imperative verbs of forms I and VII-X
-Listen.,istamic.,,AisotamiEo.
-So listen.,fa-estamic.,,faAsotamiEo.
-Read these words.,iqra' haadhihi l-kalimaat-i.,iqra' hAdhihi el-kalimaat-i.,Aiqora>o h*ihi AlokalimAt.,Aiqora>o h`*ihi AlokalimAti.
-And read these words.,wa-qra' haadhihi l-kalimaat-i.,wa-eqra' hAdhihi el-kalimaat-i.,waAqor>o h*ihi AlokalimAt.,waAqora>o h`*ihi AlokalimAti.
+Listen.,istamic.,estamic.,AisotamiEo.,{sotamiEo.
+So listen.,fa-estamic.,,faAsotamiEo.,fa- {sotamiEo.
+Read these words.,iqra' haadhihi l-kalimaat-i.,eqra' hAdhihi el-kalimaat-i.,Aiqora>o h*ihi AlokalimAt.,{qora>o h`*ihi {lo- kalimAt -i.
+And read these words.,wa-qra' haadhihi l-kalimaat-i.,wa-eqra' hAdhihi el-kalimaat-i.,waAqor>o h*ihi AlokalimAt.,wa- {qora>o h`*ihi {lo- kalimAt -i.
 
 # 3.3.3.5 Spelling borrowed words that start with consonants
-studio,istuudyuu,,Aisotwdyw,Aisotwdoyw
-strategic,istraatiijiyy,,AisotrAtyjiy~
-stable/barn,isTabl,,AisoTabol
+studio,istuudyuu,estuudyuu,Aisotwdyw,{sotwdoyw
+strategic,istraatiijiyy,estraatiijiyy,AisotrAtyjiy~,{sotorAtyjiy~
+stable/barn,isTabl,esTabl,AisoTabol,{soTabol
 
 # 3.4 Taa' marbuuTa
 # 3.4.1 Spelling
@@ -106,21 +106,21 @@ island,jaziira,jaziirah,jazyrap
 culture,thaqaafa,thaqaafah,vaqAfap
 flower,zahra,zahrah,zahorap
 an international organization,munaZZama duwaliyya,munaZZamah duwaliyyah,munaZ~amap duwaliy~ap
-the Muslim student-FEM,al-Taaliba l-muslima,al-Taalibah el-muslimah,AlT~Alibap Alomusolimap
+the Muslim student-FEM,al-Taaliba l-muslima,elT-Taalibah el-muslimah,AlT~Alibap Alomusolimap,{lT- TAlibap {lo- musolimap
 a happy occasion,furSa saciida,furSah saciidah,furoSap saEydap
 an independent kingdom,mamlaka mustaqilla,mamlakah mustaqillah,mamolakap musotaqil~ap
 ship,safiina,safiinah,safynap
 apple,tuffaaHa,tuffaaHah,tuf~AHp,tuf~AHap
 giraffe,zaraafa,zaraafah,zarAfap
-life,Hayaat,,HayAp
-canal/channel,qanaat,,qanAp
-prayer,Salaat,,SalAp
+#life,Hayaat,,HayAp
+#canal/channel,qanaat,,qanAp
+#prayer,Salaat,,SalAp
 
 # 3.4.3.1 Full Form
-information network,shabkat-un macluumaatiyyat-un,shabkah-uN macluumaatiyyah-uN,$abokapN maEolwmAtiy~apN
-in a long lifetime,fii Hayaat-in Tawiilat-in,fii Hayaah-iN Tawiilah-iN,fy HayApK TawylapK
-the national university,al-jaamicat-u l-waTaniyyat-u,al-jaamicah-u el-waTaniyyah-u,AlojAmiEapu AlowaTaniy~apu
-the capital of the country,caaSimat-u l-balad-i,caaSimah-u el-balad-i,EASimapu Alobaladi
+information network,shabkat-un macluumaatiyyat-un,shabkah-uN macluumaatiyyah-uN,$abokapN maEolwmAtiy~apN,$abokap -N maEolwmAtiy~ap -N
+in a long lifetime,fii Hayaat-in Tawiilat-in,fii Hayaah-iN Tawiilah-iN,fy HayApK TawylapK,fy HayAp -K Tawylap -K
+the national university,al-jaamicat-u l-waTaniyyat-u,el-jaamicah-u el-waTaniyyah-u,AlojAmiEapu AlowaTaniy~apu,{lo- jAmiEap -u {lo- waTaniy~ap -u
+the capital of the country,caaSimat-u l-balad-i,caaSimah-u el-balad-i,EASimapu Alobaladi,EASimap -u {lo- balad -i
 
 # 3.4.3.2 Pause form pronunciation
 a democratic republic,jumhuuriyya dimuqraaTiyya,jumhuuriyyah dimuqraaTiyyah,jumohwriy~ap dimuqrATiy~ap,jumohwriy~ap dimuqorATiy~ap
@@ -128,8 +128,8 @@ a large island,jaziira kabiira,jaziirah kabiirah,jazyrap kabyrap
 life,Hayaah,,HayAp
 young woman,fataah,,fatAp
 equality,musaawaah,,musAwAp
-#the city of Damascus,madiinat dimashq,,madynap dima$q
-#a love story,qiSSat Hubb,,qiS~p Hub~
+#the city of Damascus,madiinat dimashq,,madynap dima$q,madynap dima$oq
+#a love story,qiSSat Hubb,,qiS~p Hub~,qiS~ap Hub~
 
 # 3.5 Consonant doubling; gemination
 freedom,Hurriyya,Hurriyyah,Hur~iy~ap
@@ -138,7 +138,7 @@ to appoint,cayyana,,Eay~ana
 love,Hubb,,Hub~
 doubt,shakk,,$ak~
 surgeon,jarraaH,,jar~AH
-very,jidd-an,jidd-aN,jid~AF
+very,jidd-an,jidd-aN,jid~ -AF
 pilgrimage,Hajj,,Haj~
 to sing,ghannaa,ghannae,gan~Y
 to destroy,xarraba,,xar~aba
@@ -169,23 +169,23 @@ north/left,shamaal,,$amAl
 she said,qaalat,,qAlato
 side,jaanib,,jAnib
 peace,salaam,,salAm
-Jordan,al-'urdun,al-'urdun,Al>rodun
+Jordan,al-'urdun,el-'urdun,Al>rodun,{l- >urodun
 no,laa,,lA
 here,hunaa,,hunA
 Malta,maalTaa,,mAlTA,mAloTA
 this-MASC,haadha,hAdhaa,h*A,h`*A
-welcome,'ahl-an,'ahl-aN,>aholAF
-tomorrow,ghad-an,ghad-aN,gadAF
-thanks,shukr-an,shukr-aN,$ukorAF
-greatly,kathiir-an,kathiir-aN,kavyrAF
-very,jidd-an,jidd-aN,jid~AF
-finally,'axiir-an,'axiir-aN,>axyrAF
-They noticed.,laaHaZ-uu.,laaHaZ-uuaa.,lAHaZwA.
-They were like that.,kaan-uu ka-dhaalika.,kaan-uuaa ka-dhAlika.,kAnwA ka*`lika.
-They carried it on their backs.,Hamal-uu-haa calaa Zuhuur-i-him.,Hamal-uu-haa calae Zuhuur-i-him.,HamalwhA EalY Zuhwrihimo.
+welcome,'ahl-an,'ahl-aN,>ahol -AF
+tomorrow,ghad-an,ghad-aN,gad -AF
+thanks,shukr-an,shukr-aN,$ukor -AF
+greatly,kathiir-an,kathiir-aN,kavyr -AF
+very,jidd-an,jidd-aN,jid~ -AF
+finally,'axiir-an,'axiir-aN,>axyr -AF
+They noticed.,laaHaZ-uu.,laaHaZ-uuaa.,lAHaZ -wA.
+They were like that.,kaan-uu ka-dhaalika.,kaan-uuaa ka-dhAlika.,kAn -wA ka- *`lika.
+They carried it on their backs.,Hamal-uu-haa calaa Zuhuur-i-him.,Hamal-uu-haa calae Zuhuur-i-him.,Hamal -w -hA EalY Zuhwr -i -himo.
 
 # 4.2.1.4 Dagger 'alif
-God,allaah,al-llAh,All~`h
+God,allaah,elllAh,All~`h,{ll~`h
 god,'ilaah,'ilAh,<il`h
 this-MASC,haadha,hAdhaa,h`*A,h`*A
 this-FEM,haadhihi,hAdhihi,h`*ihi
@@ -208,17 +208,17 @@ hospital,mustashfan,mustashfaeN,musota$fYF,musota$ofYF
 echo,Sadan,SadaeN,SadYF
 coffeehouse,maqhan,maqhaeN,maqohYF
 level/status,mustawan,mustawaeN,musotawYF
-his status,mustawaa-hu,,musotawAhu
+his status,mustawaa-hu,,musotawA -hu
 villages,quran,quraeN,qurYF
-our villages,quraa-naa,,qurAnA
+our villages,quraa-naa,,qurA -nA
 he threw,ramaa,ramae,ramY
-he threw it-FEM,ramaa-haa,,ramAhA
+he threw it-FEM,ramaa-haa,,ramA -hA
 with/at,ladaa,ladae,ladY
-with her,laday-haa,,ladayohA
+with her,laday-haa,,ladayo -hA
 to/toward,'ilaa,'ilae,<ilY
-to them-MASC,'ilay-him,,<ilayohm,<ilayohimo
+to them-MASC,'ilay-him,,<ilayohm,<ilayo -himo
 on/upon,calaa,calae,EalY
-upon you PL,calay-kum,,Ealayokum
+upon you PL,calay-kum,,Ealayo -kum
 
 
 # 4.2.2 Semivowels/semiconsonants waa and yaa'
@@ -264,15 +264,15 @@ we drink,nashrab,,na$orab
 sand,raml,,ramol
 
 # 4.3.5 extra short or helping vowels
-The newspaper published the news.,nasharat-i l-jariidat-u l-'axbaar-a.,nasharat-i el-jariidah-u el-'axbaar-a.,na$arati Alojarydapu Al>xobAra.,na$arati Alojarydapu Al>axobAra.
+The newspaper published the news.,nasharat-i l-jariidat-u l-'axbaar-a.,nasharat-i el-jariidah-u el-'axbaar-a.,na$arati Alojarydapu Al>xobAra.,na$arat -i {lo- jarydap -u {l- >axobAr -a.
 
 # 4.3.5.1 helping vowel kasra
-Did the conference end?,hal-i ntahaa l-mu'tamar-u?,hal-i entahae el-mu'tamar-u?,hali AnotahY Alomu&otamaru?
+Did the conference end?,hal-i ntahaa l-mu'tamar-u?,hal-i entahae el-mu'tamar-u?,hal -i {notahY {lo- mu&otamar -u?
 
 # 4.3.5.2 helping vowel damma
-The official delegation met them.,istaqbal-at-hum-u l-bicthat-u l-rasmiyyat-u.,istaqbal-at-hum-u el-bicthah-u el-rasmiyyah-u.,Aisotaqobalatohumu AlobiEovapu Alr~asomiy~apu.
-They consider you-MASC-PL the pioneers.,ya-ctabir-uuna-kum-u l-ruwwaad-a.,ya-ctabir-uuna-kum-u el-ruwwaad-a.,yaEotabirwnakumu Alr~uw~Ada.
-Did you-MASC-PL buy the food?,hal-i shtaray-tum-u l-Tacaam-a?,hal-i eshtaray-tum-u el-Tacaam-a?,hali A$otarayotumu AlT~aEAma?
+The official delegation met them.,istaqbal-at-hum-u l-bicthat-u l-rasmiyyat-u.,estaqbal-at-hum-u el-bicthah-u elr-rasmiyyah-u.,Aisotaqobalatohumu AlobiEovapu Alr~asomiy~apu.,{sotaqobal -ato -hum -u {lo- biEovap -u {lr- rasomiy~ap -u.
+They consider you-MASC-PL the pioneers.,ya-ctabir-uuna-kum-u l-ruwwaad-a.,ya-ctabir-uuna-kum-u elr-ruwwaad-a.,ya- Eotabir -wna -kum -u {lr- ruw~Ad -a.
+Did you-MASC-PL buy the food?,hal-i shtaray-tum-u l-Tacaam-a?,hal-i eshtaray-tum-u elT-Tacaam-a?,hal -i {$otarayo -tum -u {lT- TaEAm -a?
 
 # 4.3.5.3 Long vowel waaw as helping vowel
-Did you-MASC-PL publish it?,hal nashar-tum-uu-haa?,,hal na$arotmwhA?,halo na$arotumwhA?
+Did you-MASC-PL publish it?,hal nashar-tum-uu-haa?,,hal na$arotmwhA?,halo na$aro -tum -w -hA?

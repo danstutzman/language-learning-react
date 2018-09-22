@@ -18,7 +18,7 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "eslint": "eslint src",
-    "pegjs": "pegjs src/buckwalter/qalamToBuckwalter.pegjs"
+    "pegjs": "pegjs src/buckwalter/convertBuckwalterToQalam.pegjs"
   },
   "devDependencies": {
     "babel-eslint": "^9.0.0",
@@ -27,6 +27,6 @@
   },
   "eslintIgnore": [
     "src/registerServiceWorker.js",
-    "src/buckwalter/qalamToBuckwalter.js"
+    "src/buckwalter/convertBuckwalterToQalam.js"
   ]
 }
