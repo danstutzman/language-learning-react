@@ -5,6 +5,7 @@ import diffStrings from './diffStrings.js'
 // import ReactDOM from 'react-dom'
 import fs from 'fs'
 import qalamToBuckwalter from './buckwalter/qalamToBuckwalter.js'
+import splitQalamIntoAtoms from './buckwalter/splitQalamIntoAtoms.js'
 
 it('computes diff', () => {
   // 01234-56
@@ -13,6 +14,18 @@ it('computes diff', () => {
   // G-ATTACA
   expect(diffStrings('GCATGCU', 'GATTACA')).toEqual(
     [[0, 0], [1, -1], [2, 1], [3, 2], [4, 3], [-1, 4], [5, 5], [6, 6]])
+})
+
+it('splits Qalam into atoms', () => {
+  const split = splitQalamIntoAtoms
+  expect(split('')).toEqual([])
+  expect(split('a')).toEqual(['a'])
+  expect(split('sa')).toEqual(['s', 'a'])
+  expect(split('sha')).toEqual(['sh', 'a'])
+  expect(split('ash')).toEqual(['a', 'sh'])
+  expect(split('shsh')).toEqual(['sh', 'sh'])
+  expect(split('sah')).toEqual(['s', 'a', 'h'])
+  expect(split('has')).toEqual(['h', 'a', 's'])
 })
 
 it('converts Qalam to Buckwalter correctly', () => {
