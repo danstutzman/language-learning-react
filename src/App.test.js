@@ -6,12 +6,51 @@ import type {AtomContext2} from './buckwalter/addContextToAtoms.js'
 import convertAtomContext2ToBuckwalter from
   './buckwalter/convertAtomContext2ToBuckwalter.js'
 import convertBuckwalterToQalam from './buckwalter/convertBuckwalterToQalam.js'
+import pronounceAtomContext2 from './buckwalter/pronounceAtomContext2.js'
 import diffStrings from './diffStrings.js'
 // import React from 'react'
 // import ReactDOM from 'react-dom'
 import fs from 'fs'
 import groupAtomsIntoSyllables from './buckwalter/groupAtomsIntoSyllables.js'
 import splitQalamIntoAtoms from './buckwalter/splitQalamIntoAtoms.js'
+
+it('decides pronunciation for phonemes', () => {
+  const default1 = {
+    beginPunctuation: '',
+    endPunctuation: '',
+    endsMorpheme: false,
+    endsWord: false,
+  }
+  const theName = addContextToAtoms([
+    { ...default1, atom: 'e' },
+    { ...default1, atom: 's' },
+    { ...default1, atom: 'm', endsMorpheme: true },
+    { ...default1, atom: 'u', endsMorpheme: true, endsWord: true },
+  ])
+  expect(theName.map(pronounceAtomContext2)).toEqual(["'i", 's', 'm', ''])
+
+  const inTheName = addContextToAtoms([
+    { ...default1, atom: 'b' },
+    { ...default1, atom: 'i', endsMorpheme: true },
+    { ...default1, atom: 'e' },
+    { ...default1, atom: 's' },
+    { ...default1, atom: 'm', endsMorpheme: true },
+    { ...default1, atom: 'i', endsMorpheme: true, endsWord: true },
+  ])
+  expect(inTheName.map(pronounceAtomContext2)).toEqual(
+    ['b', 'i', '', 's', 'm', ''])
+
+  const theLight = addContextToAtoms([
+    { ...default1, atom: 'e' },
+    { ...default1, atom: 'l' },
+    { ...default1, atom: 'n', endsMorpheme: true },
+    { ...default1, atom: 'n' },
+    { ...default1, atom: 'uu' },
+    { ...default1, atom: 'r', endsMorpheme: true, endsWord: true },
+  ])
+  expect(theLight.map(pronounceAtomContext2)).toEqual(
+    ["'a", '', 'n', 'n', 'uu', 'r'])
+})
 
 it('adds context to atoms', () => {
   const add = addContextToAtoms
