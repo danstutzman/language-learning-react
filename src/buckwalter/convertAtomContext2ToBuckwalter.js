@@ -73,7 +73,8 @@ export default function convertAtomContext2ToBuckwalter(
 
   const simpleConsonant = SIMPLE_CONSONANTS[atom]
   if (simpleConsonant !== undefined) {
-    if (atom === 'l' && left === 'e' && right && DOUBLE_C_AFTER_AL[right]) {
+    if (atom === 'l' && (left === 'e' || (left === 'a' && left2 === "'")) &&
+      right && DOUBLE_C_AFTER_AL[right]) {
       return 'l'
     } else if (atom === 'l' && right && NO_O_AFTER_L[right]) {
       return 'l'
@@ -97,6 +98,8 @@ export default function convertAtomContext2ToBuckwalter(
       else if (atom === 'i' && left === null) { return 'Ai' }
       else if (atom === 'a' && right === 'N') { return 'A' }
       else if (atom === 'u' && left === "'" && left2 === 'A') { return '' }
+      else if (atom === 'a' && left === "'" && right === 'l' &&
+        left2 === null) { return '' }
       else { return simpleVowel }
     } else {
       if (atom === "'") {

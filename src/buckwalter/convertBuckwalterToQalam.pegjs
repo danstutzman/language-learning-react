@@ -18,6 +18,7 @@ only
 first
   = "{l" "o"? { return "el" }
   / "{" { return "e" }
+  / ">l" "o"? { return "'al" }
 
 cvv
   = "$" vv:vv { return "sh" + vv }
