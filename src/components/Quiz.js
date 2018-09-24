@@ -2,7 +2,7 @@
 import './App.css'
 import type {Card} from '../services/CardsService.js'
 import {convertBuckwalterToArabic} from '../buckwalter/convertBuckwalter'
-import diffStrings from '../diffStrings'
+import diffStrings from '../buckwalter/diffStrings.js'
 import {expandQalam1} from '../buckwalter/digraphs'
 import type {GradesProps} from '../services/GradesService.js'
 import {mergeToQalam1} from '../buckwalter/digraphs'

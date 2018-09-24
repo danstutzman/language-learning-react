@@ -1,4 +1,5 @@
 // @flow
+import type {AtomContext2} from './addContextToAtoms.js'
 
 const IS_CASE_ENDING = {
   a: true,
