@@ -50,9 +50,6 @@ it('converts Qalam to Buckwalter correctly', () => {
       atomContext1s = atomContext1s.concat(atoms.map((atom, j) => ({
         atom,
         endsMorpheme: (j === atoms.length - 1),
-        endsWord: (j === atoms.length - 1) &&
-          !buckwalterWord.endsWith('-') &&
-          !(buckwalterWords[i + 1] || '').startsWith('-'),
         beginPunctuation: (j === 0) ? beginPunctuation : '',
         endPunctuation: (j === atoms.length - 1) ? endPunctuation : '',
       })))
@@ -87,7 +84,6 @@ it('converts Qalam to Buckwalter correctly', () => {
             atomContext2.atom
               + (atomContext2.endsSyllable ? ' -' : '')
               + (atomContext2.endsMorpheme ? '/' : '')
-              + (atomContext2.endsWord ? '|' : '')
           ).join(' '),
           roundTripped: roundTripped,
         })

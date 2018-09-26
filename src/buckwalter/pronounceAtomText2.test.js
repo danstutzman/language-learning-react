@@ -7,7 +7,6 @@ const default1 = {
   beginPunctuation: '',
   endPunctuation: '',
   endsMorpheme: false,
-  endsWord: false,
 }
 
 it('removes case endings', () => {
@@ -15,7 +14,7 @@ it('removes case endings', () => {
     { ...default1, atom: 'e' },
     { ...default1, atom: 's' },
     { ...default1, atom: 'm', endsMorpheme: true },
-    { ...default1, atom: 'u', endsMorpheme: true, endsWord: true },
+    { ...default1, atom: 'u', endsMorpheme: true },
   ])
   expect(theName.map(pronounceAtomContext2)).toEqual(['ʔi', 's', 'm', ''])
 })
@@ -27,7 +26,7 @@ it('elides e', () => {
     { ...default1, atom: 'e' },
     { ...default1, atom: 's' },
     { ...default1, atom: 'm', endsMorpheme: true },
-    { ...default1, atom: 'i', endsMorpheme: true, endsWord: true },
+    { ...default1, atom: 'i', endsMorpheme: true },
   ])
   expect(inTheName.map(pronounceAtomContext2)).toEqual(
     ['b', 'ɪ', '', 's', 'm', ''])
@@ -40,7 +39,7 @@ it('assimilates el', () => {
     { ...default1, atom: 'n', endsMorpheme: true },
     { ...default1, atom: 'n' },
     { ...default1, atom: 'uu' },
-    { ...default1, atom: 'r', endsMorpheme: true, endsWord: true },
+    { ...default1, atom: 'r', endsMorpheme: true },
   ])
   expect(theLight.map(pronounceAtomContext2)).toEqual(
     ['ʔa', '', 'n', 'n', 'uː', 'r'])
@@ -48,9 +47,7 @@ it('assimilates el', () => {
 
 function pronounce(qalam: string): string {
   const atoms = splitQalamIntoAtoms(qalam)
-  const contexts1 = atoms.map((atom, i) => ({
-    ...default1, atom, endsWord: (i === atoms.length - 1),
-  }))
+  const contexts1 = atoms.map((atom, i) => ({ ...default1, atom }))
   const contexts2 = addContextToAtoms(contexts1)
   const pronunciations = contexts2.map(context =>
     pronounceAtomContext2(context) + (context.endsSyllable ? '.' : ''))

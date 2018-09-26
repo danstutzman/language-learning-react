@@ -5,14 +5,13 @@ const default1 = {
   beginPunctuation: '',
   endPunctuation: '',
   endsMorpheme: false,
-  endsWord: false,
 }
 
 it('adds context to atoms', () => {
   const bada1 = { ...default1, atom:'b' }
   const bada2 = { ...default1, atom:'a' }
   const bada3 = { ...default1, atom:'d' }
-  const bada4 = { ...default1, atom:'a', endsMorpheme: true, endsWord: true }
+  const bada4 = { ...default1, atom:'a', endsMorpheme: true }
   expect(addContextToAtoms([bada1, bada2, bada3, bada4])).toEqual([
     { ...bada1,left2:null,left:null,right:'a', right2:'d', endsSyllable:false },
     { ...bada2,left2:null,left:'b', right:'d', right2:'a', endsSyllable:true },

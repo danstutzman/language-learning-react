@@ -3,7 +3,6 @@
 export type AtomContext1 = {|
   atom: string,
   endsMorpheme: boolean,
-  endsWord: boolean,
   beginPunctuation: string,
   endPunctuation: string,
 |}
@@ -79,6 +78,7 @@ export default function addContext2ToAtoms(
     const left2 = (i > 1) ? atomContext1s[i - 2].atom : null
     const right2 = (i < atomContext1s.length - 2) ?
       atomContext1s[i + 2].atom : null
+    const isLast = (i === atomContext1s.length - 1)
 
     if (COUNTS_AS_CONSONANT[atom]) {
       if (currentSyllableHasInitialConsonant) {
@@ -88,8 +88,7 @@ export default function addContext2ToAtoms(
         currentSyllableHasInitialConsonant = false
       } else {
         atomContext2s.unshift({
-          ...atomContext1, left, right, left2, right2,
-          endsSyllable: atomContext1.endsWord,
+          ...atomContext1, left, right, left2, right2, endsSyllable: isLast,
         })
         if (currentSyllableHasVowel) {
           currentSyllableHasInitialConsonant = true
@@ -103,8 +102,7 @@ export default function addContext2ToAtoms(
         currentSyllableHasInitialConsonant = false
       } else {
         atomContext2s.unshift({
-          ...atomContext1, left, right, left2, right2,
-          endsSyllable: atomContext1.endsWord,
+          ...atomContext1, left, right, left2, right2, endsSyllable: isLast,
         })
         currentSyllableHasVowel = true
       }
