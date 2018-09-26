@@ -1,12 +1,6 @@
 // @flow
 import type {AtomContext2} from './addContextToAtoms.js'
 
-const IS_CASE_ENDING = {
-  a: true,
-  i: true,
-  u: true,
-}
-
 const TO_IPA = {
   a: 'a',
   aa: 'æ',
@@ -48,9 +42,7 @@ const TO_IPA = {
 export default function pronunceAtomContext2(atomContext2: AtomContext2):string{
   const { atom, left, right, right2 } = atomContext2
 
-  if (IS_CASE_ENDING[atom] && right === null) {
-    return ''
-  } else if (atom === 'a' || atom === 'aa') {
+  if (atom === 'a' || atom === 'aa') {
     if (left === 'D' || right === 'D' || right2 === 'D') { return 'ɑ' }
     else if (left === 'S' || right === 'S' || right2 === 'S') { return 'ɑ' }
     else if (left === 'T' || right === 'T' || right2 === 'T') { return 'ɑ' }
@@ -71,16 +63,6 @@ export default function pronunceAtomContext2(atomContext2: AtomContext2):string{
     else if (left === 'Z' || right === 'Z' || right2 === 'Z') { return 'ɔ' }
     else { return 'o' }
   } else if (atom === 'e') {
-    if (left === null) {
-      if (right === 'l') {
-        return 'ʔa'
-      } else {
-        return 'ʔi'
-      }
-    } else {
-      return ''
-    }
-  } else if (atom === 'l' && left === 'e' && right === right2) {
     return ''
   } else {
     const ipa = TO_IPA[atom]

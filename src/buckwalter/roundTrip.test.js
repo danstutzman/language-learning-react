@@ -1,7 +1,5 @@
 // @flow
 import addContextToAtoms from './addContextToAtoms.js'
-import type {AtomContext1} from './addContextToAtoms.js'
-import type {AtomContext2} from './addContextToAtoms.js'
 import convertAtomContext2ToBuckwalter from
   './convertAtomContext2ToBuckwalter.js'
 import convertBuckwalterToQalam from './convertBuckwalterToQalam.js'
@@ -22,8 +20,9 @@ it('converts Qalam to Buckwalter correctly', () => {
 
     const doubleds = []
     const actualQalams = []
-    let atomContext1s: Array<AtomContext1> = []
     const buckwalterWords = correctedBuckwalter.split(' ')
+    let roundTripped = ''
+    let allAtomContext2s = []
     for (let i = 0; i < buckwalterWords.length; i++) {
       const buckwalterWord = buckwalterWords[i]
       const match1 = buckwalterWord.match(/^[-]+/)
@@ -47,12 +46,23 @@ it('converts Qalam to Buckwalter correctly', () => {
       actualQalams.push(beginPunctuation + actualQalam + endPunctuation)
 
       const atoms = splitQalamIntoAtoms(actualQalam)
-      atomContext1s = atomContext1s.concat(atoms.map((atom, j) => ({
+      const atomContext1s = atoms.map((atom, j) => ({
         atom,
         endsMorpheme: (j === atoms.length - 1),
         beginPunctuation: (j === 0) ? beginPunctuation : '',
         endPunctuation: (j === atoms.length - 1) ? endPunctuation : '',
-      })))
+      }))
+
+      const atomContext2s = addContextToAtoms(atomContext1s)
+      allAtomContext2s = allAtomContext2s.concat(atomContext2s)
+
+      const morphemeRoundTripped = atomContext2s.map(atomContext2 =>
+        atomContext2.beginPunctuation +
+        convertAtomContext2ToBuckwalter(atomContext2) +
+        atomContext2.endPunctuation +
+        (atomContext2.endsMorpheme ? ' ' : '')
+      ).join('')
+      roundTripped += morphemeRoundTripped
     }
 
     const actualQalamsJoined = actualQalams
@@ -60,17 +70,16 @@ it('converts Qalam to Buckwalter correctly', () => {
       .replace(/ ?- ?/g, '-')
     expect(actualQalamsJoined).toEqual(correctedQalam)
 
-    const atomContext2s: Array<AtomContext2> = addContextToAtoms(atomContext1s)
-
-    const roundTripped = atomContext2s.map(atomContext2 =>
-      atomContext2.beginPunctuation +
-      convertAtomContext2ToBuckwalter(atomContext2) +
-      atomContext2.endPunctuation +
-      (atomContext2.endsMorpheme ? ' ' : '')
-    ).join('')
+    roundTripped = roundTripped
       .replace(/([DHSTZbcdfgjklmnqrstvwyz$*])o?\1/g, '$1~')
       .replace(/l~l/, 'll~')
       .replace(/ $/, '')
+      .replace(/o -([aiuwyAN])/g, ' -$1')
+      .replace(/> -n/, '>o -n')
+      .replace(/> -w/, '& -w')
+      .replace(/> -y/, '} -y')
+      .replace(/' -u(.)/, '& -u$1')
+      .replace(/' -i(.)/, '} -i$1')
 
     if (correctedBuckwalter + 'o' !== roundTripped) {
       try {
@@ -80,7 +89,7 @@ it('converts Qalam to Buckwalter correctly', () => {
           buckwalter: correctedBuckwalter,
           doubleds: doubleds,
           qalams: actualQalams,
-          syllables: atomContext2s.map(atomContext2 =>
+          syllables: allAtomContext2s.map(atomContext2 =>
             atomContext2.atom
               + (atomContext2.endsSyllable ? ' -' : '')
               + (atomContext2.endsMorpheme ? '/' : '')

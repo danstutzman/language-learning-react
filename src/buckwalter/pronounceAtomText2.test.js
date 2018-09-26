@@ -9,45 +9,9 @@ const default1 = {
   endsMorpheme: false,
 }
 
-it('removes case endings', () => {
-  const theName = addContextToAtoms([
-    { ...default1, atom: 'e' },
-    { ...default1, atom: 's' },
-    { ...default1, atom: 'm', endsMorpheme: true },
-    { ...default1, atom: 'u', endsMorpheme: true },
-  ])
-  expect(theName.map(pronounceAtomContext2)).toEqual(['ʔi', 's', 'm', ''])
-})
-
-it('elides e', () => {
-  const inTheName = addContextToAtoms([
-    { ...default1, atom: 'b' },
-    { ...default1, atom: 'i', endsMorpheme: true },
-    { ...default1, atom: 'e' },
-    { ...default1, atom: 's' },
-    { ...default1, atom: 'm', endsMorpheme: true },
-    { ...default1, atom: 'i', endsMorpheme: true },
-  ])
-  expect(inTheName.map(pronounceAtomContext2)).toEqual(
-    ['b', 'ɪ', '', 's', 'm', ''])
-})
-
-it('assimilates el', () => {
-  const theLight = addContextToAtoms([
-    { ...default1, atom: 'e' },
-    { ...default1, atom: 'l' },
-    { ...default1, atom: 'n', endsMorpheme: true },
-    { ...default1, atom: 'n' },
-    { ...default1, atom: 'uu' },
-    { ...default1, atom: 'r', endsMorpheme: true },
-  ])
-  expect(theLight.map(pronounceAtomContext2)).toEqual(
-    ['ʔa', '', 'n', 'n', 'uː', 'r'])
-})
-
 function pronounce(qalam: string): string {
   const atoms = splitQalamIntoAtoms(qalam)
-  const contexts1 = atoms.map((atom, i) => ({ ...default1, atom }))
+  const contexts1 = atoms.map(atom => ({ ...default1, atom }))
   const contexts2 = addContextToAtoms(contexts1)
   const pronunciations = contexts2.map(context =>
     pronounceAtomContext2(context) + (context.endsSyllable ? '.' : ''))

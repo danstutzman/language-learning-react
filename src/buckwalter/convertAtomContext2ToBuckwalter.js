@@ -44,6 +44,7 @@ const CONSONANTS: {[string | null]: string} = {
 }
 
 const NO_O_AFTER_AL: {[string | null]: true} = {
+  l: true,
   T: true,
   r: true,
   sh: true,
@@ -130,11 +131,14 @@ function handleConsonant(atomContext2: AtomContext2, buckwalter: string):string{
     return 'l'
   }
 
+  if (left === 'l' && (left2 === 'e' || left2 === 'a') && NO_O_AFTER_AL[atom]) {
+    return buckwalter
+  }
+
   if (atom === 'h' && endsMorpheme && (left === 'a' || left === 'aa')) {
     return 'p'
   }
 
-  if (right === atom)    return buckwalter
   if (endsSyllable)      return buckwalter + 'o'
   if (right === "'")     return buckwalter + 'o'
   if (CONSONANTS[right]) return buckwalter + 'o'
