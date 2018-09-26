@@ -95,7 +95,6 @@ export default function convertAtomContext2ToBuckwalter(
     const simpleVowel = SIMPLE_VOWELS[atom]
     if (simpleVowel !== undefined) {
       if ((atom === 'i' || atom === 'u') && right === 'N') { return '' }
-      else if (atom === 'i' && left === null) { return 'Ai' }
       else if (atom === 'a' && right === 'N') { return 'A' }
       else if (atom === 'u' && left === "'" && left2 === 'A') { return '' }
       else if (atom === 'a' && left === "'" && right === 'l' &&
