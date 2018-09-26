@@ -1,9 +1,10 @@
 // @flow
 import type {AtomContext2} from './addContextToAtoms.js'
 
-const SIMPLE_VOWELS = {
+const VOWELS = {
   A: '`',
   a: 'a',
+  aa: 'A',
   ae: 'Y',
   e: '{',
   i: 'i',
@@ -12,21 +13,7 @@ const SIMPLE_VOWELS = {
   uu: 'w',
 }
 
-const COUNTS_AS_VOWEL = {
-  A: true,
-  a: true,
-  aa: true,
-  ae: true,
-  e: true,
-  i: true,
-  ii: true,
-  u: true,
-  uu: true,
-  w: true,
-  y: true,
-}
-
-const SIMPLE_CONSONANTS: {[string]: string} = {
+const CONSONANTS: {[string | null]: string} = {
   D: 'D',
   H: 'H',
   S: 'S',
@@ -50,115 +37,143 @@ const SIMPLE_CONSONANTS: {[string]: string} = {
   sh: '$',
   t: 't',
   th: 'v',
+  w: 'w',
   x: 'x',
+  y: 'y',
   z: 'z',
 }
 
-const NO_O_AFTER_L = {
-  "'": true,
-  sh: true,
-}
-
-const DOUBLE_C_AFTER_AL = {
+const NO_O_AFTER_AL: {[string | null]: true} = {
   T: true,
   r: true,
   sh: true,
+  "'": true,
+}
+
+const IS_CASE_ENDING = {
+  a: true,
+  i: true,
+  u: true,
+}
+
+function notFound(left: string | null, atom: string, right: string | null):
+  Error {
+  return new Error(
+    `Can't find buckwalter for ${left || ''},${atom},${right || ''}`)
+}
+
+function handleMedialHamza(left: string | null, right: string | null): string {
+  // hamza after laam-'alif ligature
+  if (left === 'l' && right === 'u') return '>'
+
+  // medial aloof hamza
+  if (left === 'uu' && right === 'a') return "'"
+  if (left === 'aa' && right === 'a') return "'"
+  if (left === 'aa' && right === 'aa') return "'"
+
+  // yaa' seat
+  if (left === 'i' || left === 'y' || left === 'ii' ||
+      right === 'i' || right === 'y' || right === 'ii') return '}'
+
+  // waaw seat
+  if (left === 'u' || right === 'u' || right === 'uu') {
+    if (right === 'aa') return '&A'
+    if (CONSONANTS[right]) return '&o'
+    return '&'
+  }
+
+  // 'alif madda
+  if (right === 'aa') return '|'
+
+  // 'alif seat
+  if (left === 'a' && right === 'a') { return '>' }
+  if (CONSONANTS[left] && right === 'a') { return '>' }
+  if (left === 'a' && CONSONANTS[right]) { return '>o' }
+
+  throw notFound(left, "'", right)
+}
+
+function handleHamza(
+  left: string | null,
+  right: string | null,
+  right2: string | null
+): string {
+  if (left === null) {
+    // initial hamza
+    if (right === 'a') return '>'
+    if (right === 'aa') return '|'
+    if (right === 'i') return '<'
+    if (right === 'ii') return '<i'
+    if (right === 'u') return '>'
+    throw notFound(left, "'", right)
+  } else if (right === null || IS_CASE_ENDING[right] && right2 === null) {
+    // final hamza
+    if (left === 'a') return '>'
+    if (left === 'aa') return "'"
+    if (left === 'u') return '&'
+    if (left === 'i') return '}'
+    if (left === 'uu') return "'"
+    if (left === 'ii') return "'"
+    if (left === 'y') return "'"
+    if (CONSONANTS[left]) return "'"
+    throw notFound(left, "'", right)
+  } else {
+    return handleMedialHamza(left, right)
+  }
+}
+
+function handleConsonant(atomContext2: AtomContext2, buckwalter: string):string{
+  const { atom, left, left2, right, endsMorpheme, endsSyllable } = atomContext2
+
+  if (atom === 'l' && (left === 'e' || (left === 'a' && left2 === "'")) &&
+    NO_O_AFTER_AL[right]) {
+    return 'l'
+  }
+
+  if (atom === 'h' && endsMorpheme && (left === 'a' || left === 'aa')) {
+    return 'p'
+  }
+
+  if (right === atom)    return buckwalter
+  if (endsSyllable)      return buckwalter + 'o'
+  if (right === "'")     return buckwalter + 'o'
+  if (CONSONANTS[right]) return buckwalter + 'o'
+  return buckwalter
+}
+
+function handleVowel(atomContext2: AtomContext2, simpleVowel: string): string {
+  const { atom, left, left2, right } = atomContext2
+
+  if (atom === 'i' && right === 'N') return ''
+  if (atom === 'u' && right === 'N') return ''
+  if (atom === 'a' && right === 'N') return 'A'
+  if (atom === 'u' && left === "'" && left2 === 'A') return ''
+  if (atom === 'a' && left === "'" && right === 'l' && left2 === null) return ''
+  if (atom === 'aa' && left === "'" && left2 !== 'aa') return ''
+  return simpleVowel
+}
+
+function handleN(left: string | null): string {
+  if (left === 'ae' || left === 'aa' || left === 'a') return 'F'
+  if (left === 'i') return 'K'
+  if (left === 'h') return 'K'
+  if (left === 'u') return 'N'
+  throw notFound(left, 'N', '?')
 }
 
 export default function convertAtomContext2ToBuckwalter(
   atomContext2: AtomContext2): string {
+  const { atom, left, right, right2 } = atomContext2
 
-  const { atom, left, right, left2, right2, endsSyllable, endsMorpheme } =
-    atomContext2
+  if (atom === "'") return handleHamza(left, right, right2)
 
-  const simpleConsonant = SIMPLE_CONSONANTS[atom]
-  if (simpleConsonant !== undefined) {
-    if (atom === 'l' && (left === 'e' || (left === 'a' && left2 === "'")) &&
-      right && DOUBLE_C_AFTER_AL[right]) {
-      return 'l'
-    } else if (atom === 'l' && right && NO_O_AFTER_L[right]) {
-      return 'l'
-    } else if (atom === 'h' && endsMorpheme &&
-      (left === 'a' || left === 'aa')) {
-      return 'p'
-    } else {
-      if (right === atom) {
-        return simpleConsonant
-      } else if (endsSyllable || right === "'" ||
-        (right && SIMPLE_CONSONANTS[right])) {
-        return simpleConsonant + 'o'
-      } else {
-        return simpleConsonant
-      }
-    }
-  } else {
-    const simpleVowel = SIMPLE_VOWELS[atom]
-    if (simpleVowel !== undefined) {
-      if ((atom === 'i' || atom === 'u') && right === 'N') { return '' }
-      else if (atom === 'a' && right === 'N') { return 'A' }
-      else if (atom === 'u' && left === "'" && left2 === 'A') { return '' }
-      else if (atom === 'a' && left === "'" && right === 'l' &&
-        left2 === null) { return '' }
-      else { return simpleVowel }
-    } else {
-      if (atom === "'") {
-        if (left === null && right === 'a') { return '>' }
-        else if (left === 'a' && right === 'a') { return '>' }
-        else if (left === null && right === 'i') { return '<' }
-        else if (left === null && right === 'ii') { return '<i' }
-        else if (left === null && right === 'u') { return '>' }
-        else if (left === 'a' && right === 'u') { return '>' }
-        else if (left === 'aa' && right === 'aa') { return "'A" }
-        else if (left === 'u' && right === 'aa') { return '&A' }
-        else if (right === 'aa') { return '|' }
-        else if (left === 'l' && right === 'u') { return '>' }
-        else if (left === 'aa' && right === 'i') {
-          return (right2 === null) ? "'" : '}'
-        }
-        else if (left === 'a' && right === 'ii') { return '}' }
-        else if (left === 'a' && right === 'uu') { return '&' }
-        else if (left === 'aa' && right === 'a') { return "'" }
-        else if (left === 'u' && right === null) { return '&' }
-        else if (left === 'u' && right === 'a') { return '&' }
-        else if (left === 'u' && right === 'uu') { return '&' }
-        else if (left === 'u' && right === 'i') { return '}' }
-        else if (left === 'w' && right === 'i') { return '}' }
-        else if (left === 'i' && right === null) { return '}' }
-        else if (left === 'a' && right === null) { return '>' }
-        else if (left === 'aa' && right === 'ii') { return '}' }
-        else if (left === 'aa' && right === 'u') {
-          return (right2 === null) ? "'" : '&'
-        }
-        else if (left === 'aa' && right === null) { return "'" }
-        else if (left === 'uu' && right === 'a') { return "'" }
-        else if (left === 'y' && right === 'a') { return '}' }
-        else if (left === 'A' && right === 'u') { return '&' }
-        else if (left === 'i' && right && SIMPLE_CONSONANTS[right]) { return '}' }
-        else if (left === 'a' && right && SIMPLE_CONSONANTS[right]) { return '>o' }
-        else if (left === 'A' && right && SIMPLE_CONSONANTS[right]) { return '&' }
-        else if (left === 'u' && right && SIMPLE_CONSONANTS[right]) { return '&o' }
-        else if (left && SIMPLE_CONSONANTS[left] && right === 'a') { return '>' }
-        else if (right === null) { return "'" }
-        else { return `?(${left || ''},${right || ''})` }
-      } else if (atom === 'N') {
-        if (left === 'ae' || left === 'aa') { return 'F' }
-        else if (left === 'i') { return 'K' }
-        else if (left === 'h') { return 'K' }
-        else if (left === 'u') { return 'N' }
-        else if (left === 'a') { return 'F' }
-        else { return '?' }
-      } else if (atom === 'w') {
-        if (right && COUNTS_AS_VOWEL[right]) { return 'w' }
-        else { return 'wo' }
-      } else if (atom === 'y') {
-        if (endsSyllable || right === "'") { return 'yo' }
-        else { return 'y' }
-      } else if (atom === 'aa') {
-        if (left === "'") { return '' }
-        else { return 'A' }
-      } else {
-        throw Error(`Can't handle atom ${atom}`)
-      }
-    }
-  }
+  if (atom === 'N') return handleN(left)
+
+  if (CONSONANTS[atom] !== undefined)
+    return handleConsonant(atomContext2, CONSONANTS[atom])
+
+  if (VOWELS[atom] !== undefined)
+    return handleVowel(atomContext2, VOWELS[atom])
+
+  throw notFound(left, atom, right)
 }
