@@ -7,16 +7,25 @@ export type Syllable = {|
   qalam1: string,
 |}
 
+type Atom = {|
+  atom: string,
+  buckwalter: string,
+  ipa: string,
+  endsSyllable: boolean,
+  endsMorpheme: boolean,
+  beginsWithHyphen: boolean,
+  endsWithHyphen: boolean,
+|}
+
 type MorphemeSerialized = {|
   id: number,
   gloss: string,
-  syllableTriplets: Array<[string, string, string]>,
+  atoms: Array<Atom>,
 |}
 
 export type Morpheme = {|
   ...MorphemeSerialized,
   l2: string,
-  syllables: Array<Syllable>,
   qalam1: string,
 |}
 
@@ -24,11 +33,13 @@ type CardSerialized = {|
   id: number,
   enTask: string,
   enContent: string,
-  morphemes: Array<MorphemeSerialized>,
+  morphemeIds: Array<number>,
 |}
 
 export type Card = {|
-  ...CardSerialized,
+  id: number,
+  enTask: string,
+  enContent: string,
   morphemes: Array<Morpheme>,
   l2: string,
   qalam1: string,
@@ -36,33 +47,42 @@ export type Card = {|
 
 const FETCH_TIMEOUT_MILLIS = 5000
 const CARDS_STORAGE_KEY = 'cards'
+const MORPHEMES_STORAGE_KEY = 'morphemes'
 
 export type CardsProps = {|
   cards: Array<Card>,
+  morphemeById: {[number]: Morpheme},
   downloadCards: () => void,
   networkState: 'ASSUMED_OK' | 'WAITING' | 'TIMEOUT' | 'BAD_RESPONSE',
 |}
 
-function expandCardsSerialized(cards: Array<CardSerialized>): Array<Card> {
+function expandMorphemesSerialized(morphemes: Array<MorphemeSerialized>):
+    {[number]: Morpheme} {
+  const morphemeById: {[number]: Morpheme} = {}
+  for (const morpheme of morphemes) {
+    const newMorpheme = {
+      ...morpheme,
+      qalam1: morpheme.atoms.map(atom => atom.atom).join(''),
+      l2: morpheme.atoms.map(atom => atom.buckwalter).join(''),
+    }
+    morphemeById[newMorpheme.id] = newMorpheme
+  }
+  return morphemeById
+}
+
+function expandCardsSerialized(
+  cards: Array<CardSerialized>,
+  morphemeById: {[number]: Morpheme},
+): Array<Card> {
   return cards.map(card => {
-    const morphemesExpanded: Array<Morpheme> = card.morphemes.map(morpheme => {
-      const syllables = morpheme.syllableTriplets.map(triplet => {
-        const l2 = triplet[0] + triplet[1] + triplet[2]
-        const qalam1 = toQalam1(triplet)
-        return { l2, qalam1 }
-      })
-      const morphemeL2 =
-        syllables.map(syllable => syllable.l2).join('')
-      const morphemeQalam1 =
-        syllables.map(syllable => syllable.qalam1).join('')
-      return { ...morpheme, syllables, qalam1: morphemeQalam1, l2: morphemeL2 }
-    })
-    const phraseQalam1 = morphemesExpanded.map(morpheme => morpheme.qalam1)
+    const morphemes =
+      card.morphemeIds.map(morphemeId => morphemeById[morphemeId])
+    const phraseQalam1 = morphemes.map(morpheme => morpheme.qalam1)
       .join(' ')
       .replace(/- -/g, '')
       .replace(/ -/g, '')
       .replace(/- /g, '')
-    const phraseL2 = morphemesExpanded.map(morpheme => morpheme.l2)
+    const phraseL2 = morphemes.map(morpheme => morpheme.l2)
       .join(' ')
       .replace(/- -/g, '')
       .replace(/ -/g, '')
@@ -72,7 +92,7 @@ function expandCardsSerialized(cards: Array<CardSerialized>): Array<Card> {
       enTask: card.enTask,
       enContent: card.enContent,
       l2: phraseL2,
-      morphemes: morphemesExpanded,
+      morphemes,
       qalam1: phraseQalam1,
     }
   })
@@ -97,11 +117,24 @@ export default class CardsService {
   }
 
   init() {
-    const json = this.localStorage.getItem(CARDS_STORAGE_KEY)
-    const cardsSerialized = (json !== null) ? JSON.parse(json) : []
+    const cardsJson = this.localStorage.getItem(CARDS_STORAGE_KEY)
+    const cardsSerialized =
+      (cardsJson !== null) ? JSON.parse(cardsJson) : []
+    const morphemesJson = this.localStorage.getItem(MORPHEMES_STORAGE_KEY)
+    const morphemesSerialized =
+      (morphemesJson !== null) ? JSON.parse(morphemesJson) : []
+    this.loadFromLocalOrRemote(cardsSerialized, morphemesSerialized)
+  }
+
+  loadFromLocalOrRemote(
+    cardsSerialized: Array<CardSerialized>,
+    morphemesSerialized: Array<MorphemeSerialized>,
+  ) {
+    const morphemeById = expandMorphemesSerialized(morphemesSerialized)
     this.props = {
       networkState: 'ASSUMED_OK',
-      cards: expandCardsSerialized(cardsSerialized),
+      cards: expandCardsSerialized(cardsSerialized, morphemeById),
+      morphemeById,
       downloadCards: this.downloadCards,
     }
   }
@@ -139,14 +172,11 @@ export default class CardsService {
       if (response.ok) {
         try {
           this.log('DownloadCardsSuccess')
-          const cardsSerialized = JSON.parse(text).cards
-          this.localStorage.setItem(
-            CARDS_STORAGE_KEY, JSON.stringify(cardsSerialized))
-          this.props = {
-            ...this.props,
-            networkState: 'ASSUMED_OK',
-            cards: expandCardsSerialized(cardsSerialized),
-          }
+          const { cards, morphemes } = JSON.parse(text)
+          this.localStorage.setItem(CARDS_STORAGE_KEY, JSON.stringify(cards))
+          this.localStorage.setItem(MORPHEMES_STORAGE_KEY,
+            JSON.stringify(morphemes))
+          this.loadFromLocalOrRemote(cards, morphemes)
           this.eventEmitter.emit('cards')
         } catch (e) {
           this.log('DownloadCardsFailure', { error: e })
