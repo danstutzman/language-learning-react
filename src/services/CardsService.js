@@ -125,6 +125,9 @@ export default class CardsService {
         }
       })
       .catch(e => {
+        if (!timedOut) {
+          clearTimeout(timeout)
+        }
         this.log('DownloadCardsError', { error: e })
         this.props = { ...this.props, networkState: 'BAD_RESPONSE' }
         this.eventEmitter.emit('cards')
