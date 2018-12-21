@@ -70,7 +70,7 @@ export default class Quiz extends React.PureComponent<Props, State> {
       let nextSyllableStart = 0
       for (const morpheme of morphemes) {
         for (const atom of morpheme.atoms) {
-          nextSyllableStart += 1
+          nextSyllableStart += atom.atom.length
           if (atom.endsSyllable) {
             syllableStarts[nextSyllableStart] = true
           }
