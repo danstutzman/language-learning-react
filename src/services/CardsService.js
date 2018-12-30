@@ -60,10 +60,15 @@ function expandMorphemesSerialized(morphemes: Array<MorphemeSerialized>):
     {[number]: Morpheme} {
   const morphemeById: {[number]: Morpheme} = {}
   for (const morpheme of morphemes) {
+    const atom0 = morpheme.atoms[0]
+    const hyphenBefore = atom0 && atom0.beginsWithHyphen ? '-' : ''
+    const hyphenAfter = atom0 && atom0.endsWithHyphen ? '-' : ''
     const newMorpheme = {
       ...morpheme,
-      qalam1: morpheme.atoms.map(atom => atom.atom).join(''),
-      l2: morpheme.atoms.map(atom => atom.buckwalter).join(''),
+      qalam1: hyphenBefore +
+        morpheme.atoms.map(atom => atom.atom).join('') + hyphenAfter,
+      l2: hyphenBefore +
+        morpheme.atoms.map(atom => atom.buckwalter).join('') + hyphenAfter,
     }
     morphemeById[newMorpheme.id] = newMorpheme
   }
@@ -79,14 +84,16 @@ function expandCardsSerialized(
       card.morphemeIds.map(morphemeId => morphemeById[morphemeId])
     const phraseQalam1 = morphemes.map(morpheme => morpheme.qalam1)
       .join(' ')
-      .replace(/- -/g, '')
-      .replace(/ -/g, '')
-      .replace(/- /g, '')
+      .replace(/- -/g, '-')
+      .replace(/ -/g, '-')
+      .replace(/- /g, '-')
+      .replace(/-([.?!])$/, '$1')
     const phraseL2 = morphemes.map(morpheme => morpheme.l2)
       .join(' ')
-      .replace(/- -/g, '')
-      .replace(/ -/g, '')
-      .replace(/- /g, '')
+      .replace(/- -/g, '-')
+      .replace(/ -/g, '-')
+      .replace(/- /g, '-')
+      .replace(/-([.?!])$/, '$1')
     return {
       id: card.id,
       enTask: card.enTask,
